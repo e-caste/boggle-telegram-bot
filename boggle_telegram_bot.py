@@ -17,6 +17,7 @@ import os
 import sys
 import traceback
 from translations import get_string
+from threading import Timer
 from datetime import time
 import shutil
 from string import whitespace
@@ -31,6 +32,10 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
+timers = {
+    'newgame': [],
+    'ingame': []
+}
 
 def start(update, context):
     reply = get_string(__get_user_lang(context), 'welcome', update.message.from_user.first_name)
@@ -44,7 +49,12 @@ def start(update, context):
 
 
 def new(update, context):
-    pass
+    if not __check_chat_is_group(update):
+        update.message.reply_text(get_string(__get_user_lang(context), msg='chat_is_not_group'))
+    else:
+        t = Timer(interval=120, function=__newgame_timer, args=context)
+        t.start()
+        timers['newgame'].append({update.message.chat_id: t})
 
 
 def join(update, context):
@@ -108,8 +118,12 @@ def __get_user_lang(context) -> str:
 
 
 # return True for GROUP or SUPERGROUP, False for PRIVATE (or CHANNEL)
-def __check_chat_type(update):
+def __check_chat_is_group(update):
     return True if 'group' in update.chat.type else False
+
+
+def __newgame_timer(context):
+    pass
 
 
 def main():
