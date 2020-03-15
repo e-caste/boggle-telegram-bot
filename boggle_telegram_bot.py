@@ -97,14 +97,19 @@ def error(update, context):
     raise
 
 
-def __get_username(update):
+def __get_username(update) -> str:
     u = update.message.from_user.username
     u2 = update.message.from_user.first_name
     return str(u) if u else str(u2)
 
 
-def __get_user_lang(context):
+def __get_user_lang(context) -> str:
     return context.user_data['lang'] if context.user_data.get('lang') else 'eng'
+
+
+# return True for GROUP or SUPERGROUP, False for PRIVATE (or CHANNEL)
+def __check_chat_type(update):
+    return True if 'group' in update.chat.type else False
 
 
 def main():
