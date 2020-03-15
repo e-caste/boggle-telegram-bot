@@ -18,6 +18,10 @@ translations = {
         'ita': "Ciao <b>{}</b>, benvenuto/a su Boggle/Paroliere Bot!",
         'eng': "Hi <b>{}</b>, welcome to Boggle/Paroliere Bot!"
     },
+    'chat_is_not_group': {
+        'ita': "Devi digitare questo comando in un gruppo!",
+        'eng': "You can only use this command in a group chat!"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
