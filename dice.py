@@ -1,3 +1,16 @@
+from random import shuffle, choice
+
+
+class LanguageNotFoundException(Exception):
+    def __init__(self, message: str):
+        super().__init__(message)
+
+
+class TableDimensionsNotFoundException(Exception):
+    def __init__(self, message: str):
+        super().__init__(message)
+
+
 dice = {
     'ita': {
         '4x4': [
@@ -40,3 +53,22 @@ dice = {
         ]
     }
 }
+
+
+def get_shuffled_dice(lang: str, table_dimensions: str) -> list:
+    if lang not in dice:
+        raise LanguageNotFoundException(f"Language {lang} is not available for translation.")
+    if table_dimensions not in dice[lang]:
+        raise TableDimensionsNotFoundException(f"The table dimensions {table_dimensions} "
+                                               f"are not available for the language {lang}.")
+
+    tmp = dice[lang][table_dimensions]
+    shuffle(tmp)
+    for i, die in enumerate(tmp):
+        tmp[i] = choice(die)
+
+    return tmp
+
+
+if __name__ == '__main__':
+    print(get_shuffled_dice('eng', '4x4'))
