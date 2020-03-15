@@ -104,7 +104,7 @@ def __get_username(update):
 
 
 def __get_user_lang(context):
-    return context.user_data['lang']
+    return context.user_data['lang'] if context.user_data.get('lang') else 'eng'
 
 
 def main():
