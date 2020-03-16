@@ -61,7 +61,8 @@ def new(update, context):
             context.bot.send_message(chat_id=__get_chat_id(update),
                                      text=get_string(__get_user_lang(context), 'game_created', __get_username(update)))
         else:
-            update.message.reply_text(get_string(__get_user_lang(context), msg='game_already_started'))
+            context.bot.send_message(chat_id=__get_chat_id(update),
+                                     text=get_string(__get_user_lang(context), 'game_already_started', __get_username(update)))
 
 
 def join(update, context):
