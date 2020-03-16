@@ -75,7 +75,7 @@ def new(update, context):
                                                      newgame_timer_duration))
         else:
             context.bot.send_message(chat_id=__get_chat_id(update),
-                                     text=get_string(__get_user_lang(context), 'game_already_started',
+                                     text=get_string(__get_user_lang(context), 'game_already_created',
                                                      __get_username(update)))
 
 

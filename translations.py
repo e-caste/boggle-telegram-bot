@@ -15,7 +15,7 @@ translations = {
         'ita': "Nuova partita creata da {}! Potete entrare con /join entro {} secondi.",
         'eng': "New game created by {}! You can now /join within {} seconds."
     },
-    'game_already_started': {
+    'game_already_created': {
         'ita': "È già stata creata una partita! Puoi partecipare con /join.",
         'eng': "A game has already been created! You can still /join."
     },
