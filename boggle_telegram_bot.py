@@ -251,6 +251,8 @@ def __init_user_stats_for_group(update, context, group_chat_id: int):
                 'played': 0
             },
             'points': {
+                'max': 0,
+                'min': 0,
                 'last_match': 0,
                 'average': 0,
                 'total': 0
@@ -297,16 +299,16 @@ def main():
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('start', start, pass_user_data=True))
-    dp.add_handler(CommandHandler('new', new, pass_user_data=True))
-    dp.add_handler(CommandHandler('join', join, pass_user_data=True))
-    dp.add_handler(CommandHandler('startgame', start_game, pass_user_data=True))
-    dp.add_handler(CommandHandler('leave', leave, pass_user_data=True))
-    dp.add_handler(CommandHandler('kick', kick, pass_user_data=True))
-    dp.add_handler(CommandHandler('kill', kill, pass_user_data=True))
-    dp.add_handler(CommandHandler('stats', show_statistics, pass_user_data=True))
-    dp.add_handler(CommandHandler('settings', settings, pass_user_data=True))
-    dp.add_handler(CommandHandler('help', show_help, pass_user_data=True))
+    dp.add_handler(CommandHandler('start', start, pass_user_data=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler('new', new, pass_user_data=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler('join', join, pass_user_data=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler('startgame', start_game, pass_user_data=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler('leave', leave, pass_user_data=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler('kick', kick, pass_user_data=True,pass_chat_data=True))
+    dp.add_handler(CommandHandler('kill', kill, pass_user_data=True,pass_chat_data=True))
+    dp.add_handler(CommandHandler('stats', show_statistics, pass_user_data=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler('settings', settings, pass_user_data=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler('help', show_help, pass_user_data=True, pass_chat_data=True))
 
     # log all errors
     dp.add_error_handler(error)
