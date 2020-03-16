@@ -57,7 +57,8 @@ def new(update, context):
     else:
         t = Timer(interval=120, function=__newgame_timer, args=context)
         t.start()
-        timers['newgame'].append({update.message.chat_id: t})
+        timers['newgame'].append({__get_chat_id(update): t})
+        print(timers)
 
 
 def join(update, context):
@@ -122,11 +123,11 @@ def __get_user_lang(context) -> str:
 
 # return True for GROUP or SUPERGROUP, False for PRIVATE (or CHANNEL)
 def __check_chat_is_group(update):
-    return True if 'group' in update.chat.type else False
+    return True if 'group' in update.message.chat.type else False
 
 
 def __get_chat_id(update) -> int:
-    return update.chat.id
+    return update.message.chat.id
 
 
 def __newgame_timer(context):
