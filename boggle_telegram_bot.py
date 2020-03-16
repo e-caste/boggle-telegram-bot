@@ -112,7 +112,7 @@ def join(update, context):
                 __join_user_to_game(update, context)
                 context.bot.send_message(chat_id=group_chat_id,
                                          text=get_string(__get_user_lang(context), 'game_joined',
-                                                         __get_username(update)))
+                                                         __get_username(update), current_game['creator']['username']))
 
         else:
             context.bot.send_message(chat_id=__get_chat_id(update),
@@ -167,7 +167,8 @@ def start_game(update, context, timer: bool = False):
     for player in current_game['participants']:
         context.bot.send_message(chat_id=player['id'],
                                  text=get_string(__get_user_lang(context), 'game_started_private',
-                                                 cd['timers']['durations']['ingame']) + "\n\n\n" + table)
+                                                 cd['timers']['durations']['ingame']) + "\n\n\n" + table,
+                                 parse_mode=HTML)
 
 
 
