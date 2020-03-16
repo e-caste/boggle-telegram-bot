@@ -109,7 +109,7 @@ def join(update, context):
                                      text=get_string(__get_user_lang(context), msg='no_game_yet'))
 
 
-def leave(update, context):
+def leave(update, context):  # TODO: fix double /leave after /join replies with game_left instead of not_yet_in_game
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_user_lang(context), msg='chat_is_not_group'))
     else:
@@ -118,7 +118,7 @@ def leave(update, context):
             if not context.user_data.get(group_chat_id):
                 __remove_user_from_game(__get_user_id(update), group_chat_id)
                 context.bot.send_message(chat_id=group_chat_id,
-                                         text=get_string(__get_user_lang(context), 'game_left',
+                                         text=get_string(__get_user_lang(context), 'not_yet_in_game',
                                                          __get_username(update)))
 
             elif context.user_data.get(group_chat_id) and context.user_data[group_chat_id]['in_game']:
@@ -220,6 +220,7 @@ def __newgame_timer(update, context, group_chat_id: int):
         context.bot.send_message(chat_id=__get_chat_id(update),
                                  text=get_string(__get_user_lang(context), 'newgame_timer_expired'))
         del games[group_chat_id]
+        del timers['newgame'][group_chat_id]
     else:
         start_game(update, context)
 
@@ -259,6 +260,8 @@ def __init_user_stats_for_group(update, context, group_chat_id: int):
 
 
 def __join_user_to_game(update, context, group_chat_id: int):
+    context.user_data['in_game'] = True
+    context.user_data['in_game'] = True if games[group_chat_id]['creator']['id'] == __get_user_id(update) else False
     games[group_chat_id]['joined'].append({
         'id': __get_user_id(update),
         'username': __get_username(update),
@@ -270,6 +273,7 @@ def __remove_user_from_game(user_chat_id: int, group_chat_id: int):
     joined = games[group_chat_id]['joined']
     for user in joined:
         if user_chat_id == user['id']:
+            user['user_data']['in_game'] = False
             joined.remove(user)
             break
 
