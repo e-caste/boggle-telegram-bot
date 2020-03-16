@@ -45,6 +45,10 @@ translations = {
                "nuova partita con /new.",
         'eng': "Timer expired. The game was canceled since no player joined. You can create a new game with /new."
     },
+    'forbid_not_game_creator': {
+        'ita': "Mi spiace, {}, ma solo il creatore della partita ({}) può usare {}.",
+        'eng': "Sorry, {}, but only the game creator ({}) can use {}."
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
