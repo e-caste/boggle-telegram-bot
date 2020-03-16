@@ -32,6 +32,10 @@ translations = {
         'ita': "Non è ancora stata creata nessuna partita. Puoi crearne una con /new.",
         'eng': "No game has been created yet. You can create one with /new."
     },
+    'newgame_timer_expired': {
+        'ita': "Tempo scaduto. La parita è stata cancellata, dato che nessun giocatore è entrato.",
+        'eng': "Timer expired. The game was canceled since no player joined."
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
