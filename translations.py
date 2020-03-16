@@ -49,6 +49,12 @@ translations = {
         'ita': "Mi spiace, {}, ma solo il creatore della partita ({}) può usare {}.",
         'eng': "Sorry, {}, but only the game creator ({}) can use {}."
     },
+    'game_started_group': {
+        'ita': "La partita è cominciata! Ho inviato a ciascuno dei partecipanti un messaggio in chat privata, lì "
+               "dovrete scrivermi tutte le parole che riuscite a trovare tra i dadi! Che vinca il migliore!",
+        'eng': "The game has begun! I've sent a message to each of the partecipants in their private chat, and that's "
+               "where you'll have to send me all of the words you can find among the dice! May the best player win!"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
