@@ -43,6 +43,7 @@ timers = {
 
 games = {}
 
+# TODO: add logger to each function
 def start(update, context):
     reply = get_string(__get_user_lang(context), 'welcome', update.message.from_user.first_name)
     logger.info(f"User {__get_username(update)} started the bot.")
@@ -59,11 +60,16 @@ def new(update, context):
     else:
         group_chat_id = __get_chat_id(update)
         if not timers['newgame'].get(group_chat_id):
-            t = Timer(interval=newgame_timer_duration, function=__newgame_timer, args=context)
+            t = Timer(interval=newgame_timer_duration, function=__newgame_timer, args=(update, context))
             t.start()
             timers['newgame'][group_chat_id] = t
-            games[group_chat_id] = __get_user_id(update)
-            games[str(group_chat_id)] = __get_username(update)
+            games[group_chat_id] = {
+                'creator': {
+                    'id': __get_user_id(update),
+                    'username': __get_username(update)
+                },
+                'joined': []
+            }
             context.bot.send_message(chat_id=__get_chat_id(update),
                                      text=get_string(__get_user_lang(context), 'game_created', __get_username(update),
                                                      newgame_timer_duration))
@@ -81,6 +87,7 @@ def join(update, context):
         if timers['newgame'].get(group_chat_id):
             if not context.user_data.get(group_chat_id):
                 __init_user_stats_for_group(update, context, group_chat_id)
+                __join_user_to_game(update, group_chat_id)
                 context.bot.send_message(chat_id=group_chat_id,
                                          text=get_string(__get_user_lang(context), 'game_joined',
                                                          __get_username(update)))
@@ -92,6 +99,7 @@ def join(update, context):
                                                          games[str(group_chat_id)]))
 
             elif context.user_data.get(group_chat_id) and not context.user_data[group_chat_id]['in_game']:
+                __join_user_to_game(update, group_chat_id)
                 context.bot.send_message(chat_id=group_chat_id,
                                          text=get_string(__get_user_lang(context), 'game_joined',
                                                          __get_username(update)))
@@ -99,7 +107,6 @@ def join(update, context):
         else:
             context.bot.send_message(chat_id=__get_chat_id(update),
                                      text=get_string(__get_user_lang(context), msg='no_game_yet'))
-
 
 
 def start_game(update, context):
@@ -123,7 +130,7 @@ def error(update, context):
     # notify user that experienced the error
     if update.effective_message:
         msg = "Hey. I'm sorry to inform you that an error happened while I tried to handle your update. " \
-               "My developer will be notified."
+              "My developer will be notified."
         update.effective_message.reply_text(msg)
     # text the dev
     trace = "".join(traceback.format_tb(sys.exc_info()[2]))
@@ -171,15 +178,16 @@ def __get_user_id(update) -> int:
     return update.message.from_user.id
 
 
-def __newgame_timer(context):
-    pass
+def __newgame_timer(update, context):
+    context.bot.send_message(chat_id=__get_chat_id(update),
+                             text=get_string(__get_user_lang(context), 'newgame_timer_expired'))
 
 
 def __init_user_stats_for_group(update, context, group_chat_id: int):
     d = context.user_data
     d[group_chat_id] = {
         'in_game': True,
-        'is_game_creator': True if games[group_chat_id] == __get_user_id(update) else False,
+        'is_game_creator': True if games[group_chat_id]['creator']['id'] == __get_user_id(update) else False,
         'stats': {
             'matches': {
                 'won': {
@@ -209,13 +217,20 @@ def __init_user_stats_for_group(update, context, group_chat_id: int):
     }
 
 
+def __join_user_to_game(update, group_chat_id: int):
+    games[group_chat_id]['joined'].append({
+        'id': __get_user_id(update),
+        'username': __get_username(update)
+    })
+
+
 def __get_formatted_table(shuffled_dice: list) -> str:
     # assuming the table is always an NxN square
     total_num = len(shuffled_dice)
     row_col_num = int(sqrt(total_num))
     formatted_table = "<b>"
     for i in range(0, total_num, row_col_num):
-        formatted_table += "  ".join(shuffled_dice[i:i+row_col_num]) + "\n"
+        formatted_table += "  ".join(shuffled_dice[i:i + row_col_num]) + "\n"
     formatted_table += "</b>"
     return formatted_table
 
