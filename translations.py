@@ -20,8 +20,8 @@ translations = {
         'eng': "A game has already been created! You can still /join."
     },
     'game_joined': {
-        'ita': "Okay, {}, sei in partita!",
-        'eng': "Alright, {}, you're in!"
+        'ita': "Okay, {}, sei in partita! Il creatore della partita, {}, può farla cominciare con /startgame.",
+        'eng': "Alright, {}, you're in! The game creator, {}, can start it with /startgame."
     },
     'game_left': {
         'ita': "Va bene, {}, sarà per un'altra volta. Usa /join se vuoi rientrare in partita.",
