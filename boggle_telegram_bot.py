@@ -62,7 +62,8 @@ def new(update, context):
             t = Timer(interval=newgame_timer_duration, function=__newgame_timer, args=context)
             t.start()
             timers['newgame'][group_chat_id] = t
-            games[group_chat_id] =  __get_user_id(update)
+            games[group_chat_id] = __get_user_id(update)
+            games[str(group_chat_id)] = __get_username(update)
             context.bot.send_message(chat_id=__get_chat_id(update),
                                      text=get_string(__get_user_lang(context), 'game_created', __get_username(update),
                                                      newgame_timer_duration))
@@ -78,12 +79,22 @@ def join(update, context):
     else:
         group_chat_id = __get_chat_id(update)
         if timers['newgame'].get(group_chat_id):
-            context.bot.send_message(chat_id=group_chat_id,
-                                     text=get_string(__get_user_lang(context), 'game_joined',
-                                                     __get_username(update)))
-            # TODO: add in context.user_data that the user has joined
-            # if not context.user_data.get(group_chat_id):
+            if not context.user_data.get(group_chat_id):
+                __init_user_stats_for_group(update, context, group_chat_id)
+                context.bot.send_message(chat_id=group_chat_id,
+                                         text=get_string(__get_user_lang(context), 'game_joined',
+                                                         __get_username(update)))
 
+            elif context.user_data.get(group_chat_id) and context.user_data[group_chat_id]['in_game']:
+                context.bot.send_message(chat_id=group_chat_id,
+                                         text=get_string(__get_user_lang(context), 'already_in_game',
+                                                         __get_username(update),
+                                                         games[str(group_chat_id)]))
+
+            elif context.user_data.get(group_chat_id) and not context.user_data[group_chat_id]['in_game']:
+                context.bot.send_message(chat_id=group_chat_id,
+                                         text=get_string(__get_user_lang(context), 'game_joined',
+                                                         __get_username(update)))
 
         else:
             context.bot.send_message(chat_id=__get_chat_id(update),
