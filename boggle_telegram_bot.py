@@ -228,8 +228,8 @@ def __newgame_timer(update, context, group_chat_id: int):
 def __init_user_stats_for_group(update, context, group_chat_id: int):
     d = context.user_data
     d[group_chat_id] = {
-        'in_game': True,
-        'is_game_creator': True if games[group_chat_id]['creator']['id'] == __get_user_id(update) else False,
+        'in_game': False,
+        'is_game_creator': False,
         'stats': {
             'matches': {
                 'won': {
