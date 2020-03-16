@@ -170,6 +170,10 @@ def start_game(update, context, timer: bool = False):
                                                  cd['timers']['durations']['ingame']) + "\n\n\n" + table,
                                  parse_mode=HTML)
 
+    t = Timer(interval=cd['timers']['durations']['newgame'],
+              function=__ingame_timer, args=(update, context))
+    t.start()
+    cd['timers']['ingame'] = t.name
 
 
 
@@ -258,6 +262,10 @@ def __newgame_timer(update, context):
         cd['games'].remove(current_game)
     else:
         start_game(update, context, timer=True)
+
+
+def __ingame_timer(update, context):
+    pass
 
 
 def __init_chat_data(context):
