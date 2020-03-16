@@ -42,8 +42,8 @@ timers = {
 def start(update, context):
     reply = get_string(__get_user_lang(context), 'welcome', update.message.from_user.first_name)
     logger.info(f"User {__get_username(update)} started the bot.")
-    if context.user_data:  # TODO: add stats to reply
-        reply += ""
+    # if context.user_data:  # TODO: add stats to reply
+    #     reply += ""
     update.message.reply_text(
         text=reply,
         parse_mode=HTML
@@ -122,6 +122,10 @@ def __get_user_lang(context) -> str:
 # return True for GROUP or SUPERGROUP, False for PRIVATE (or CHANNEL)
 def __check_chat_is_group(update):
     return True if 'group' in update.chat.type else False
+
+
+def __get_chat_id(update) -> int:
+    return update.chat.id
 
 
 def __newgame_timer(context):
