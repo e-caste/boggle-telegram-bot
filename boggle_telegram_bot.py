@@ -117,7 +117,7 @@ def join(update, context):
                                      text=get_string(__get_user_lang(context), msg='no_game_yet'))
 
 
-def leave(update, context):  # TODO: fix double /leave after /join replies with game_left instead of not_yet_in_game
+def leave(update, context):
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_user_lang(context), msg='chat_is_not_group'))
     else:
