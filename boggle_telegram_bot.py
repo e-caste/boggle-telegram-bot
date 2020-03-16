@@ -41,7 +41,7 @@ timers = {
     'ingame': {}
 }
 
-games = []
+games = {}
 
 def start(update, context):
     reply = get_string(__get_user_lang(context), 'welcome', update.message.from_user.first_name)
@@ -62,7 +62,7 @@ def new(update, context):
             t = Timer(interval=newgame_timer_duration, function=__newgame_timer, args=context)
             t.start()
             timers['newgame'][group_chat_id] = t
-            games.append({group_chat_id: __get_user_id(update)})
+            games[group_chat_id] =  __get_user_id(update)
             context.bot.send_message(chat_id=__get_chat_id(update),
                                      text=get_string(__get_user_lang(context), 'game_created', __get_username(update),
                                                      newgame_timer_duration))
@@ -167,8 +167,8 @@ def __newgame_timer(context):
 def __init_user_stats_for_group(chat_id: int, context):
     d = context.user_data
     d[chat_id] = {
-        'in_game': F,
-        'is_game_creator': True
+        'in_game': True,
+        'is_game_creator': True if games
     }
 
 
