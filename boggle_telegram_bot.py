@@ -109,10 +109,6 @@ def join(update, context):
                                      text=get_string(__get_user_lang(context), msg='no_game_yet'))
 
 
-def start_game(update, context):
-    pass
-
-
 def leave(update, context):
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_user_lang(context), msg='chat_is_not_group'))
@@ -139,6 +135,11 @@ def leave(update, context):
         else:
             context.bot.send_message(chat_id=__get_chat_id(update),
                                      text=get_string(__get_user_lang(context), msg='no_game_yet'))
+
+
+def start_game(update, context):
+    pass
+
 
 
 def kick(update, context):
