@@ -92,6 +92,8 @@ def join(update, context):
                                      text=get_string(__get_user_lang(context), msg='no_game_yet'))
             return
 
+        # TODO: add check that the user joining has started the bot in a private chat
+
         if cd['timers']['newgame']:
             current_game = __get_current_game(context)
             user_id = __get_user_id(update)
@@ -151,7 +153,8 @@ def leave(update, context):
 
 
 def start_game(update, context):
-    pass
+    cd = context.chat_data
+
 
 
 
