@@ -195,7 +195,7 @@ def error(update, context):
 def __get_username(update) -> str:
     u = update.message.from_user.username
     u2 = update.message.from_user.first_name
-    return "@" + str(u) if u else str(u2)
+    return "@" + str(u) if u else str(u2)  # TODO: check if @ can be used with the first_name
 
 
 def __get_user_lang(context) -> str:
