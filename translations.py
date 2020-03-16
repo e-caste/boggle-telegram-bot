@@ -8,8 +8,8 @@ translations = {
         'eng': "Hi <b>{}</b>, welcome to Boggle/Paroliere Bot!"
     },
     'chat_is_not_group': {
-        'ita': "Devi digitare questo comando in un gruppo!",
-        'eng': "You can only use this command in a group chat!"
+        'ita': "Devi digitare questo comando in un gruppo! Aggiungimi a un gruppo con degli amici per giocare.",
+        'eng': "You can only use this command in a group chat! Add me to a group with your friends to play."
     },
     'game_created': {
         'ita': "Nuova partita creata da {}! Potete entrare con /join",
