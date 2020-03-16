@@ -55,6 +55,11 @@ translations = {
         'eng': "The game has begun! I've sent a message to each of the partecipants in their private chat, and that's "
                "where you'll have to send me all of the words you can find among the dice! May the best player win!"
     },
+    'game_started_private': {
+        'ita': "Qui puoi mandarmi tutte le parole che trovi nella tabella seguente. Presto che è tardi, hai solo {} "
+               "secondi!",
+        'eng': "Here you can send me all the words you can find in the table below. Quick, you only have {} seconds!"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
