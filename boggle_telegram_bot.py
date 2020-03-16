@@ -59,7 +59,7 @@ def new(update, context):
 
         if not cd['timers']['newgame']:
             t = Timer(interval=cd['timers']['durations']['newgame'],
-                      function=__newgame_timer, args=(update, context, group_chat_id))
+                      function=__newgame_timer, args=(update, context))
             t.start()
             cd['timers']['newgame'] = t.name
             cd['games'].append({
@@ -228,12 +228,14 @@ def __get_user_id(update) -> int:
     return update.message.from_user.id
 
 
-def __newgame_timer(update, context, group_chat_id: int):
-    if len(games[group_chat_id]['joined']) == 0:
+def __newgame_timer(update, context):
+    cd = context.chat_data
+    current_game = __get_current_game(context)
+    if len(current_game['participants']) == 0:
         context.bot.send_message(chat_id=__get_chat_id(update),
                                  text=get_string(__get_user_lang(context), 'newgame_timer_expired'))
-        del games[group_chat_id]
-        del timers['newgame'][group_chat_id]
+        cd['games'].remove(current_game)
+        cd['timers']['newgame'] = None
     else:
         start_game(update, context)
 
