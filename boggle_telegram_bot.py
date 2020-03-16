@@ -159,6 +159,15 @@ def start_game(update, context, timer: bool = False):
         if __forbid_not_game_creator(update, context, command="/startgame"):
             return
 
+    table = __get_formatted_table(get_shuffled_dice(cd['settings']['lang'],
+                                                    cd['settings']['table_dimensions']))
+    group_chat_id = __get_chat_id(update)
+    context.bot.send_message(chat_id=group_chat_id,
+                             text=get_string(__get_user_lang(context), 'game_started_group'))
+    for player in current_game['participants']:
+        context.bot.send_message(chat_id=player['id'],
+                                 text=get_string(__get_user_lang(context), 'game_started_private',
+                                                 cd['timers']['durations']['ingame']) + "\n\n\n" + table)
 
 
 
@@ -220,7 +229,7 @@ def __get_username(update) -> str:
     u2 = update.message.from_user.first_name
     return "@" + str(u) if u else str(u2)  # TODO: check if @ can be used with the first_name
 
-
+# TODO: reformat to get_chat_lang if group
 def __get_user_lang(context) -> str:
     return context.user_data['lang'] if context.user_data.get('lang') else 'eng'
 
@@ -262,6 +271,10 @@ def __init_chat_data(context):
     }
     cd['games'] = []
     cd['ingame_user_ids'] = []
+    cd['settings'] = {
+        'lang': 'eng',
+        'table_dimensions': '4x4'
+    }
 
 
 def __init_user_stats_for_group(context, in_game: bool):
@@ -307,9 +320,11 @@ def __join_user_to_game(update, context):
 
 
 def __remove_user_from_game(update, context):
+    cd = context.chat_data
     current_game = __get_current_game(context)
     participants = current_game['participants']
     user_id = __get_user_id(update)
+    cd['ingame_user_ids'].remove(user_id)
     for user in participants:
         if user_id == user['id']:
             participants.remove(user)
@@ -358,6 +373,7 @@ def main():
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
+    # TODO: add greetings message when the bot gets added to a group
     dp.add_handler(CommandHandler('start', start, pass_user_data=True, pass_chat_data=True))
     dp.add_handler(CommandHandler('new', new, pass_user_data=True, pass_chat_data=True))
     dp.add_handler(CommandHandler('join', join, pass_user_data=True, pass_chat_data=True))
