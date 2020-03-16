@@ -3,7 +3,7 @@ from exceptions import LanguageNotFoundException
 
 def get_string(lang: str, msg: str, *args) -> str:
     if lang in available_languages:
-        return translations[msg][lang].format(args)
+        return translations[msg][lang].format(*args)
     else:
         raise LanguageNotFoundException(f"Language {lang} is not available for translation.")
 
