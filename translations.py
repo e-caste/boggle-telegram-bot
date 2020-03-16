@@ -32,6 +32,10 @@ translations = {
                "/startgame.",
         'eng': "Hey {}, you've already joined a game! The game creator, {}, can start it with /startgame."
     },
+    'not_yet_in_game': {
+        'ita': "{}, non sei ancora entrato in partita! Usa /join per entrare.",
+        'eng': "{}, you're not in a game yet! You can /join the current game if you want."
+    },
     'no_game_yet': {
         'ita': "Non è ancora stata creata nessuna partita. Puoi crearne una con /new.",
         'eng': "No game has been created yet. You can create one with /new."
