@@ -45,10 +45,9 @@ def start(update, context):
     logger.info(f"User {__get_username(update)} started the bot.")
     # if context.user_data:  # TODO: add stats to reply
     #     reply += ""
-    update.message.reply_text(
-        text=reply,
-        parse_mode=HTML
-    )
+    context.bot.send_message(chat_id=__get_chat_id(update),
+                             text=reply,
+                             parse_mode=HTML)
 
 
 def new(update, context):
@@ -59,6 +58,8 @@ def new(update, context):
             t = Timer(interval=120, function=__newgame_timer, args=context)
             t.start()
             timers['newgame'][__get_chat_id(update)] = t
+            context.bot.send_message(chat_id=__get_chat_id(update),
+                                     text=get_string(__get_user_lang(context), 'game_created', __get_username(update)))
         else:
             update.message.reply_text(get_string(__get_user_lang(context), msg='game_already_started'))
 
@@ -116,7 +117,7 @@ def error(update, context):
 def __get_username(update) -> str:
     u = update.message.from_user.username
     u2 = update.message.from_user.first_name
-    return str(u) if u else str(u2)
+    return "@" + str(u) if u else str(u2)
 
 
 def __get_user_lang(context) -> str:
