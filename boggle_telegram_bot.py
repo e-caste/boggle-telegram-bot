@@ -152,8 +152,15 @@ def leave(update, context):
                                      text=get_string(__get_user_lang(context), msg='no_game_yet'))
 
 
-def start_game(update, context):
+def start_game(update, context, timer: bool = False):
     cd = context.chat_data
+    current_game = __get_current_game(context)
+    if not timer:
+        if __forbid_not_game_creator(update, context, command="/startgame"):
+            return
+
+
+
 
 
 
@@ -234,13 +241,13 @@ def __get_user_id(update) -> int:
 def __newgame_timer(update, context):
     cd = context.chat_data
     current_game = __get_current_game(context)
+    cd['timers']['newgame'] = None
     if len(current_game['participants']) == 0:
         context.bot.send_message(chat_id=__get_chat_id(update),
                                  text=get_string(__get_user_lang(context), 'newgame_timer_expired'))
         cd['games'].remove(current_game)
-        cd['timers']['newgame'] = None
     else:
-        start_game(update, context)
+        start_game(update, context, timer=True)
 
 
 def __init_chat_data(context):
@@ -320,6 +327,17 @@ def __get_latest_game(context) -> dict:
 def __get_current_game(context) -> dict:
     res = __get_latest_game(context)
     return res if not res['is_finished'] else None
+
+
+def __forbid_not_game_creator(update, context, command: str) -> bool:
+    current_game = __get_current_game(context)
+    user_id = __get_user_id(update)
+    if user_id != current_game['creator']['id']:
+        context.bot.send_message(chat_id=__get_chat_id(update),
+                                 text=get_string(__get_user_lang(context), 'forbid_not_game_creator',
+                                                 __get_username(update), current_game['creator']['username'], command))
+        return True
+    return False
 
 
 def __get_formatted_table(shuffled_dice: list) -> str:
