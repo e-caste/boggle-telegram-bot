@@ -18,6 +18,8 @@ import sys
 import traceback
 from translations import get_string
 from threading import Timer
+from dice import get_shuffled_dice
+from math import sqrt
 from datetime import time
 import shutil
 from string import whitespace
@@ -124,6 +126,17 @@ def __check_chat_is_group(update):
 
 def __newgame_timer(context):
     pass
+
+
+def __get_formatted_table(shuffled_dice: list) -> str:
+    # assuming the table is always an NxN square
+    total_num = len(shuffled_dice)
+    row_col_num = int(sqrt(total_num))
+    formatted_table = "<b>"
+    for i in range(0, total_num, row_col_num):
+        formatted_table += "  ".join(shuffled_dice[i:i+row_col_num]) + "\n"
+    formatted_table += "</b>"
+    return formatted_table
 
 
 def main():
