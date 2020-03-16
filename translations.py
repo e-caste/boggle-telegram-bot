@@ -1,6 +1,4 @@
-class LanguageNotFoundException(Exception):
-    def __init__(self, message: str):
-        super().__init__(message)
+from exceptions import LanguageNotFoundException
 
 
 def get_string(lang: str, msg: str, *args) -> str:

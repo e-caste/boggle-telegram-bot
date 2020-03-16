@@ -1,15 +1,5 @@
 from random import shuffle, choice
-
-
-class LanguageNotFoundException(Exception):
-    def __init__(self, message: str):
-        super().__init__(message)
-
-
-class TableDimensionsNotFoundException(Exception):
-    def __init__(self, message: str):
-        super().__init__(message)
-
+from exceptions import LanguageNotFoundException, TableDimensionsNotFoundException
 
 dice = {
     'ita': {
