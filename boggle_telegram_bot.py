@@ -261,7 +261,8 @@ def __init_user_stats_for_group(update, context, group_chat_id: int):
 
 def __join_user_to_game(update, context, group_chat_id: int):
     context.user_data['in_game'] = True
-    context.user_data['in_game'] = True if games[group_chat_id]['creator']['id'] == __get_user_id(update) else False
+    context.user_data['is_game_creator'] = True if games[group_chat_id]['creator']['id'] == __get_user_id(update) \
+        else False
     games[group_chat_id]['joined'].append({
         'id': __get_user_id(update),
         'username': __get_username(update),
