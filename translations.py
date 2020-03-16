@@ -20,6 +20,10 @@ translations = {
         'ita': "Devi digitare questo comando in un gruppo!",
         'eng': "You can only use this command in a group chat!"
     },
+    'game_already_started': {
+        'ita': "È già stata creata una partita! Puoi partecipare con /join",
+        'eng': "A game has already been created! You can join with /join"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
