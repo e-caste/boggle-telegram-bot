@@ -32,6 +32,10 @@ translations = {
         'ita': "Okay, {}, sei in partita!",
         'eng': "Alright, {}, you're in!"
     },
+    'no_game_yet': {
+        'ita': "Non è ancora stata creata nessuna partita. Puoi crearne una con /new",
+        'eng': "No game has been created yet. You can create one with /new"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
