@@ -16,8 +16,8 @@ translations = {
         'eng': "New game created by {}! You can now /join within {} seconds."
     },
     'game_already_started': {
-        'ita': "È già stata creata una partita! Puoi partecipare con /join",
-        'eng': "A game has already been created! You can still /join"
+        'ita': "È già stata creata una partita! Puoi partecipare con /join.",
+        'eng': "A game has already been created! You can still /join."
     },
     'game_joined': {
         'ita': "Okay, {}, sei in partita!",
@@ -25,12 +25,12 @@ translations = {
     },
     'already_in_game': {
         'ita': "Hey {}, sei già in una partita! Il creatore della partita, {}, può farla cominciare col comando "
-               "/startgame",
+               "/startgame.",
         'eng': "Hey {}, you've already joined a game! The game creator, {}, can start it with /startgame."
     },
     'no_game_yet': {
-        'ita': "Non è ancora stata creata nessuna partita. Puoi crearne una con /new",
-        'eng': "No game has been created yet. You can create one with /new"
+        'ita': "Non è ancora stata creata nessuna partita. Puoi crearne una con /new.",
+        'eng': "No game has been created yet. You can create one with /new."
     },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
