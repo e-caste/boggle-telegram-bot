@@ -33,8 +33,9 @@ translations = {
         'eng': "No game has been created yet. You can create one with /new."
     },
     'newgame_timer_expired': {
-        'ita': "Tempo scaduto. La parita è stata cancellata, dato che nessun giocatore è entrato.",
-        'eng': "Timer expired. The game was canceled since no player joined."
+        'ita': "Tempo scaduto. La parita è stata cancellata, dato che nessun giocatore è entrato. Potete creare una "
+               "nuova partita con /new.",
+        'eng': "Timer expired. The game was canceled since no player joined. You can create a new game with /new."
     },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
