@@ -23,6 +23,10 @@ translations = {
         'ita': "Okay, {}, sei in partita!",
         'eng': "Alright, {}, you're in!"
     },
+    'game_left': {
+        'ita': "Va bene, {}, sarà per un'altra volta. Usa /join se vuoi rientrare in partita.",
+        'eng': "Okay, {}, we'll play another time. Use /join if you change your mind."
+    },
     'already_in_game': {
         'ita': "Hey {}, sei già in una partita! Il creatore della partita, {}, può farla cominciare col comando "
                "/startgame.",
