@@ -60,7 +60,7 @@ def new(update, context):
     else:
         group_chat_id = __get_chat_id(update)
         if not timers['newgame'].get(group_chat_id):
-            t = Timer(interval=newgame_timer_duration, function=__newgame_timer, args=(update, context))
+            t = Timer(interval=newgame_timer_duration, function=__newgame_timer, args=(update, context, group_chat_id))
             t.start()
             timers['newgame'][group_chat_id] = t
             games[group_chat_id] = {
@@ -178,9 +178,12 @@ def __get_user_id(update) -> int:
     return update.message.from_user.id
 
 
-def __newgame_timer(update, context):
-    context.bot.send_message(chat_id=__get_chat_id(update),
-                             text=get_string(__get_user_lang(context), 'newgame_timer_expired'))
+def __newgame_timer(update, context, group_chat_id: int):
+    if len(games[group_chat_id]['joined']) == 0:
+        context.bot.send_message(chat_id=__get_chat_id(update),
+                                 text=get_string(__get_user_lang(context), 'newgame_timer_expired'))
+    else:
+        start_game(update, context)
 
 
 def __init_user_stats_for_group(update, context, group_chat_id: int):
