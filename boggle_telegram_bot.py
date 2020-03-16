@@ -58,7 +58,6 @@ def new(update, context):
         t = Timer(interval=120, function=__newgame_timer, args=context)
         t.start()
         timers['newgame'].append({__get_chat_id(update): t})
-        print(timers)
 
 
 def join(update, context):
@@ -127,7 +126,7 @@ def __check_chat_is_group(update):
 
 
 def __get_chat_id(update) -> int:
-    return update.message.chat.id
+    return update.message.chat.id if update.message.chat else update.message.effective_chat.id
 
 
 def __newgame_timer(context):
