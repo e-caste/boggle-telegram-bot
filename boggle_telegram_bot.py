@@ -87,7 +87,7 @@ def join(update, context):
         if timers['newgame'].get(group_chat_id):
             if not context.user_data.get(group_chat_id):
                 __init_user_stats_for_group(update, context, group_chat_id)
-                __join_user_to_game(update, group_chat_id)
+                __join_user_to_game(update, context, group_chat_id)
                 context.bot.send_message(chat_id=group_chat_id,
                                          text=get_string(__get_user_lang(context), 'game_joined',
                                                          __get_username(update)))
@@ -99,7 +99,7 @@ def join(update, context):
                                                          games[str(group_chat_id)]))
 
             elif context.user_data.get(group_chat_id) and not context.user_data[group_chat_id]['in_game']:
-                __join_user_to_game(update, group_chat_id)
+                __join_user_to_game(update, context, group_chat_id)
                 context.bot.send_message(chat_id=group_chat_id,
                                          text=get_string(__get_user_lang(context), 'game_joined',
                                                          __get_username(update)))
@@ -182,6 +182,7 @@ def __newgame_timer(update, context, group_chat_id: int):
     if len(games[group_chat_id]['joined']) == 0:
         context.bot.send_message(chat_id=__get_chat_id(update),
                                  text=get_string(__get_user_lang(context), 'newgame_timer_expired'))
+        del games[group_chat_id]
     else:
         start_game(update, context)
 
@@ -220,10 +221,11 @@ def __init_user_stats_for_group(update, context, group_chat_id: int):
     }
 
 
-def __join_user_to_game(update, group_chat_id: int):
+def __join_user_to_game(update, context, group_chat_id: int):
     games[group_chat_id]['joined'].append({
         'id': __get_user_id(update),
-        'username': __get_username(update)
+        'username': __get_username(update),
+        'user_data': context.user_data
     })
 
 
