@@ -96,7 +96,7 @@ def join(update, context):
                 context.bot.send_message(chat_id=group_chat_id,
                                          text=get_string(__get_user_lang(context), 'already_in_game',
                                                          __get_username(update),
-                                                         games[str(group_chat_id)]))
+                                                         games[group_chat_id]['creator']['username']))
 
             elif context.user_data.get(group_chat_id) and not context.user_data[group_chat_id]['in_game']:
                 __join_user_to_game(update, context, group_chat_id)
@@ -114,7 +114,31 @@ def start_game(update, context):
 
 
 def leave(update, context):
-    pass
+    if not __check_chat_is_group(update):
+        update.message.reply_text(get_string(__get_user_lang(context), msg='chat_is_not_group'))
+    else:
+        group_chat_id = __get_chat_id(update)
+        if timers['newgame'].get(group_chat_id):
+            if not context.user_data.get(group_chat_id):
+                __remove_user_from_game(__get_user_id(update), group_chat_id)
+                context.bot.send_message(chat_id=group_chat_id,
+                                         text=get_string(__get_user_lang(context), 'game_left',
+                                                         __get_username(update)))
+
+            elif context.user_data.get(group_chat_id) and context.user_data[group_chat_id]['in_game']:
+                __remove_user_from_game(__get_user_id(update), group_chat_id)
+                context.bot.send_message(chat_id=group_chat_id,
+                                         text=get_string(__get_user_lang(context), 'game_left',
+                                                         __get_username(update)))
+
+            elif context.user_data.get(group_chat_id) and not context.user_data[group_chat_id]['in_game']:
+                context.bot.send_message(chat_id=group_chat_id,
+                                         text=get_string(__get_user_lang(context), 'not_yet_in_game',
+                                                         __get_username(update)))
+
+        else:
+            context.bot.send_message(chat_id=__get_chat_id(update),
+                                     text=get_string(__get_user_lang(context), msg='no_game_yet'))
 
 
 def kick(update, context):
@@ -239,6 +263,14 @@ def __join_user_to_game(update, context, group_chat_id: int):
         'username': __get_username(update),
         'user_data': context.user_data
     })
+
+
+def __remove_user_from_game(user_chat_id: int, group_chat_id: int):
+    joined = games[group_chat_id]['joined']
+    for user in joined:
+        if user_chat_id == user['id']:
+            joined.remove(user)
+            break
 
 
 def __get_formatted_table(shuffled_dice: list) -> str:
