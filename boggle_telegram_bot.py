@@ -113,6 +113,18 @@ def start_game(update, context):
     pass
 
 
+def leave(update, context):
+    pass
+
+
+def kick(update, context):
+    pass
+
+
+def kill(update, context):
+    pass
+
+
 def show_statistics(update, context):
     pass
 
@@ -251,6 +263,9 @@ def main():
     dp.add_handler(CommandHandler('new', new, pass_user_data=True))
     dp.add_handler(CommandHandler('join', join, pass_user_data=True))
     dp.add_handler(CommandHandler('startgame', start_game, pass_user_data=True))
+    dp.add_handler(CommandHandler('leave', leave, pass_user_data=True))
+    dp.add_handler(CommandHandler('kick', kick, pass_user_data=True))
+    dp.add_handler(CommandHandler('kill', kill, pass_user_data=True))
     dp.add_handler(CommandHandler('stats', show_statistics, pass_user_data=True))
     dp.add_handler(CommandHandler('settings', settings, pass_user_data=True))
     dp.add_handler(CommandHandler('help', show_help, pass_user_data=True))
