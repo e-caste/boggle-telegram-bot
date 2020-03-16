@@ -41,6 +41,8 @@ timers = {
     'ingame': {}
 }
 
+games = []
+
 def start(update, context):
     reply = get_string(__get_user_lang(context), 'welcome', update.message.from_user.first_name)
     logger.info(f"User {__get_username(update)} started the bot.")
@@ -55,10 +57,12 @@ def new(update, context):
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_user_lang(context), msg='chat_is_not_group'))
     else:
-        if not timers['newgame'].get(__get_chat_id(update)):
+        group_chat_id = __get_chat_id(update)
+        if not timers['newgame'].get(group_chat_id):
             t = Timer(interval=newgame_timer_duration, function=__newgame_timer, args=context)
             t.start()
-            timers['newgame'][__get_chat_id(update)] = t
+            timers['newgame'][group_chat_id] = t
+            games.append({group_chat_id: __get_user_id(update)})
             context.bot.send_message(chat_id=__get_chat_id(update),
                                      text=get_string(__get_user_lang(context), 'game_created', __get_username(update),
                                                      newgame_timer_duration))
@@ -72,11 +76,14 @@ def join(update, context):
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_user_lang(context), msg='chat_is_not_group'))
     else:
-        if timers['newgame'].get(__get_chat_id(update)):
-            context.bot.send_message(chat_id=__get_chat_id(update),
+        group_chat_id = __get_chat_id(update)
+        if timers['newgame'].get(group_chat_id):
+            context.bot.send_message(chat_id=group_chat_id,
                                      text=get_string(__get_user_lang(context), 'game_joined',
                                                      __get_username(update)))
             # TODO: add in context.user_data that the user has joined
+            # if not context.user_data.get(group_chat_id):
+
 
         else:
             context.bot.send_message(chat_id=__get_chat_id(update),
@@ -149,8 +156,20 @@ def __get_chat_id(update) -> int:
     return update.message.chat.id if update.message.chat else update.message.effective_chat.id
 
 
+def __get_user_id(update) -> int:
+    return update.message.from_user.id
+
+
 def __newgame_timer(context):
     pass
+
+
+def __init_user_stats_for_group(chat_id: int, context):
+    d = context.user_data
+    d[chat_id] = {
+        'in_game': F,
+        'is_game_creator': True
+    }
 
 
 def __get_formatted_table(shuffled_dice: list) -> str:
