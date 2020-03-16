@@ -36,8 +36,8 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 timers = {
-    'newgame': [],
-    'ingame': []
+    'newgame': {},
+    'ingame': {}
 }
 
 def start(update, context):
@@ -55,9 +55,12 @@ def new(update, context):
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_user_lang(context), msg='chat_is_not_group'))
     else:
-        t = Timer(interval=120, function=__newgame_timer, args=context)
-        t.start()
-        timers['newgame'].append({__get_chat_id(update): t})
+        if not timers['newgame'].get(__get_chat_id(update)):
+            t = Timer(interval=120, function=__newgame_timer, args=context)
+            t.start()
+            timers['newgame'][__get_chat_id(update)] = t
+        else:
+            update.message.reply_text(get_string(__get_user_lang(context), msg='game_already_started'))
 
 
 def join(update, context):
