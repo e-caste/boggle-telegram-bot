@@ -55,7 +55,7 @@ def new(update, context):
         update.message.reply_text(get_string(__get_user_lang(context), msg='chat_is_not_group'))
     else:
         if not timers['newgame'].get(__get_chat_id(update)):
-            t = Timer(interval=120, function=__newgame_timer, args=context)
+            t = Timer(interval=60, function=__newgame_timer, args=context)
             t.start()
             timers['newgame'][__get_chat_id(update)] = t
             context.bot.send_message(chat_id=__get_chat_id(update),
