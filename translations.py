@@ -28,6 +28,10 @@ translations = {
         'ita': "È già stata creata una partita! Puoi partecipare con /join",
         'eng': "A game has already been created! You can still /join"
     },
+    'game_joined': {
+        'ita': "Okay, {}, sei in partita!",
+        'eng': "Alright, {}, you're in!"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
