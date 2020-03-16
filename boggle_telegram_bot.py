@@ -370,7 +370,7 @@ def __get_formatted_table(shuffled_dice: list) -> str:
     row_col_num = int(sqrt(total_num))
     formatted_table = "<b>"
     for i in range(0, total_num, row_col_num):
-        formatted_table += "  ".join(shuffled_dice[i:i + row_col_num]) + "\n"
+        formatted_table += "      ".join(shuffled_dice[i:i + row_col_num]) + "\n\n"
     formatted_table += "</b>"
     return formatted_table
 
@@ -388,8 +388,8 @@ def main():
     dp.add_handler(CommandHandler('join', join, pass_user_data=True, pass_chat_data=True))
     dp.add_handler(CommandHandler('startgame', start_game, pass_user_data=True, pass_chat_data=True))
     dp.add_handler(CommandHandler('leave', leave, pass_user_data=True, pass_chat_data=True))
-    dp.add_handler(CommandHandler('kick', kick, pass_user_data=True,pass_chat_data=True))
-    dp.add_handler(CommandHandler('kill', kill, pass_user_data=True,pass_chat_data=True))
+    dp.add_handler(CommandHandler('kick', kick, pass_user_data=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler('kill', kill, pass_user_data=True, pass_chat_data=True))
     dp.add_handler(CommandHandler('stats', show_statistics, pass_user_data=True, pass_chat_data=True))
     dp.add_handler(CommandHandler('settings', settings, pass_user_data=True, pass_chat_data=True))
     dp.add_handler(CommandHandler('help', show_help, pass_user_data=True, pass_chat_data=True))
