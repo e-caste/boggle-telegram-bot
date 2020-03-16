@@ -1,17 +1,6 @@
 from exceptions import LanguageNotFoundException, MessageNotFoundException
 
-
-def get_string(lang: str, msg: str, *args) -> str:
-    if lang not in available_languages:
-        raise LanguageNotFoundException(f"Language {lang} is not available for translation.")
-    elif msg not in translations:
-        raise MessageNotFoundException(f"Message {msg} is not available.")
-    else:
-        return translations[msg][lang].format(*args)
-
-
 available_languages = ['ita', 'eng']
-
 
 translations = {
     'welcome': {
@@ -49,6 +38,15 @@ translations = {
                "Use /help to show this help."
     }
 }
+
+
+def get_string(lang: str, msg: str, *args) -> str:
+    if lang not in available_languages:
+        raise LanguageNotFoundException(f"Language {lang} is not available for translation.")
+    elif msg not in translations:
+        raise MessageNotFoundException(f"Message {msg} is not available.")
+    else:
+        return translations[msg][lang].format(*args)
 
 
 if __name__ == '__main__':
