@@ -62,11 +62,23 @@ def new(update, context):
                                      text=get_string(__get_user_lang(context), 'game_created', __get_username(update)))
         else:
             context.bot.send_message(chat_id=__get_chat_id(update),
-                                     text=get_string(__get_user_lang(context), 'game_already_started', __get_username(update)))
+                                     text=get_string(__get_user_lang(context), 'game_already_started',
+                                                     __get_username(update)))
 
 
 def join(update, context):
-    pass
+    if not __check_chat_is_group(update):
+        update.message.reply_text(get_string(__get_user_lang(context), msg='chat_is_not_group'))
+    else:
+        if timers['newgame'].get(__get_chat_id(update)):
+            context.bot.send_message(chat_id=__get_chat_id(update),
+                                     text=get_string(__get_user_lang(context), 'game_joined',
+                                                     __get_username(update)))
+            # TODO: add in context.user_data that the user has joined
+        else:
+            context.bot.send_message(chat_id=__get_chat_id(update),
+                                     text=get_string(__get_user_lang(context), msg='no_game_yet'))
+
 
 
 def start_game(update, context):
