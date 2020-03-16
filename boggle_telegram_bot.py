@@ -146,7 +146,7 @@ def __get_formatted_table(shuffled_dice: list) -> str:
 
 
 def main():
-    pp = PicklePersistence(filename='boggle_paroliere_bot_db')
+    pp = PicklePersistence(filename='_boggle_paroliere_bot_db')
     updater = Updater(token, persistence=pp, use_context=True)
 
     # Get the dispatcher to register handlers
