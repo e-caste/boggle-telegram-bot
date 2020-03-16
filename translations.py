@@ -24,8 +24,9 @@ translations = {
         'eng': "Alright, {}, you're in!"
     },
     'already_in_game': {
-        'ita': "Hey {}, sei già in una partita! Il creatore della partita, {}, può farla cominciare col comando /start",
-        'eng': "Hey {}, you've already joined a game! The game creator, {}, can /start it."
+        'ita': "Hey {}, sei già in una partita! Il creatore della partita, {}, può farla cominciare col comando "
+               "/startgame",
+        'eng': "Hey {}, you've already joined a game! The game creator, {}, can start it with /startgame."
     },
     'no_game_yet': {
         'ita': "Non è ancora stata creata nessuna partita. Puoi crearne una con /new",
