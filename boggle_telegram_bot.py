@@ -54,6 +54,7 @@ def new(update, context):
     else:
         group_chat_id = __get_chat_id(update)
         cd = context.chat_data
+        bd = context.bot_data
         if not cd.get('timers'):
             __init_chat_data(context)
 
@@ -108,7 +109,7 @@ def join(update, context):
             else:
                 ud = context.user_data
                 if not ud.get('stats'):
-                    __init_user_stats_for_group(context, in_game=True)
+                    __init_user_stats_for_group(context)
                 __join_user_to_game(update, context)
                 context.bot.send_message(chat_id=group_chat_id,
                                          text=get_string(__get_user_lang(context), 'game_joined',
@@ -188,6 +189,8 @@ def kill(update, context):
 
 
 def show_statistics(update, context):
+    # TODO: if in group chat, ask the user if he wants group or their stats
+    # TODO: if in private chat, show the user's stats
     pass
 
 
@@ -286,7 +289,7 @@ def __init_chat_data(context):
     }
 
 
-def __init_user_stats_for_group(context, in_game: bool):
+def __init_user_stats_for_group(context):
     ud = context.user_data
     ud['stats'] = {
         'matches': {
