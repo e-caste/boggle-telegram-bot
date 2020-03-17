@@ -18,7 +18,7 @@ import sys
 import traceback
 from translations import get_string
 from threading import Timer
-from dice import get_shuffled_dice
+from dice import get_shuffled_dice, letters_sets
 from math import sqrt
 from time import time
 # from datetime import time
@@ -62,7 +62,6 @@ def new(update, context):
     else:
         group_chat_id = __get_chat_id(update)
         cd = context.chat_data
-        bd = context.bot_data
         if not cd.get('timers'):
             __init_chat_data(context)
 
@@ -79,16 +78,10 @@ def new(update, context):
                     'username': __get_username(update)
                 },
                 'participants': [],
-                'is_finished': False
+                'is_finished': False,
+                'ingame_timer': None,
+                'lang': __get_chat_lang(context)
             })
-            bd['games'][group_chat_id] = {
-                'creator': {
-                    'id': __get_user_id(update),
-                    'username': __get_username(update)
-                },
-                'participants': [],
-                'ingame_timer': None
-            }
             context.bot.send_message(chat_id=__get_chat_id(update),
                                      text=get_string(__get_chat_lang(context), 'game_created', __get_username(update),
                                                      cd['timers']['durations']['newgame']))
@@ -194,17 +187,18 @@ def start_game(update, context, timer: bool = False):
             cd['timers']['newgame'] = None
             timers['newgame'][group_chat_id]()  # cancel timer if started by game creator
 
-    table = __get_formatted_table(get_shuffled_dice(cd['settings']['lang'],
-                                                    cd['settings']['table_dimensions']))
+    table_list = get_shuffled_dice(cd['settings']['lang'], cd['settings']['table_dimensions'])
+    table_str = __get_formatted_table(table_list)
 
     bd['games'][group_chat_id] = current_game
+    bd['games'][group_chat_id]['table'] = __convert_table_list_to_matrix(table_list)
 
     context.bot.send_message(chat_id=group_chat_id,
                              text=get_string(__get_chat_lang(context), 'game_started_group'))
     for player in current_game['participants']:
         context.bot.send_message(chat_id=player['id'],
                                  text=get_string(__get_chat_lang(context), 'game_started_private',
-                                                 cd['timers']['durations']['ingame']) + "\n\n\n" + table,
+                                                 cd['timers']['durations']['ingame']) + "\n\n\n" + table_str,
                                  parse_mode=HTML)
 
     t = Timer(interval=cd['timers']['durations']['newgame'],
@@ -212,6 +206,31 @@ def start_game(update, context, timer: bool = False):
     t.start()
     bd['games'][group_chat_id]['ingame_timer'] = t.name
     timers['ingame'][group_chat_id] = t.cancel
+
+
+def points_handler(update, context):
+    chat_id = __get_chat_id(update)
+    user_id = __get_user_id(update)
+    bd = context.bot_data
+
+    for group in bd['games']:
+        for participant in group['participants']:
+            if user_id == participant['id']:
+                group_dict = group
+                break
+        else:
+            continue
+        break
+    else:
+        context.bot.send_message(chat_id=chat_id,
+                                 text=get_string(__get_chat_lang(context), 'received_dm_but_user_not_in_game'))
+        return
+
+    word = update.message.text
+    if set(word) > letters_sets[group_dict['lang']]:
+        update.message.reply_text(get_string(__get_chat_lang(context), 'received_dm_but_char_not_alpha'))
+        return
+
 
 
 
@@ -473,6 +492,15 @@ def __get_formatted_table(shuffled_dice: list) -> str:
     return "<code>" + formatted_table + "</code>"
 
 
+def __convert_table_list_to_matrix(table: list) -> list:
+    res = []
+    total_num = len(table)
+    row_col_num = int(sqrt(total_num))
+    for i in range(0, total_num, row_col_num):
+        res.append(table[i:i + row_col_num])
+    return res
+
+
 def main():
     pp = PicklePersistence(filename='_boggle_paroliere_bot_db')
     updater = Updater(token, persistence=pp, use_context=True)
@@ -491,6 +519,9 @@ def main():
     dp.add_handler(CommandHandler('stats', show_statistics))
     dp.add_handler(CommandHandler('settings', settings))
     dp.add_handler(CommandHandler('help', show_help))
+
+    # handles all text messages in a private chat
+    dp.add_handler(MessageHandler(Filters.text & ~ Filters.group, points_handler))
 
     # log all errors
     dp.add_error_handler(error)
