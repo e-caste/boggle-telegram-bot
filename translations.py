@@ -60,6 +60,12 @@ translations = {
                "secondi!",
         'eng': "Here you can send me all the words you can find in the table below. Quick, you only have {} seconds!"
     },
+    'received_dm_but_user_not_in_game': {
+        'ita': "Ehi, mi hai scritto ma non sei in nessuna partita! Puoi aggiungermi a un gruppo con degli amici e usare"
+               " lì il comando /new per crearne una.",
+        'eng': "Hey, you texted me but you're not in any game at the moment! You can add me to a group with your "
+               "friends and use the /new command there to create one."
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
