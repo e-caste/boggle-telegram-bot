@@ -222,7 +222,7 @@ def points_handler(update, context):
             continue
         break
     else:
-        context.bot.send_message(chat_id=chat_id,
+        context.bot.send_message(chat_id=chat_id,  # TODO: make __get_game_lang
                                  text=get_string(__get_chat_lang(context), 'received_dm_but_user_not_in_game'))
         return
 
@@ -231,6 +231,9 @@ def points_handler(update, context):
         if char not in letters_sets[bd['games'][group_id]['lang']]:
             update.message.reply_text(get_string(__get_chat_lang(context), 'received_dm_but_char_not_alpha'))
             return
+
+    if not __validate_word_by_boggle_rules(word, bd['games'][group_id]['table']):
+        update.message.reply_text(get_string(__get_chat_lang(context), 'received_dm_but_char_not_alpha'))
 
     context.bot.send_message(chat_id=chat_id,
                              text=word)
@@ -496,12 +499,18 @@ def __get_formatted_table(shuffled_dice: list) -> str:
 
 
 def __convert_table_list_to_matrix(table: list) -> list:
+    for i, letter in table:
+        table[i] = letter.lower()
     res = []
     total_num = len(table)
     row_col_num = int(sqrt(total_num))
     for i in range(0, total_num, row_col_num):
         res.append(table[i:i + row_col_num])
     return res
+
+
+def __validate_word_by_boggle_rules(word: str, table: list) -> bool:
+
 
 
 def main():
