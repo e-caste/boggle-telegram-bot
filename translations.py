@@ -75,6 +75,10 @@ translations = {
         'ita': "Questa parola è troppo corta: nel Paroliere le parole devono essere lunghe almeno 3 lettere.",
         'eng': "This word is too short: in Boggle, words must be at least 3 letters long."
     },
+    'received_dm_but_word_not_validated': {
+        'ita': "Ehi, hai digitato una parola impossibile da comporre con queste lettere, quindi l'ho scartata.",
+        'eng': "Hey, you've sent me an impossible word to make using these letters, so I've discarded it."
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
