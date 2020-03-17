@@ -481,16 +481,16 @@ def main():
     dp = updater.dispatcher
 
     # TODO: add greetings message when the bot gets added to a group
-    dp.add_handler(CommandHandler('start', start, pass_user_data=True, pass_chat_data=True))
-    dp.add_handler(CommandHandler('new', new, pass_user_data=True, pass_chat_data=True))
-    dp.add_handler(CommandHandler('join', join, pass_user_data=True, pass_chat_data=True))
-    dp.add_handler(CommandHandler('startgame', start_game, pass_user_data=True, pass_chat_data=True))
-    dp.add_handler(CommandHandler('leave', leave, pass_user_data=True, pass_chat_data=True))
-    dp.add_handler(CommandHandler('kick', kick, pass_user_data=True, pass_chat_data=True))
-    dp.add_handler(CommandHandler('kill', kill, pass_user_data=True, pass_chat_data=True))
-    dp.add_handler(CommandHandler('stats', show_statistics, pass_user_data=True, pass_chat_data=True))
-    dp.add_handler(CommandHandler('settings', settings, pass_user_data=True, pass_chat_data=True))
-    dp.add_handler(CommandHandler('help', show_help, pass_user_data=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler('start', start))
+    dp.add_handler(CommandHandler('new', new))
+    dp.add_handler(CommandHandler('join', join))
+    dp.add_handler(CommandHandler('startgame', start_game))
+    dp.add_handler(CommandHandler('leave', leave))
+    dp.add_handler(CommandHandler('kick', kick))
+    dp.add_handler(CommandHandler('kill', kill))
+    dp.add_handler(CommandHandler('stats', show_statistics))
+    dp.add_handler(CommandHandler('settings', settings))
+    dp.add_handler(CommandHandler('help', show_help))
 
     # log all errors
     dp.add_error_handler(error)
