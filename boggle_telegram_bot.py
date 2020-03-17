@@ -233,7 +233,7 @@ def points_handler(update, context):
             continue
         break
     else:
-        context.bot.send_message(chat_id=chat_id,  # TODO: make __get_game_lang
+        context.bot.send_message(chat_id=chat_id,
                                  text=get_string(__get_chat_lang(context), 'received_dm_but_user_not_in_game'))
         return
 
@@ -241,21 +241,21 @@ def points_handler(update, context):
 
     for char in word:
         if char not in letters_sets[bd['games'][group_id]['lang']]:
-            update.message.reply_text(get_string(__get_chat_lang(context), 'received_dm_but_char_not_alpha'))
+            update.message.reply_text(get_string(__get_game_lang(context, group_id), 'received_dm_but_char_not_alpha'))
             return
 
     if len(word) < 3:
-        update.message.reply_text(get_string(__get_chat_lang(context), 'received_dm_but_word_too_short'))
+        update.message.reply_text(get_string(__get_game_lang(context, group_id), 'received_dm_but_word_too_short'))
         return
 
     if "q" in word and "qu" not in word:
-        update.message.reply_text(get_string(__get_chat_lang(context), 'received_dm_but_q_without_u'))
+        update.message.reply_text(get_string(__get_game_lang(context, group_id), 'received_dm_but_q_without_u'))
         return
 
     word = word.replace("qu", "q")
 
     if not __validate_word_by_boggle_rules(word, bd['games'][group_id]['table_grid']):
-        update.message.reply_text(get_string(__get_chat_lang(context), 'received_dm_but_word_not_validated'))
+        update.message.reply_text(get_string(__get_game_lang(context, group_id), 'received_dm_but_word_not_validated'))
         return
 
     word = word.replace("q", "qu")
@@ -333,6 +333,11 @@ def __get_username(update) -> str:
 def __get_chat_lang(context) -> str:
     cd = context.chat_data
     return cd['settings']['lang'] if cd.get('settings') else 'eng'
+
+
+def __get_game_lang(context, group_id: int) -> str:
+    bd = context.bot_data
+    return bd['games'][group_id]['lang']
 
 
 # return True for GROUP or SUPERGROUP, False for PRIVATE (or CHANNEL)
