@@ -287,7 +287,7 @@ def __get_chat_lang(context) -> str:
 
 # return True for GROUP or SUPERGROUP, False for PRIVATE (or CHANNEL)
 def __check_chat_is_group(update):
-    return True if 'group' in update.message.chat.type else False
+    return 'group' in update.message.chat.type
 
 
 def __get_chat_id(update) -> int:
@@ -442,7 +442,7 @@ def __get_formatted_table(shuffled_dice: list) -> str:
     total_num = len(shuffled_dice)
     row_col_num = int(sqrt(total_num))
 
-    Qu_is_in_table = True if "Qu" in shuffled_dice else False
+    Qu_is_in_table = "Qu" in shuffled_dice
 
     formatted_table = ""
     for i in range(0, total_num, row_col_num):
