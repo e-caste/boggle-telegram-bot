@@ -39,6 +39,8 @@ logger = logging.getLogger(__name__)
 
 # TODO: add logger to each function
 def start(update, context):
+    __check_bot_data_is_initialized(context
+                                    )
     reply = get_string(__get_user_lang(context), 'welcome', update.message.from_user.first_name)
     logger.info(f"User {__get_username(update)} started the bot.")
     # if context.user_data:  # TODO: add stats to reply
@@ -49,6 +51,8 @@ def start(update, context):
 
 
 def new(update, context):
+    __check_bot_data_is_initialized(context)
+
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_user_lang(context), msg='chat_is_not_group'))
     else:
@@ -82,6 +86,8 @@ def new(update, context):
 
 
 def join(update, context):
+    __check_bot_data_is_initialized(context)
+
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_user_lang(context), msg='chat_is_not_group'))
     else:
@@ -121,6 +127,8 @@ def join(update, context):
 
 
 def leave(update, context):
+    __check_bot_data_is_initialized(context)
+
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_user_lang(context), msg='chat_is_not_group'))
     else:
@@ -154,6 +162,8 @@ def leave(update, context):
 
 
 def start_game(update, context, timer: bool = False):
+    __check_bot_data_is_initialized(context)
+
     cd = context.chat_data
     current_game = __get_current_game(context)
     if not timer:
@@ -181,24 +191,29 @@ def start_game(update, context, timer: bool = False):
 
 
 def kick(update, context):
+    __check_bot_data_is_initialized(context)
     pass
 
 
 def kill(update, context):
+    __check_bot_data_is_initialized(context)
     pass
 
 
 def show_statistics(update, context):
+    __check_bot_data_is_initialized(context)
     # TODO: if in group chat, ask the user if he wants group or their stats
     # TODO: if in private chat, show the user's stats
     pass
 
 
 def settings(update, context):
+    __check_bot_data_is_initialized(context)
     pass
 
 
 def show_help(update, context):
+    __check_bot_data_is_initialized(context)
     update.message.reply_text(text=get_string(__get_user_lang(context), msg='help'))
 
 
@@ -269,6 +284,20 @@ def __newgame_timer(update, context):
 
 def __ingame_timer(update, context):
     pass
+
+
+def __check_bot_data_is_initialized(context):
+    if not context.bot_data.get('stats'):
+        __init_bot_data(context)
+
+
+def __init_bot_data(context):
+    bd = context.bot_data
+    bd['games'] = {}
+    bd['stats'] = {
+        'users': [],
+        'groups': []
+    }
 
 
 def __init_chat_data(context):
