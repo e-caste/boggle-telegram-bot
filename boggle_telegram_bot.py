@@ -440,13 +440,36 @@ def __get_formatted_table(shuffled_dice: list) -> str:
     # assuming the table is always an NxN square
     total_num = len(shuffled_dice)
     row_col_num = int(sqrt(total_num))
-    formatted_table = "<code>"
+
+    Qu_is_in_table = True if "Qu" in shuffled_dice else False
+
+    formatted_table = ""
     for i in range(0, total_num, row_col_num):
         formatted_table += "  |  ".join(shuffled_dice[i:i + row_col_num]) + "\n"
-        if i != total_num - 1:
+        if i != total_num - row_col_num:
             formatted_table += "---|--" * (row_col_num - 1) + "-\n"
-    formatted_table += "</code>"
-    return formatted_table
+
+    if Qu_is_in_table:
+        lines = formatted_table.splitlines()
+        formatted_table = ""
+        index_u = -1
+        for line in lines:
+            if "Qu" in line:
+                index_u = line.index("u")
+
+        for line in lines:
+            if "Qu" not in line:
+                formatted_table += line[:index_u]
+                if "-" not in line:
+                    formatted_table += " "
+                else:
+                    formatted_table += "-"
+                formatted_table += line[index_u:]
+            else:
+                formatted_table += line
+            formatted_table += "\n"
+
+    return "<code>" + formatted_table + "</code>"
 
 
 def main():
