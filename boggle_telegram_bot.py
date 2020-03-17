@@ -193,10 +193,11 @@ def start_game(update, context, timer: bool = False):
 
     table_list = get_shuffled_dice(cd['settings']['lang'], cd['settings']['table_dimensions'])
     table_str = __get_formatted_table(table_list)
+
     row_col_num = int(sqrt(len(table_list)))
+    table_list = [letter if letter != "Qu" else "Q" for letter in table_list]
     table_grid = {(row, col): table_list[row * row_col_num + col].lower()
                   for row in range(row_col_num) for col in range(row_col_num)}
-    # TODO: add substitution of Qu with Q for simpler handling
 
     bd['games'][group_chat_id] = current_game
     bd['games'][group_chat_id]['table_grid'] = table_grid
@@ -247,9 +248,17 @@ def points_handler(update, context):
         update.message.reply_text(get_string(__get_chat_lang(context), 'received_dm_but_word_too_short'))
         return
 
+    if "q" in word and "qu" not in word:
+        update.message.reply_text(get_string(__get_chat_lang(context), 'received_dm_but_q_without_u'))
+        return
+
+    word = word.replace("qu", "q")
+
     if not __validate_word_by_boggle_rules(word, bd['games'][group_id]['table_grid']):
         update.message.reply_text(get_string(__get_chat_lang(context), 'received_dm_but_word_not_validated'))
         return
+
+    word = word.replace("q", "qu")
 
     context.bot.send_message(chat_id=chat_id,
                              text=word)
