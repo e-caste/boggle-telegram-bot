@@ -66,6 +66,11 @@ translations = {
         'eng': "Hey, you texted me but you're not in any game at the moment! You can add me to a group with your "
                "friends and use the /new command there to create one."
     },
+    'received_dm_but_char_not_alpha': {
+        'ita': "Ehi, sembra che questo messaggio contenga dei caratteri non presenti tra i dadi, l'ho scartato.",
+        'eng': "Hey, it looks like this message contains some characters which can't be found on the dice, "
+               "I've discarded it."
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
