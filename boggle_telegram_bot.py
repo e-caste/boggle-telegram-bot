@@ -41,6 +41,10 @@ timers = {
     'ingame': {}
 }
 
+_possible_directions = [
+        [-1, 0], [1, 0], [1, 1], [1, -1], [-1, -1], [-1, 1], [0, 1], [0, -1]
+]
+
 # TODO: add logger to each function
 def start(update, context):
     __check_bot_data_is_initialized(context)
@@ -189,9 +193,13 @@ def start_game(update, context, timer: bool = False):
 
     table_list = get_shuffled_dice(cd['settings']['lang'], cd['settings']['table_dimensions'])
     table_str = __get_formatted_table(table_list)
+    row_col_num = int(sqrt(len(table_list)))
+    table_grid = {(row, col): table_list[row * row_col_num + col].lower()
+                  for row in range(row_col_num) for col in range(row_col_num)}
+    # TODO: add substitution of Qu with Q for simpler handling
 
     bd['games'][group_chat_id] = current_game
-    bd['games'][group_chat_id]['table'] = __convert_table_list_to_matrix(table_list)
+    bd['games'][group_chat_id]['table_grid'] = table_grid
 
     context.bot.send_message(chat_id=group_chat_id,
                              text=get_string(__get_chat_lang(context), 'game_started_group'))
@@ -209,6 +217,8 @@ def start_game(update, context, timer: bool = False):
 
 
 def points_handler(update, context):
+    __check_bot_data_is_initialized(context)
+
     chat_id = __get_chat_id(update)
     user_id = __get_user_id(update)
     bd = context.bot_data
@@ -227,13 +237,19 @@ def points_handler(update, context):
         return
 
     word = update.message.text.lower()
+
     for char in word:
         if char not in letters_sets[bd['games'][group_id]['lang']]:
             update.message.reply_text(get_string(__get_chat_lang(context), 'received_dm_but_char_not_alpha'))
             return
 
-    if not __validate_word_by_boggle_rules(word, bd['games'][group_id]['table']):
-        update.message.reply_text(get_string(__get_chat_lang(context), 'received_dm_but_char_not_alpha'))
+    if len(word) < 3:
+        update.message.reply_text(get_string(__get_chat_lang(context), 'received_dm_but_word_too_short'))
+        return
+
+    if not __validate_word_by_boggle_rules(word, bd['games'][group_id]['table_grid']):
+        update.message.reply_text(get_string(__get_chat_lang(context), 'received_dm_but_word_not_validated'))
+        return
 
     context.bot.send_message(chat_id=chat_id,
                              text=word)
@@ -482,6 +498,7 @@ def __get_formatted_table(shuffled_dice: list) -> str:
         for line in lines:
             if "Qu" in line:
                 index_u = line.index("u")
+                break
 
         for line in lines:
             if "Qu" not in line:
@@ -499,7 +516,7 @@ def __get_formatted_table(shuffled_dice: list) -> str:
 
 
 def __convert_table_list_to_matrix(table: list) -> list:
-    for i, letter in table:
+    for i, letter in enumerate(table):
         table[i] = letter.lower()
     res = []
     total_num = len(table)
@@ -509,8 +526,62 @@ def __convert_table_list_to_matrix(table: list) -> list:
     return res
 
 
-def __validate_word_by_boggle_rules(word: str, table: list) -> bool:
+def __validate_word_by_boggle_rules(word: str, grid: dict) -> bool:
+    neighbours = __get_all_grid_neighbours(grid)
+    paths = []
+    full_words = set()
+    full_words.add(word)
+    stems = set(word[:i] for i in range(1, len(word)))
 
+    def __do_search(path):
+        word = __get_path_to_word(grid, path)
+        if word in full_words:
+            paths.append(path)
+        if word not in stems:
+            return
+        for next_pos in neighbours[path[-1]]:
+            if next_pos not in path:
+                __do_search(path + [next_pos])
+
+    for position in grid:
+        __do_search([position])
+
+    words = set()
+    for path in paths:
+        words.add(__get_path_to_word(grid, path))
+
+    return word in words
+
+
+def __get_all_grid_neighbours(grid):
+    neighbours = {}
+    for position in grid:
+        position_neighbours = __get_neighbours_of_position(position)
+        neighbours[position] = [p for p in position_neighbours if p in grid]
+    return neighbours
+
+
+def __get_neighbours_of_position(coords):
+    row, col = coords
+
+    top_left = (row - 1, col - 1)
+    top_center = (row - 1, col)
+    top_right = (row - 1, col + 1)
+
+    left = (row, col - 1)
+    right = (row, col + 1)
+
+    bottom_left = (row + 1, col - 1)
+    bottom_center = (row + 1, col)
+    bottom_right = (row + 1, col + 1)
+
+    return [top_left, top_center, top_right,
+            left, right,
+            bottom_left, bottom_center, bottom_right]
+
+
+def __get_path_to_word(grid, path):
+    return ''.join([grid[p] for p in path])
 
 
 def main():
