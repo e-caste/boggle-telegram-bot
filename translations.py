@@ -79,6 +79,10 @@ translations = {
         'ita': "Ehi, hai digitato una parola impossibile da comporre con queste lettere, quindi l'ho scartata.",
         'eng': "Hey, you've sent me an impossible word to make using these letters, so I've discarded it."
     },
+    'received_dm_but_q_without_u': {
+        'ita': "Non puoi usare la lettera Q senza che sia seguita da una U! Ho scartato la parola.",
+        'eng': "You can't use the letter Q without it being followed by U! I've discarded your last word."
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
