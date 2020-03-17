@@ -36,11 +36,15 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
+timers = {
+    'newgame': {},
+    'ingame': {}
+}
 
 # TODO: add logger to each function
 def start(update, context):
-    __check_bot_data_is_initialized(context
-                                    )
+    __check_bot_data_is_initialized(context)
+
     reply = get_string(__get_user_lang(context), 'welcome', update.message.from_user.first_name)
     logger.info(f"User {__get_username(update)} started the bot.")
     # if context.user_data:  # TODO: add stats to reply
@@ -67,6 +71,7 @@ def new(update, context):
                       function=__newgame_timer, args=(update, context))
             t.start()
             cd['timers']['newgame'] = t.name
+            timers['newgame'][group_chat_id] = t.cancel  # pass callable
             cd['games'].append({
                 'unix_epoch': int(time()),
                 'creator': {
@@ -76,6 +81,14 @@ def new(update, context):
                 'participants': [],
                 'is_finished': False
             })
+            bd['games'][group_chat_id] = {
+                'creator': {
+                    'id': __get_user_id(update),
+                    'username': __get_username(update)
+                },
+                'participants': [],
+                'ingame_timer': None
+            }
             context.bot.send_message(chat_id=__get_chat_id(update),
                                      text=get_string(__get_user_lang(context), 'game_created', __get_username(update),
                                                      cd['timers']['durations']['newgame']))
@@ -99,6 +112,7 @@ def join(update, context):
                                      text=get_string(__get_user_lang(context), msg='no_game_yet'))
             return
 
+        bd = context.bot_data
         # TODO: add check that the user joining has started the bot in a private chat
 
         if cd['timers']['newgame']:
@@ -113,9 +127,14 @@ def join(update, context):
                                                              current_game['creator']['username']))
                     break
             else:
-                ud = context.user_data
-                if not ud.get('stats'):
-                    __init_user_stats_for_group(context)
+                if group_chat_id not in bd['stats']['groups']:
+                    __init_group_stats(context, group_chat_id)
+
+                if not bd['stats']['users'].get(user_id):  # user has never played
+                    __init_user_stats(context, user_id, __get_username(update), group_chat_id, new_player=True)
+                elif not bd['stats']['groups'][group_chat_id].get(user_id):  # user has already played in other groups
+                    __init_user_stats(context, user_id, __get_username(update), group_chat_id, new_player=False)
+
                 __join_user_to_game(update, context)
                 context.bot.send_message(chat_id=group_chat_id,
                                          text=get_string(__get_user_lang(context), 'game_joined',
@@ -165,14 +184,21 @@ def start_game(update, context, timer: bool = False):
     __check_bot_data_is_initialized(context)
 
     cd = context.chat_data
+    bd = context.bot_data
     current_game = __get_current_game(context)
+    group_chat_id = __get_chat_id(update)
     if not timer:
         if __forbid_not_game_creator(update, context, command="/startgame"):
             return
+        else:
+            cd['timers']['newgame'] = None
+            timers['newgame'][group_chat_id]()  # cancel timer if started by game creator
 
     table = __get_formatted_table(get_shuffled_dice(cd['settings']['lang'],
                                                     cd['settings']['table_dimensions']))
-    group_chat_id = __get_chat_id(update)
+
+    bd['games'][group_chat_id] = current_game
+
     context.bot.send_message(chat_id=group_chat_id,
                              text=get_string(__get_user_lang(context), 'game_started_group'))
     for player in current_game['participants']:
@@ -184,7 +210,7 @@ def start_game(update, context, timer: bool = False):
     t = Timer(interval=cd['timers']['durations']['newgame'],
               function=__ingame_timer, args=(update, context))
     t.start()
-    cd['timers']['ingame'] = t.name
+    bd['games'][group_chat_id]['ingame_timer'] = t.cancel
 
 
 
@@ -295,8 +321,8 @@ def __init_bot_data(context):
     bd = context.bot_data
     bd['games'] = {}
     bd['stats'] = {
-        'users': [],
-        'groups': []
+        'users': {},
+        'groups': {}
     }
 
 
@@ -318,9 +344,19 @@ def __init_chat_data(context):
     }
 
 
-def __init_user_stats_for_group(context):
-    ud = context.user_data
-    ud['stats'] = {
+def __init_group_stats(context, group_id: int):
+    bd = context.bot_data
+    bd['stats']['groups'][group_id] = {
+        'matches': 0,
+        'points': 0,
+        'average': 0
+    }
+
+
+def __init_user_stats(context, user_id: int, username: str, group_id: int, new_player: bool):
+    bd = context.bot_data
+    initial_stats = {
+        'username': username,
         'matches': {
             'won': {
                 'value': 0,
@@ -348,6 +384,9 @@ def __init_user_stats_for_group(context):
             'total': 0
         }
     }
+    if new_player:
+        bd['stats']['users'][user_id] = initial_stats
+    bd['stats']['groups'][group_id][user_id] = initial_stats
 
 
 def __join_user_to_game(update, context):
