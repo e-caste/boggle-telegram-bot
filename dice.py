@@ -44,6 +44,10 @@ dice = {
     }
 }
 
+letters_sets = {
+    'ita': set('abcdefghilmnopqrstuvz'),
+    'eng': set('abcdefghijklmnopqrstuvxyz')
+}
 
 def get_shuffled_dice(lang: str, table_dimensions: str) -> list:
     if lang not in dice:
