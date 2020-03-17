@@ -49,6 +49,7 @@ letters_sets = {
     'eng': set('abcdefghijklmnopqrstuvwxyz')
 }
 
+
 def get_shuffled_dice(lang: str, table_dimensions: str) -> list:
     if lang not in dice:
         raise LanguageNotFoundException(f"Language {lang} is not available for translation.")
