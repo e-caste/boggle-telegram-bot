@@ -41,9 +41,6 @@ timers = {
     'ingame': {}
 }
 
-_possible_directions = [
-        [-1, 0], [1, 0], [1, 1], [1, -1], [-1, -1], [-1, 1], [0, 1], [0, -1]
-]
 
 # TODO: add logger to each function
 def start(update, context):
