@@ -214,9 +214,9 @@ def points_handler(update, context):
     bd = context.bot_data
 
     for group in bd['games']:
-        for participant in group['participants']:
+        for participant in bd['games'][group]['participants']:
             if user_id == participant['id']:
-                group_dict = group
+                group_id = group
                 break
         else:
             continue
@@ -226,11 +226,14 @@ def points_handler(update, context):
                                  text=get_string(__get_chat_lang(context), 'received_dm_but_user_not_in_game'))
         return
 
-    word = update.message.text
-    if set(word) > letters_sets[group_dict['lang']]:
-        update.message.reply_text(get_string(__get_chat_lang(context), 'received_dm_but_char_not_alpha'))
-        return
+    word = update.message.text.lower()
+    for char in word:
+        if char not in letters_sets[bd['games'][group_id]['lang']]:
+            update.message.reply_text(get_string(__get_chat_lang(context), 'received_dm_but_char_not_alpha'))
+            return
 
+    context.bot.send_message(chat_id=chat_id,
+                             text=word)
 
 
 
