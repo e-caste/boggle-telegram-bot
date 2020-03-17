@@ -71,6 +71,10 @@ translations = {
         'eng': "Hey, it looks like this message contains some characters which can't be found on the dice, "
                "I've discarded it."
     },
+    'received_dm_but_word_too_short': {
+        'ita': "Questa parola è troppo corta: nel Paroliere le parole devono essere lunghe almeno 3 lettere.",
+        'eng': "This word is too short: in Boggle, words must be at least 3 letters long."
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
