@@ -210,7 +210,8 @@ def start_game(update, context, timer: bool = False):
     t = Timer(interval=cd['timers']['durations']['newgame'],
               function=__ingame_timer, args=(update, context))
     t.start()
-    bd['games'][group_chat_id]['ingame_timer'] = t.cancel
+    bd['games'][group_chat_id]['ingame_timer'] = t.name
+    timers['ingame'][group_chat_id] = t.cancel
 
 
 
