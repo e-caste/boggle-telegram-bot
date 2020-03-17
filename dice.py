@@ -46,7 +46,7 @@ dice = {
 
 letters_sets = {
     'ita': set('abcdefghilmnopqrstuvz'),
-    'eng': set('abcdefghijklmnopqrstuvxyz')
+    'eng': set('abcdefghijklmnopqrstuvwxyz')
 }
 
 def get_shuffled_dice(lang: str, table_dimensions: str) -> list:
