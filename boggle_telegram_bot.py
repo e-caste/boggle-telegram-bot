@@ -221,7 +221,7 @@ def points_handler(update, context):
     user_id = __get_user_id(update)
     bd = context.bot_data
 
-    for group in bd['games']:
+    for group in [game for game in bd['games'] if not game['is_finished']]:
         for participant in bd['games'][group]['participants']:
             if user_id == participant['id']:
                 group_id = group
@@ -382,6 +382,22 @@ def __ingame_timer(update, context, group_id: int):
     game['ingame_timer'] = None
     game['is_finished'] = True
     __check_words_in_common(context, group_id)
+    player_words_with_points = {}
+    for user_id in game['participants']:
+        player_words_with_points[user_id] = __get_formatted_words(context, group_id, with_points=True, user_id=user_id)
+    player_words_without_points = __get_formatted_words(context, group_id, with_points=False)
+
+    for user_id in player_words_with_points:
+        context.bot.send_message(chat_id=user_id,
+                                 text=get_string(__get_game_lang(context, group_id), 'ingame_timer_expired_private',
+                                                 player_words_with_points[user_id]),
+                                 parse_mode=HTML)
+
+    context.bot.send_message(chat_id=group_id,
+                             text=get_string(__get_chat_lang(context), 'ingame_timer_expired_group',
+                                             game['creator']['username'], game['creator']['username'],
+                                             player_words_without_points),
+                             parse_mode=HTML)
 
 
 def __check_bot_data_is_initialized(context):
@@ -642,6 +658,30 @@ def __check_words_in_common(context, group_id: int):
                             if word == word_2:
                                 words[word]['sent_by_other_players'] = True
                                 words_2[word_2]['sent_by_other_players'] = True
+
+
+def __get_formatted_words(context, group_id: int, with_points: bool, user_id: int = None) -> str:
+    players = context.bot_data['games'][group_id]['participants']
+    res = ""
+    def __get_formatted_words_internal(result: str) -> str:
+        result += f"<b>{players[player]['username']}</b>\n"
+        words = players[player]['words']
+        for word in words:
+            result += f"<i>{word}</i>"
+            if with_points:
+                result += f": {word['points']}"
+            result += "\n"
+            return result
+
+    for player in players:
+        if user_id:
+            if player == user_id:
+                res = __get_formatted_words_internal(res)
+                return res
+        else:
+            res = __get_formatted_words_internal(res)
+        res += "\n\n"
+    return res
 
 
 def main():
