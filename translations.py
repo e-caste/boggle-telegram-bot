@@ -160,6 +160,10 @@ translations = {
                "/delete <word> (do not include < and >).\n\n<b>{}, please remember to send me the /endgame command to "
                "end the game and to see the results!</b>\n\nBelow you can find the list of words for each player:\n\n{}"
     },
+    'game_not_yet_finished': {
+        'ita': "Mi spiace, ma quel comando si può usare solo a partita finita.",
+        'eng': "I'm sorry, but that command is only available after the game is finished."
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
