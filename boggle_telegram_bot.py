@@ -256,8 +256,13 @@ def points_handler(update, context):
         return
 
     word = word.replace("q", "qu")
+    words = bd['games'][group_id]['participants'][user_id]['words']
 
-    bd['games'][group_id]['participants'][user_id]['words'][word] = __get_points_for_word(word)
+    if not words.get(word):
+        words[word] = __get_points_for_word(word)
+    else:
+        update.message.reply_text(get_string(__get_game_lang(context, group_id), 'received_dm_but_word_already_sent',
+                                             word))
 
 
 def delete(update, context):
