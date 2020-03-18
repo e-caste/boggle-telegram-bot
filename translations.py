@@ -183,6 +183,18 @@ translations = {
         'eng': "I've deleted all the words you've sent me. Now you can either send me some other words with /delete <"
                "list of space separated words> or you can /endgame."
     },
+    'game_finished': {
+        'ita': "<b>Fine partita!</b>\n\n{}: {} con {} punti!",
+        'eng': "<b>Game ended!</b>\n\n{}: {} with {} points!"
+    },
+    'game_winner_singular': {
+        'ita': "E il vincitore è",
+        'eng': "And the winner is"
+    },
+    'game_winners_plural': {
+        'ita': "E i vincitori parimerito sono",
+        'eng': "And the even winners are"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
