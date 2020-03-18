@@ -169,6 +169,14 @@ translations = {
                "rimandami il messaggio.",
         'eng': "At least one character in the word '{}' is not available among the dice. Please resend me the message."
     },
+    'words_not_found_in_players_words': {
+        'ita': "Ho eliminato tutte le parole che mi hai mandato, fatta eccezione per queste: {}, perché non le ho "
+               "trovate tra le parole segnate dai giocatori. Puoi riprovare a usare /delete <lista di parole separate "
+               "da spazi>, o terminare la partita con /endgame.",
+        'eng': "I've deleted all the words you've sent me, except these ones: {}, because I couldn't find them among "
+               "the words sent me by the players. You can try again with /delete <list of space separated words>, or "
+               "you can /endgame."
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
