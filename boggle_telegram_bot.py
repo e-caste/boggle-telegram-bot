@@ -144,34 +144,34 @@ def leave(update, context):
 
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
-    else:
-        group_chat_id = __get_chat_id(update)
-        cd = context.chat_data
-        if not cd.get('timers'):
-            __init_chat_data(context)
-            context.bot.send_message(chat_id=__get_chat_id(update),
-                                     text=get_string(__get_chat_lang(context), msg='no_game_yet'))
-            return
+        return
+    group_chat_id = __get_chat_id(update)
+    cd = context.chat_data
+    if not cd.get('timers'):
+        __init_chat_data(context)
+        context.bot.send_message(chat_id=__get_chat_id(update),
+                                 text=get_string(__get_chat_lang(context), msg='no_game_yet'))
+        return
 
-        if cd['timers']['newgame']:
-            current_game = __get_current_game(context)
-            user_id = __get_user_id(update)
+    if cd['timers']['newgame']:
+        current_game = __get_current_game(context)
+        user_id = __get_user_id(update)
 
-            for participant in current_game['participants']:
-                if user_id == participant['id']:
-                    __remove_user_from_game(update, context)
-                    context.bot.send_message(chat_id=group_chat_id,
-                                             text=get_string(__get_chat_lang(context), 'game_left',
-                                                             __get_username(update)))
-                    break
-            else:
+        for participant in current_game['participants']:
+            if user_id == participant['id']:
+                __remove_user_from_game(update, context)
                 context.bot.send_message(chat_id=group_chat_id,
-                                         text=get_string(__get_chat_lang(context), 'not_yet_in_game',
+                                         text=get_string(__get_chat_lang(context), 'game_left',
                                                          __get_username(update)))
-
+                break
         else:
-            context.bot.send_message(chat_id=__get_chat_id(update),
-                                     text=get_string(__get_chat_lang(context), msg='no_game_yet'))
+            context.bot.send_message(chat_id=group_chat_id,
+                                     text=get_string(__get_chat_lang(context), 'not_yet_in_game',
+                                                     __get_username(update)))
+
+    else:
+        context.bot.send_message(chat_id=__get_chat_id(update),
+                                 text=get_string(__get_chat_lang(context), msg='no_game_yet'))
 
 
 def start_game(update, context, timer: bool = False):
@@ -271,7 +271,16 @@ def points_handler(update, context):
 
 def delete(update, context):
     __check_bot_data_is_initialized(context)
-    pass
+
+    if not __check_chat_is_group(update):
+        update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
+        return
+
+    user_id = __get_user_id(update)
+    group_id = __get_chat_id(update)
+    bd = context.bot_data
+
+
 
 
 def end_game(update, context):
@@ -663,6 +672,7 @@ def __check_words_in_common(context, group_id: int):
 def __get_formatted_words(context, group_id: int, with_points: bool, user_id: int = None) -> str:
     players = context.bot_data['games'][group_id]['participants']
     res = ""
+
     def __get_formatted_words_internal(result: str) -> str:
         result += f"<b>{players[player]['username']}</b>\n"
         words = players[player]['words']
