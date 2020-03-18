@@ -573,7 +573,7 @@ def __validate_word_by_boggle_rules(word: str, grid: dict) -> bool:
     return word in words
 
 
-def __get_all_grid_neighbours(grid):
+def __get_all_grid_neighbours(grid: dict) -> dict:
     neighbours = {}
     for position in grid:
         position_neighbours = __get_neighbours_of_position(position)
@@ -581,7 +581,7 @@ def __get_all_grid_neighbours(grid):
     return neighbours
 
 
-def __get_neighbours_of_position(coords):
+def __get_neighbours_of_position(coords: tuple) -> list:
     row, col = coords
 
     top_left = (row - 1, col - 1)
@@ -600,7 +600,7 @@ def __get_neighbours_of_position(coords):
             bottom_left, bottom_center, bottom_right]
 
 
-def __get_path_to_word(grid, path):
+def __get_path_to_word(grid: dict, path: list) -> str:
     return ''.join([grid[p] for p in path])
 
 
