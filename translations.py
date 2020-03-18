@@ -143,6 +143,19 @@ translations = {
         'ita': "Mi hai già mandato la parola '{}' in questa partita.",
         'eng': "You've already sent me the word '{}' during this game."
     },
+    'ingame_timer_expired_group': {
+        'ita': "Tempo scaduto! Ora il creatore della partita ({}), in accordo con gli altri giocatori, dovrà mandarmi "
+               "la lista delle parole non valide. Basta un messaggio con la lista delle parole non valide di tutti i "
+               "giocatori, nella forma /delete <lista di parole separate da spazi>, ma accetto anche delle singole "
+               "parole, se ricevo /delete <parola> (sempre senza < né >).\n\n<b>Mi raccomando, {}, ricordati di "
+               "darmi il comando /endgame per concludere la partita e visualizzare i risultati!</b>\n\nQui di seguito "
+               "la lista complessiva:\n\n{}",
+        'eng': "Time's up! Now the game creator ({}), in agreement with the other players, will have to send me the "
+               "list of invalid words. A single message with the list of these words for all players in the form "
+               "/delete <list of space separated words> works, but I also accept messages for a single word like "
+               "/delete <word> (do not include < and >).\n\n<b>{}, please remember to send me the /endgame command to "
+               "end the game and to see the results!</b>\n\nBelow you can find the list of words for each player:\n\n{}"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
