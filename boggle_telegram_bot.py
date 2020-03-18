@@ -60,36 +60,37 @@ def new(update, context):
 
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
-    else:
-        group_chat_id = __get_chat_id(update)
-        cd = context.chat_data
-        if not cd.get('timers'):
-            __init_chat_data(context)
+        return
 
-        if not cd['timers']['newgame']:
-            t = Timer(interval=cd['timers']['durations']['newgame'],
-                      function=__newgame_timer, args=(update, context))
-            t.start()
-            cd['timers']['newgame'] = t.name
-            timers['newgame'][group_chat_id] = t.cancel  # pass callable
-            cd['games'].append({
-                'unix_epoch': int(time()),
-                'creator': {
-                    'id': __get_user_id(update),
-                    'username': __get_username(update)
-                },
-                'participants': {},
-                'is_finished': False,
-                'ingame_timer': None,
-                'lang': __get_chat_lang(context)
-            })
-            context.bot.send_message(chat_id=__get_chat_id(update),
-                                     text=get_string(__get_chat_lang(context), 'game_created', __get_username(update),
-                                                     cd['timers']['durations']['newgame']))
-        else:
-            context.bot.send_message(chat_id=__get_chat_id(update),
-                                     text=get_string(__get_chat_lang(context), 'game_already_created',
-                                                     __get_username(update)))
+    group_chat_id = __get_chat_id(update)
+    cd = context.chat_data
+    if not cd.get('timers'):
+        __init_chat_data(context)
+
+    if not cd['timers']['newgame']:
+        t = Timer(interval=cd['timers']['durations']['newgame'],
+                  function=__newgame_timer, args=(update, context))
+        t.start()
+        cd['timers']['newgame'] = t.name
+        timers['newgame'][group_chat_id] = t.cancel  # pass callable
+        cd['games'].append({
+            'unix_epoch': int(time()),
+            'creator': {
+                'id': __get_user_id(update),
+                'username': __get_username(update)
+            },
+            'participants': {},
+            'is_finished': False,
+            'ingame_timer': None,
+            'lang': __get_chat_lang(context)
+        })
+        context.bot.send_message(chat_id=__get_chat_id(update),
+                                 text=get_string(__get_chat_lang(context), 'game_created', __get_username(update),
+                                                 cd['timers']['durations']['newgame']))
+    else:
+        context.bot.send_message(chat_id=__get_chat_id(update),
+                                 text=get_string(__get_chat_lang(context), 'game_already_created',
+                                                 __get_username(update)))
 
 
 def join(update, context):
