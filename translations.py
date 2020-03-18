@@ -63,6 +63,12 @@ translations = {
                "termina quando il creatore della partita usa il comando /endgame.\n\nPotete dare un'occhiata agli altri"
                " miei comandi con /help."
     },
+    'bot_not_started_by_user': {
+        'ita': "Ehi, {}, non mi hai ancora avviato! Clicca o tocca il mio nome e premi Avvia o mandami il comando "
+               "/start.",
+        'eng': "Hey, {}, you haven't started me yet! Click or tap my name and select Start or send me the /start "
+               "command."
+    },
     'chat_is_not_group': {
         'ita': "Devi digitare questo comando in un gruppo! Aggiungimi a un gruppo con degli amici per giocare.",
         'eng': "You can only use this command in a group chat! Add me to a group with your friends to play."
