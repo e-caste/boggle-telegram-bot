@@ -144,8 +144,8 @@ translations = {
         'eng': "You've already sent me the word '{}' during this game."
     },
     'ingame_timer_expired_private': {
-        'ita': "Tempo scaduto! Ecco il tuo punteggio: {}",
-        'eng': "Time's up! Here's your score: {}"
+        'ita': "Tempo scaduto! Ecco il tuo punteggio:\n\n{}",
+        'eng': "Time's up! Here's your score:\n\n{}"
     },
     'ingame_timer_expired_group': {
         'ita': "Tempo scaduto! Ora il creatore della partita ({}), in accordo con gli altri giocatori, dovrà mandarmi "
