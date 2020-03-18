@@ -177,6 +177,12 @@ translations = {
                "the words sent me by the players. You can try again with /delete <list of space separated words>, or "
                "you can /endgame."
     },
+    'all_words_deleted': {
+        'ita': "Ho eliminato tutte le parole che mi hai mandato. Ora puoi mandarmi altre parole con /delete <lista di "
+               "parole separate da spazi>, oppure terminare la partita con /endgame.",
+        'eng': "I've deleted all the words you've sent me. Now you can either send me some other words with /delete <"
+               "list of space separated words> or you can /endgame."
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
