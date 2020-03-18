@@ -207,8 +207,8 @@ def start_game(update, context, timer: bool = False):
                                                  cd['timers']['durations']['ingame']) + "\n\n\n" + table_str,
                                  parse_mode=HTML)
 
-    t = Timer(interval=cd['timers']['durations']['newgame'],
-              function=__ingame_timer, args=(update, context))
+    t = Timer(interval=cd['timers']['durations']['ingame'],
+              function=__ingame_timer, args=(update, context, group_chat_id))
     t.start()
     bd['games'][group_chat_id]['ingame_timer'] = t.name
     timers['ingame'][group_chat_id] = t.cancel
@@ -259,7 +259,11 @@ def points_handler(update, context):
     words = bd['games'][group_id]['participants'][user_id]['words']
 
     if not words.get(word):
-        words[word] = __get_points_for_word(word)
+        words[word] = {
+            'points': __get_points_for_word(word),
+            'sent_by_other_players': False,
+            'deleted': False
+        }
     else:
         update.message.reply_text(get_string(__get_game_lang(context, group_id), 'received_dm_but_word_already_sent',
                                              word))
@@ -373,8 +377,11 @@ def __newgame_timer(update, context):
         start_game(update, context, timer=True)
 
 
-def __ingame_timer(update, context):
-    pass
+def __ingame_timer(update, context, group_id: int):
+    game = context.bot_data['games'][group_id]
+    game['ingame_timer'] = None
+    game['is_finished'] = True
+    __check_words_in_common(context, group_id)
 
 
 def __check_bot_data_is_initialized(context):
@@ -616,8 +623,25 @@ def __get_points_for_word(word: str) -> int:
         return 3
     elif length == 7:
         return 5
-    elif length >= 8:
+    else:
         return 11
+
+
+def __check_words_in_common(context, group_id: int):
+    players = context.bot_data['games'][group_id]['participants']
+    players_2 = players
+    for player in players:
+        del players_2[player]
+        words = players[player]['words']
+        for word in words:
+            if not words[word]['sent_by_other_players']:
+                for player_2 in players_2:
+                    words_2 = players_2[player_2]['words']
+                    for word_2 in words:
+                        if not words[word]['sent_by_other_players']:
+                            if word == word_2:
+                                words[word]['sent_by_other_players'] = True
+                                words_2[word_2]['sent_by_other_players'] = True
 
 
 def main():
