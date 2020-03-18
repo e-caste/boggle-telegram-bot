@@ -139,6 +139,10 @@ translations = {
         'ita': "Non puoi usare la lettera Q senza che sia seguita da una U! Ho scartato la parola.",
         'eng': "You can't use the letter Q without it being followed by U! I've discarded your last word."
     },
+    'received_dm_but_word_already_sent': {
+        'ita': "Mi hai già mandato la parola '{}' in questa partita.",
+        'eng': "You've already sent me the word '{}' during this game."
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
