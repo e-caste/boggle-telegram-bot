@@ -10,6 +10,7 @@ from telegram.parsemode import ParseMode
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler, PicklePersistence)
 from telegram.utils.helpers import mention_html
+from telegram.error import Unauthorized
 import logging
 from secret import token, castes_chat_id, working_directory
 from math import ceil
@@ -115,13 +116,11 @@ def join(update, context):
         current_game = __get_current_game(context)
         user_id = __get_user_id(update)
 
-        for participant in current_game['participants']:
-            if user_id == participant['id']:
-                context.bot.send_message(chat_id=group_chat_id,
-                                         text=get_string(__get_chat_lang(context), 'already_in_game',
-                                                         __get_username(update),
-                                                         current_game['creator']['username']))
-                break
+        if current_game['participants'].get(user_id):
+            context.bot.send_message(chat_id=group_chat_id,
+                                     text=get_string(__get_chat_lang(context), 'already_in_game',
+                                                     __get_username(update),
+                                                     current_game['creator']['username']))
         else:
             if group_chat_id not in bd['stats']['groups']:
                 __init_group_stats(context, group_chat_id)
@@ -160,13 +159,11 @@ def leave(update, context):
         current_game = __get_current_game(context)
         user_id = __get_user_id(update)
 
-        for participant in current_game['participants']:
-            if user_id == participant['id']:
-                __remove_user_from_game(update, context)
-                context.bot.send_message(chat_id=group_chat_id,
-                                         text=get_string(__get_chat_lang(context), 'game_left',
-                                                         __get_username(update)))
-                break
+        if current_game['participants'].get(user_id):
+            __remove_user_from_game(update, context)
+            context.bot.send_message(chat_id=group_chat_id,
+                                     text=get_string(__get_chat_lang(context), 'game_left',
+                                                     __get_username(update)))
         else:
             context.bot.send_message(chat_id=group_chat_id,
                                      text=get_string(__get_chat_lang(context), 'not_yet_in_game',
@@ -204,11 +201,19 @@ def start_game(update, context, timer: bool = False):
 
     context.bot.send_message(chat_id=group_chat_id,
                              text=get_string(__get_chat_lang(context), 'game_started_group'))
+
+    text = get_string(__get_chat_lang(context), 'game_started_private',
+                      cd['timers']['durations']['ingame']) + "\n\n\n" + table_str
     for player in current_game['participants']:
-        context.bot.send_message(chat_id=player['id'],
-                                 text=get_string(__get_chat_lang(context), 'game_started_private',
-                                                 cd['timers']['durations']['ingame']) + "\n\n\n" + table_str,
-                                 parse_mode=HTML)
+        try:
+            context.bot.send_message(chat_id=player,
+                                     text=text,
+                                     parse_mode=HTML)
+        except Unauthorized:
+            context.bot.send_message(chat_id=group_chat_id,
+                                     text=get_string(__get_chat_lang(context), 'bot_not_started_by_user',
+                                                     current_game['participants'][player]['username']))
+            kill(update, context)  # TODO: implement
 
     t = Timer(interval=cd['timers']['durations']['ingame'],
               function=__ingame_timer, args=(update, context, group_chat_id))
