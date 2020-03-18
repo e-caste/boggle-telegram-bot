@@ -143,6 +143,10 @@ translations = {
         'ita': "Mi hai già mandato la parola '{}' in questa partita.",
         'eng': "You've already sent me the word '{}' during this game."
     },
+    'ingame_timer_expired_private': {
+        'ita': "Tempo scaduto! Ecco il tuo punteggio: {}",
+        'eng': "Time's up! Here's your score: {}"
+    },
     'ingame_timer_expired_group': {
         'ita': "Tempo scaduto! Ora il creatore della partita ({}), in accordo con gli altri giocatori, dovrà mandarmi "
                "la lista delle parole non valide. Basta un messaggio con la lista delle parole non valide di tutti i "
