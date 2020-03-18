@@ -164,6 +164,11 @@ translations = {
         'ita': "Mi spiace, ma quel comando si può usare solo a partita finita.",
         'eng': "I'm sorry, but that command is only available after the game is finished."
     },
+    'char_not_alpha': {
+        'ita': "Almeno un carattere nella parola '{}' non è disponibile tra quelli tra i dadi. Prova a correggerla e "
+               "rimandami il messaggio.",
+        'eng': "At least one character in the word '{}' is not available among the dice. Please resend me the message."
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
