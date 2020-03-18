@@ -78,7 +78,7 @@ def new(update, context):
                     'id': __get_user_id(update),
                     'username': __get_username(update)
                 },
-                'participants': [],
+                'participants': {},
                 'is_finished': False,
                 'ingame_timer': None,
                 'lang': __get_chat_lang(context)
@@ -257,8 +257,7 @@ def points_handler(update, context):
 
     word = word.replace("q", "qu")
 
-    context.bot.send_message(chat_id=chat_id,
-                             text=word)
+    bd['games'][group_id]['participants'][user_id]['words'][word] = __get_points_for_word(word)
 
 
 def delete(update, context):
@@ -452,12 +451,13 @@ def __init_user_stats(context, user_id: int, username: str, group_id: int, new_p
 
 def __join_user_to_game(update, context):
     cd = context.chat_data
-    cd['ingame_user_ids'].append(__get_user_id(update))
+    user_id = __get_user_id(update)
+    cd['ingame_user_ids'].append(user_id)
     current_game = __get_current_game(context)
-    current_game['participants'].append({
-        'id': __get_user_id(update),
-        'username': __get_username(update)
-    })
+    current_game['participants'][user_id] = {
+        'username': __get_username(update),
+        'words': {}
+    }
 
 
 def __remove_user_from_game(update, context):
@@ -466,10 +466,7 @@ def __remove_user_from_game(update, context):
     participants = current_game['participants']
     user_id = __get_user_id(update)
     cd['ingame_user_ids'].remove(user_id)
-    for user in participants:
-        if user_id == user['id']:
-            participants.remove(user)
-            break
+    del participants[user_id]
 
 
 def __get_latest_game(context) -> dict:
@@ -600,6 +597,22 @@ def __get_neighbours_of_position(coords):
 
 def __get_path_to_word(grid, path):
     return ''.join([grid[p] for p in path])
+
+
+def __get_points_for_word(word: str) -> int:
+    length = len(word)
+    if length < 3:
+        return 0
+    elif length == 3 or length == 4:
+        return 1
+    elif length == 5:
+        return 2
+    elif length == 6:
+        return 3
+    elif length == 7:
+        return 5
+    elif length >= 8:
+        return 11
 
 
 def main():
