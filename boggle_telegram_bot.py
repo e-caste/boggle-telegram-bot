@@ -97,46 +97,47 @@ def join(update, context):
 
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
-    else:
-        group_chat_id = __get_chat_id(update)
-        cd = context.chat_data
-        if not cd.get('timers'):
-            __init_chat_data(context)
-            context.bot.send_message(chat_id=__get_chat_id(update),
-                                     text=get_string(__get_chat_lang(context), msg='no_game_yet'))
-            return
+        return
 
-        bd = context.bot_data
-        # TODO: add check that the user joining has started the bot in a private chat
+    group_chat_id = __get_chat_id(update)
+    cd = context.chat_data
+    if not cd.get('timers'):
+        __init_chat_data(context)
+        context.bot.send_message(chat_id=__get_chat_id(update),
+                                 text=get_string(__get_chat_lang(context), msg='no_game_yet'))
+        return
 
-        if cd['timers']['newgame']:
-            current_game = __get_current_game(context)
-            user_id = __get_user_id(update)
+    bd = context.bot_data
+    # TODO: add check that the user joining has started the bot in a private chat
 
-            for participant in current_game['participants']:
-                if user_id == participant['id']:
-                    context.bot.send_message(chat_id=group_chat_id,
-                                             text=get_string(__get_chat_lang(context), 'already_in_game',
-                                                             __get_username(update),
-                                                             current_game['creator']['username']))
-                    break
-            else:
-                if group_chat_id not in bd['stats']['groups']:
-                    __init_group_stats(context, group_chat_id)
+    if cd['timers']['newgame']:
+        current_game = __get_current_game(context)
+        user_id = __get_user_id(update)
 
-                if not bd['stats']['users'].get(user_id):  # user has never played
-                    __init_user_stats(context, user_id, __get_username(update), group_chat_id, new_player=True)
-                elif not bd['stats']['groups'][group_chat_id].get(user_id):  # user has already played in other groups
-                    __init_user_stats(context, user_id, __get_username(update), group_chat_id, new_player=False)
-
-                __join_user_to_game(update, context)
+        for participant in current_game['participants']:
+            if user_id == participant['id']:
                 context.bot.send_message(chat_id=group_chat_id,
-                                         text=get_string(__get_chat_lang(context), 'game_joined',
-                                                         __get_username(update), current_game['creator']['username']))
-
+                                         text=get_string(__get_chat_lang(context), 'already_in_game',
+                                                         __get_username(update),
+                                                         current_game['creator']['username']))
+                break
         else:
-            context.bot.send_message(chat_id=__get_chat_id(update),
-                                     text=get_string(__get_chat_lang(context), msg='no_game_yet'))
+            if group_chat_id not in bd['stats']['groups']:
+                __init_group_stats(context, group_chat_id)
+
+            if not bd['stats']['users'].get(user_id):  # user has never played
+                __init_user_stats(context, user_id, __get_username(update), group_chat_id, new_player=True)
+            elif not bd['stats']['groups'][group_chat_id].get(user_id):  # user has already played in other groups
+                __init_user_stats(context, user_id, __get_username(update), group_chat_id, new_player=False)
+
+            __join_user_to_game(update, context)
+            context.bot.send_message(chat_id=group_chat_id,
+                                     text=get_string(__get_chat_lang(context), 'game_joined',
+                                                     __get_username(update), current_game['creator']['username']))
+
+    else:
+        context.bot.send_message(chat_id=__get_chat_id(update),
+                                 text=get_string(__get_chat_lang(context), msg='no_game_yet'))
 
 
 def leave(update, context):
@@ -145,6 +146,7 @@ def leave(update, context):
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
         return
+
     group_chat_id = __get_chat_id(update)
     cd = context.chat_data
     if not cd.get('timers'):
