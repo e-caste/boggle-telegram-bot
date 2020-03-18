@@ -323,10 +323,109 @@ def delete(update, context):
         update.message.reply_text(get_string(lang, 'all_words_deleted'))
 
 
-
 def end_game(update, context):
     __check_bot_data_is_initialized(context)
-    pass
+
+    if not __check_chat_is_group(update):
+        update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
+        return
+
+    user_id = __get_user_id(update)
+    group_id = __get_chat_id(update)
+    cd = context.chat_data
+    bd = context.bot_data
+
+    if not bd['games'].get(group_id):
+        update.message.reply_text(get_string(__get_chat_lang(context), msg='no_game_yet'))
+        return
+
+    game = bd['games'][group_id]
+    lang = game['lang']
+
+    if user_id != game['creator']['id']:
+        update.message.reply_text(get_string(lang, 'forbid_not_game_creator',
+                                             __get_username(update), game['creator']['username'], "/endgame"))
+        return
+
+    if not game['is_finished']:
+        update.message.reply_text(get_string(lang, msg='game_not_yet_finished'))
+        return
+
+    us = bd['stats']['users']
+    gs = bd['stats']['groups']
+
+    total_points = 0
+    players_points = {}
+    players = game['participants']
+    for user_id in players:  # stats already initialized in join()
+        words = players[user_id]['words']
+        for word in words:
+            if not words[word]['sent_by_other_players'] and not words[word]['deleted']:
+                if not players_points.get(user_id):
+                    players_points[user_id] = words[word]['points']
+                else:
+                    players_points[user_id] += words[word]['points']
+                total_points += words[word]['points']
+        if not players_points.get(user_id):  # hasn't made any points
+            players_points[user_id] = 0
+
+    max_points = -1
+    for user_id in players_points:
+        points = players_points[user_id]
+        max_points = points if points > max_points else max_points
+
+    winners = {}
+    for user_id in players_points:
+        if players_points[user_id] == max_points:
+            winners[user_id] = game['participants'][user_id]['username']
+    game['winners'] = winners
+
+    # update group stats
+    if not gs.get(group_id):
+        gs[group_id] = {
+            'matches': 0,
+            'points': 0,
+            'average': 0
+        }
+    gs[group_id]['points'] += total_points
+    gs[group_id]['matches'] += 1
+    gs[group_id]['average'] = int(gs[group_id]['points'] / gs[group_id]['matches'])
+
+    # update users stats
+    for user_id in players:
+        us[user_id]['matches']['played'] += 1
+        if winners.get(user_id) and len(winners) == 1:  # won
+            us[user_id]['matches']['won']['value'] += 1
+        elif winners.get(user_id) and len(winners) > 1:  # even
+            us[user_id]['matches']['even']['value'] += 1
+        elif not winners.get(user_id):  # lost
+            us[user_id]['matches']['lost']['value'] += 1
+        for ending in ['won', 'even', 'lost']:
+            us[user_id]['matches'][ending]['percentage'] = round(us[user_id]['matches'][ending]['value']
+                                                                 / us[user_id]['matches']['played'] * 100, 2)
+        us[user_id]['points']['max'] = players_points[user_id] if players_points[user_id] > us[user_id]['points']['max'] \
+            else us[user_id]['points']['max']
+        us[user_id]['points']['min'] = players_points[user_id] if players_points[user_id] < us[user_id]['points']['max'] \
+            else us[user_id]['points']['min']
+        us[user_id]['points']['last_match'] = players_points[user_id]
+        us[user_id]['points']['total'] += players_points[user_id]
+        us[user_id]['points']['average'] = round(us[user_id]['points']['total'] / us[user_id]['matches']['played'], 2)
+
+    chat_game = __get_latest_game(context)
+    cd['games'].remove(chat_game)
+    cd['games'].append(game)
+    del bd['games'][group_id]
+
+    lang = __get_chat_lang(context)
+    winner_str = ""
+    if len(winners) == 1:
+        winner_str = get_string(lang, 'game_winner_singular')
+    elif len(winners) > 1:
+        winner_str = get_string(lang, 'game_winners_plural')
+
+    context.bot.send_message(chat_id=group_id,
+                             text=get_string(lang, 'game_finished', get_string(lang, winner_str), max_points),
+                             parse_mode=HTML)
 
 
 def kick(update, context):
@@ -508,10 +607,10 @@ def __init_user_stats(context, user_id: int, username: str, group_id: int, new_p
                 'value': 0,
                 'percentage': 0
             },
-            'last': {
-                'value': 0,
-                'percentage': 0
-            },
+            # 'last': {
+            #     'value': 0,
+            #     'percentage': 0
+            # },
             'played': 0
         },
         'points': {
