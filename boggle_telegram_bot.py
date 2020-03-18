@@ -261,7 +261,14 @@ def points_handler(update, context):
                              text=word)
 
 
+def delete(update, context):
+    __check_bot_data_is_initialized(context)
+    pass
 
+
+def end_game(update, context):
+    __check_bot_data_is_initialized(context)
+    pass
 
 
 def kick(update, context):
@@ -607,6 +614,8 @@ def main():
     dp.add_handler(CommandHandler('new', new))
     dp.add_handler(CommandHandler('join', join))
     dp.add_handler(CommandHandler('startgame', start_game))
+    dp.add_handler(CommandHandler('delete', delete))
+    dp.add_handler(CommandHandler('endgame', end_game))
     dp.add_handler(CommandHandler('leave', leave))
     dp.add_handler(CommandHandler('kick', kick))
     dp.add_handler(CommandHandler('kill', kill))
