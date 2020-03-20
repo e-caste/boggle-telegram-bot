@@ -663,8 +663,11 @@ def __remove_user_from_game(update, context):
 def __get_latest_game(context) -> dict:
     cd = context.chat_data
     res = {'unix_epoch': 0}
-    for game in cd['games']:
-        res = game if game['unix_epoch'] > res['unix_epoch'] else res
+    if cd.get('games'):
+        for game in cd['games']:
+            res = game if game['unix_epoch'] > res['unix_epoch'] else res
+        return res
+    res['is_finished'] = False
     return res
 
 
