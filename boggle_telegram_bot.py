@@ -58,7 +58,7 @@ def start(update, context):
 
 def bot_added_to_group(update, context):
     if update.message.new_chat_members[0].username == context.bot.username:
-        context.bot.send_message(chat_id=update.message.chat_id,
+        context.bot.send_message(chat_id=__get_chat_id(update),
                                  text=get_string(__get_chat_lang(context), 'bot_added_to_group'),
                                  parse_mode=HTML)
 
@@ -466,6 +466,13 @@ def show_statistics(update, context):
 def settings(update, context):
     __check_bot_data_is_initialized(context)
     pass
+
+
+def show_rules(update, context):
+    __check_bot_data_is_initialized(context)
+    context.bot.send_message(chat_id=__get_chat_id(update),
+                             text=get_string(__get_chat_lang(context), 'rules'),
+                             parse_mode=HTML)
 
 
 def show_help(update, context):
@@ -878,6 +885,7 @@ def main():
     dp.add_handler(CommandHandler('kill', kill))
     dp.add_handler(CommandHandler('stats', show_statistics))
     dp.add_handler(CommandHandler('settings', settings))
+    dp.add_handler(CommandHandler('rules', show_rules))
     dp.add_handler(CommandHandler('help', show_help))
 
     # handles all text messages in a private chat
