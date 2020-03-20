@@ -9,7 +9,7 @@ __group_welcome = {
            "Boggle together!\n\n"
 }
 
-__rules = {
+__usage = {
         'ita': "Per cambiare la lingua, i timer, o le dimensioni della tabella per "
                "questo gruppo, potete usare il comando /settings in questa chat.\n\nPrima di creare una partita, "
                "assicuratevi che tutti giocatori mi abbiano fatto partire <b>in una chat privata con me</b>: potete "
@@ -44,12 +44,12 @@ translations = {
         'eng': "Hi <b>{}</b>, welcome to Boggle/Paroliere Bot!"
     },
     'bot_added_to_group': {
-        'ita': __group_welcome['ita'] + __rules['ita'] + "\n\n\n" + __group_welcome['eng'] + __rules['eng'],
-        'eng': __group_welcome['eng'] + __rules['eng'] + "\n\n\n" + __group_welcome['ita'] + __rules['ita']
+        'ita': __group_welcome['ita'] + __usage['ita'] + "\n\n\n" + __group_welcome['eng'] + __usage['eng'],
+        'eng': __group_welcome['eng'] + __usage['eng'] + "\n\n\n" + __group_welcome['ita'] + __usage['ita']
     },
-    'rules': {
-        'ita': __rules['ita'],
-        'eng': __rules['eng']
+    'usage': {
+        'ita': __usage['ita'],
+        'eng': __usage['eng']
     },
     'bot_not_started_by_user': {
         'ita': "Ehi, {}, non mi hai ancora avviato! Clicca o tocca il mio nome e premi Avvia o mandami il comando "
