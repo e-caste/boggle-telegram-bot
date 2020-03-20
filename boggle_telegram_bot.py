@@ -56,6 +56,12 @@ def start(update, context):
                              parse_mode=HTML)
 
 
+def bot_added_to_group(update, context):
+    if update.message.new_chat_members[0].username == context.bot.username:
+        context.bot.send_message(chat_id=update.message.chat_id,
+                                 text=get_string(__get_chat_lang(context), 'bot_added_to_group'))
+
+
 def new(update, context):
     __check_bot_data_is_initialized(context)
 
@@ -875,6 +881,7 @@ def main():
 
     # handles all text messages in a private chat
     dp.add_handler(MessageHandler(Filters.text & ~ Filters.group, points_handler))
+    dp.add_handler(MessageHandler(Filters.status_update.new_chat_members, bot_added_to_group))
 
     # log all errors
     dp.add_error_handler(error)
