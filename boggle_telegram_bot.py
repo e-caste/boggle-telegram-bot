@@ -556,9 +556,8 @@ def __ingame_timer(update, context, group_id: int):
     context.bot.send_message(chat_id=group_id,
                              text=get_string(__get_chat_lang(context), 'ingame_timer_expired_group',
                                              game['creator']['username'], game['creator']['username'],
-                                             player_words_without_points)
-                             .replace("<", "&lt;").replace(">", "&gt;").replace("'", "&#39;")
-                             .replace("&lt;", "<").replace("&gt;", ">").replace("&#39;", "'"),
+                                             player_words_without_points),
+                             # .replace("<", "&lt;").replace(">", "&gt;").replace("'", "&#39;"),
                              parse_mode=HTML)
     # TODO: fix telegram.error.BadRequest: Can't parse entities: unsupported start tag "list" at byte offset 212
 
