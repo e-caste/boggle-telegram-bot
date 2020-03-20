@@ -59,7 +59,8 @@ def start(update, context):
 def bot_added_to_group(update, context):
     if update.message.new_chat_members[0].username == context.bot.username:
         context.bot.send_message(chat_id=update.message.chat_id,
-                                 text=get_string(__get_chat_lang(context), 'bot_added_to_group'))
+                                 text=get_string(__get_chat_lang(context), 'bot_added_to_group'),
+                                 parse_mode=HTML)
 
 
 def new(update, context):
