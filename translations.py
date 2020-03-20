@@ -38,6 +38,42 @@ __usage = {
                "game creator uses the /endgame command.\n\nYou can take a look at all my other commands with /help."
 }
 
+__rules = {
+    'ita': "<b>Punteggi</b>\n"
+           "1-2 lettere: 0 punti\n3-4 lettere: 1 punto\n5 lettere: 2 punti\n6 lettere: 3 punti\n7 lettere: 5 punti\n"
+           "8+ lettere: 11 punti\n\n"
+           "<b>Regole del gioco</b>\n"
+           "Lo scopo del gioco è trovare il maggior numero possibile di parole nel tempo dato composte da lettere "
+           "adiacenti sia ortogonalmente che diagonalmente. È vietato comporre una parola saltando una lettera o "
+           "ripassando sullo stessa lettera.\nUna volta terminato il tempo a disposizione, i giocatori devono smettere "
+           "di scrivere e sul gruppo verranno mandate le parole di ciascun giocatore: se una stessa parola è stata "
+           "trovata da più giocatori, essa sarà stata cancellata dall'elenco. Se una parola è ritenuta non valida dagli"
+           " altri giocatori, il creatore della partita può eliminarla con /delete 'parola/lista di parole'.\n\n"
+           "<b>Validità delle parole</b>\n"
+           "Sono ammesse le tipologie di parole determinate dal gruppo di giocatori. In generale, si possono usare le "
+           "seguenti linee guida:\nsostantivi e aggettivi al maschile/femminile singolare/plurale, verbi all'infinito,"
+           " avverbi, congiunzioni, interiezioni, onomatopee, preposizioni e pronomi sono sempre validi;\nverbi"
+           " coniugati, sigle, parole straniere di uso comune in Italiano, nomi propri e geografici possono essere"
+           " aggiunti per semplificare il gioco.",
+    'eng': "<b>Scoring</b>\n"
+           "1-2 letters: 0 points\n3-4 letters: 1 point\n5 letters: 2 points\n6 letters: 3 points\n7 letters: 5 points"
+           "\n8+ letters: 11 points\n\n"
+           "<b>Rules of the game</b>\n"
+           "The goal of the game is to find the maximum possible amount of words, made with adjacent letters both"
+           " diagonally and vertically/horizontally, in the time given. It's forbidden to make a word skipping a letter"
+           " or using the same letter more than once.\nOnce the time's finished, the players have to stop texting the "
+           "bot, and it will send a message to the group chat containing the words of each player: if a word has been "
+           "found by multiple players, it will have been removed from the list. If the players consider a word to be "
+           "invalid, the game creator will be able to remove it from the player's list with /delete 'word/list of words"
+           "'.\n\n"
+           "<b>Word validity</b>\n"
+           "The players can determine the allowed word categories. In general, you can use the following guidelines:\n"
+           "nouns and adjectives, both masculine and feminine, both singular and plural, infinite verbs, adverbs, "
+           "conjunctions, interjections, onomatopoeias, prepositions and pronouns are always valid;\n conjugated verbs,"
+           " acronyms, foreign words of common use in English, first/last/geographical names can be allowed to simplify"
+           " the game."
+}
+
 translations = {
     'welcome': {
         'ita': "Ciao <b>{}</b>, benvenuto/a su Boggle/Paroliere Bot!",
@@ -46,6 +82,10 @@ translations = {
     'bot_added_to_group': {
         'ita': __group_welcome['ita'] + __usage['ita'] + "\n\n\n" + __group_welcome['eng'] + __usage['eng'],
         'eng': __group_welcome['eng'] + __usage['eng'] + "\n\n\n" + __group_welcome['ita'] + __usage['ita']
+    },
+    'rules': {
+        'ita': __rules['ita'],
+        'eng': __rules['eng']
     },
     'usage': {
         'ita': __usage['ita'],
