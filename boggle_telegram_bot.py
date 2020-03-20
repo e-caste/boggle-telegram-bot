@@ -229,9 +229,15 @@ def points_handler(update, context):
     user_id = __get_user_id(update)
     bd = context.bot_data
 
-    for group in [game for game in bd['games'] if not game['is_finished']]:
-        for participant in bd['games'][group]['participants']:
-            if user_id == participant['id']:
+    not_finished = {}
+    for game in bd['games']:
+        if not bd['games'][game]['is_finished']:
+            not_finished[game] = bd['games'][game]
+
+    for group in not_finished:
+        participants = bd['games'][group]['participants']
+        for participant in participants:
+            if user_id == participant:
                 group_id = group
                 break
         else:
@@ -537,7 +543,7 @@ def __ingame_timer(update, context, group_id: int):
     game['is_finished'] = True
     __check_words_in_common(context, group_id)
     player_words_with_points = {}
-    for user_id in game['participants']:
+    for user_id in game['participants']:  # TODO: check why this function does not return the correct string
         player_words_with_points[user_id] = __get_formatted_words(context, group_id, with_points=True, user_id=user_id)
     player_words_without_points = __get_formatted_words(context, group_id, with_points=False)
 
@@ -550,8 +556,11 @@ def __ingame_timer(update, context, group_id: int):
     context.bot.send_message(chat_id=group_id,
                              text=get_string(__get_chat_lang(context), 'ingame_timer_expired_group',
                                              game['creator']['username'], game['creator']['username'],
-                                             player_words_without_points),
+                                             player_words_without_points)
+                             .replace("<", "&lt;").replace(">", "&gt;").replace("'", "&#39;")
+                             .replace("&lt;", "<").replace("&gt;", ">").replace("&#39;", "'"),
                              parse_mode=HTML)
+    # TODO: fix telegram.error.BadRequest: Can't parse entities: unsupported start tag "list" at byte offset 212
 
 
 def __check_bot_data_is_initialized(context):
@@ -575,7 +584,7 @@ def __init_chat_data(context):
         'ingame': None,
         'durations': {
             'newgame': 90,  # seconds
-            'ingame': 180  # seconds
+            'ingame': 30  # seconds  # TODO: change to 180
         }
     }
     cd['games'] = []
@@ -799,7 +808,7 @@ def __get_points_for_word(word: str) -> int:
 
 def __check_words_in_common(context, group_id: int):
     players = context.bot_data['games'][group_id]['participants']
-    players_2 = players
+    players_2 = players.copy()
     for player in players:
         del players_2[player]
         words = players[player]['words']
@@ -807,7 +816,7 @@ def __check_words_in_common(context, group_id: int):
             if not words[word]['sent_by_other_players']:
                 for player_2 in players_2:
                     words_2 = players_2[player_2]['words']
-                    for word_2 in words:
+                    for word_2 in words_2:
                         if not words[word]['sent_by_other_players']:
                             if word == word_2:
                                 words[word]['sent_by_other_players'] = True
@@ -822,10 +831,10 @@ def __get_formatted_words(context, group_id: int, with_points: bool, user_id: in
         result += f"<b>{players[player]['username']}</b>\n"
         words = players[player]['words']
         for word in words:
-            result += f"<i>{word}</i>"
+            result += f"<i>{word}"
             if with_points:
-                result += f": {word['points']}"
-            result += "\n"
+                result += f": {words[word]['points']}"
+            result += "</i>\n"
             return result
 
     for player in players:
