@@ -20,7 +20,7 @@ __rules = {
                "partita, e prenderò nota di tutte le parole che mi manderete in privato.\nAllo scadere del tempo, "
                "manderò la lista delle parole che ciascuno di voi mi avrà mandato sulla chat di gruppo, e se stabilite "
                "che qualcuno ha inventato una parola (o mi ha mandato una parola non valida), il creatore della partita"
-               " potrà cancellarla dalla sua lista con /delete <parola/lista di parole> (senza < e >).\nLa partita "
+               " potrà cancellarla dalla sua lista con /delete 'parola/lista di parole' (senza ').\nLa partita "
                "termina quando il creatore della partita usa il comando /endgame.\n\nPotete dare un'occhiata agli altri"
                " miei comandi con /help.",
         'eng': "You can change the language, timers, and board dimensions for this group by using "
@@ -32,7 +32,7 @@ __rules = {
                "players a private message containing the board for the game, and I will take note of all the words "
                "you'll send me in private.\nAt the end of the timer, I will send the list of the words each of you will"
                " have sent to me to the group chat, and if you think someone has made up a word, the game creator can "
-               "delete it from their list with /delete <word/list of words> (without < and >).\nThe game ends when the "
+               "delete it from their list with /delete 'word/list of words' (without ').\nThe game ends when the "
                "game creator uses the /endgame command.\n\nYou can take a look at all my other commands with /help."
 }
 
@@ -142,14 +142,14 @@ translations = {
     'ingame_timer_expired_group': {
         'ita': "Tempo scaduto! Ora il creatore della partita ({}), in accordo con gli altri giocatori, dovrà mandarmi "
                "la lista delle parole non valide. Basta un messaggio con la lista delle parole non valide di tutti i "
-               "giocatori, nella forma /delete <lista di parole separate da spazi>, ma accetto anche delle singole "
-               "parole, se ricevo /delete <parola> (sempre senza < né >).\n\n<b>Mi raccomando, {}, ricordati di "
+               "giocatori, nella forma /delete <lista di parole separate da spazi', ma accetto anche delle singole "
+               "parole, se ricevo /delete 'parola' (sempre senza ').\n\n<b>Mi raccomando, {}, ricordati di "
                "darmi il comando /endgame per concludere la partita e visualizzare i risultati!</b>\n\nQui di seguito "
                "la lista complessiva:\n\n{}",
         'eng': "Time's up! Now the game creator ({}), in agreement with the other players, will have to send me the "
                "list of invalid words. A single message with the list of these words for all players in the form "
-               "/delete <list of space separated words> works, but I also accept messages for a single word like "
-               "/delete <word> (do not include < and >).\n\n<b>{}, please remember to send me the /endgame command to "
+               "/delete 'list of space separated words' works, but I also accept messages for a single word like "
+               "/delete 'word' (do not include ').\n\n<b>{}, please remember to send me the /endgame command to "
                "end the game and to see the results!</b>\n\nBelow you can find the list of words for each player:\n\n{}"
     },
     'game_not_yet_finished': {
@@ -163,17 +163,17 @@ translations = {
     },
     'words_not_found_in_players_words': {
         'ita': "Ho eliminato tutte le parole che mi hai mandato, fatta eccezione per queste: {}, perché non le ho "
-               "trovate tra le parole segnate dai giocatori. Puoi riprovare a usare /delete <lista di parole separate "
-               "da spazi>, o terminare la partita con /endgame.",
+               "trovate tra le parole segnate dai giocatori. Puoi riprovare a usare /delete 'lista di parole separate "
+               "da spazi', o terminare la partita con /endgame.",
         'eng': "I've deleted all the words you've sent me, except these ones: {}, because I couldn't find them among "
-               "the words sent me by the players. You can try again with /delete <list of space separated words>, or "
+               "the words sent me by the players. You can try again with /delete 'list of space separated words', or "
                "you can /endgame."
     },
     'all_words_deleted': {
         'ita': "Ho eliminato tutte le parole che mi hai mandato. Ora puoi mandarmi altre parole con /delete <lista di "
-               "parole separate da spazi>, oppure terminare la partita con /endgame.",
+               "parole separate da spazi', oppure terminare la partita con /endgame.",
         'eng': "I've deleted all the words you've sent me. Now you can either send me some other words with /delete <"
-               "list of space separated words> or you can /endgame."
+               "list of space separated words' or you can /endgame."
     },
     'game_finished': {
         'ita': "<b>Fine partita!</b>\n\n{}: {} con {} punti!",
