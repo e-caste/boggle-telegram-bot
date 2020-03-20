@@ -475,6 +475,13 @@ def show_rules(update, context):
                              parse_mode=HTML)
 
 
+def show_usage(update, context):
+    __check_bot_data_is_initialized(context)
+    context.bot.send_message(chat_id=__get_chat_id(update),
+                             text=get_string(__get_chat_lang(context), 'usage'),
+                             parse_mode=HTML)
+
+
 def show_help(update, context):
     __check_bot_data_is_initialized(context)
     update.message.reply_text(text=get_string(__get_chat_lang(context), msg='help'))
@@ -886,6 +893,7 @@ def main():
     dp.add_handler(CommandHandler('stats', show_statistics))
     dp.add_handler(CommandHandler('settings', settings))
     dp.add_handler(CommandHandler('rules', show_rules))
+    dp.add_handler(CommandHandler('usage', show_usage))
     dp.add_handler(CommandHandler('help', show_help))
 
     # handles all text messages in a private chat
