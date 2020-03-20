@@ -830,15 +830,15 @@ def __get_formatted_words(context, group_id: int, with_points: bool, user_id: in
     players = context.bot_data['games'][group_id]['participants']
     res = ""
 
-    def __get_formatted_words_internal(result: str) -> str:
-        result += f"<b>{players[player]['username']}</b>\n"
+    def __get_formatted_words_internal(res) -> str:
+        res += f"<b>{players[player]['username']}</b>\n"
         words = players[player]['words']
         for word in words:
-            result += f"<i>{word}"
+            res += f"<i>{word}"
             if with_points:
-                result += f": {words[word]['points']}"
-            result += "</i>\n"
-            return result
+                res += f": {words[word]['points']}"
+            res += "</i>\n"
+        return res
 
     for player in players:
         if user_id:
