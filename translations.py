@@ -247,6 +247,12 @@ translations = {
         'ita': "E i vincitori parimerito sono",
         'eng': "And the even winners are"
     },
+    'game_killed_user_did_not_start_the_bot': {
+        'ita': "La partita è stata annullata perché {} non mi ha avviato! Per farlo, entra nella chat privata con me e"
+               "seleziona Avvia o mandami il comando /start.",
+        'eng': "The game has been canceled because {} didn't start me! To do so, go to your private chat with me and "
+               "select Start or send me the /start command."
+    },
     'game_killed_group': {
         'ita': "La partita in corso è stata annullata! Per crearne una nuova, potete usare /new. Ricordatevi di usare "
                "/help se avete dei dubbi.",
@@ -254,7 +260,7 @@ translations = {
                " have any doubts."
     },
     'game_killed_private': {
-        'ita': "La partita a cui stavi giocando è stata annullata, dal suo creatore, {}.",
+        'ita': "La partita a cui stavi giocando è stata annullata dal suo creatore, {}.",
         'eng': "The game you were playing has been canceled by its creator, {}."
     },
     'kick_user_choice_group': {
