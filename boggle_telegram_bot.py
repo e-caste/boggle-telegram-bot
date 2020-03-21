@@ -672,6 +672,8 @@ def query_handler(update, context):
                                           reply_markup=reply_markup)
 
         elif setting == "english" or setting == "italiano":
+            if not cd.get('settings'):
+                __init_chat_data(context)
             if setting == "english":
                 cd['settings']['lang'] = 'eng'
             elif setting == "italiano":
@@ -1300,6 +1302,6 @@ def main():
 if __name__ == '__main__':
     if not debug:
         os.chdir(working_directory)
-    else:
-        os.remove('_boggle_paroliere_bot_db')
+    # else:
+    #     os.remove('_boggle_paroliere_bot_db')
     main()
