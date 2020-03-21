@@ -493,7 +493,8 @@ def kick(update, context):
     group_id = __get_chat_id(update)
 
     if not bd['games'].get(group_id):
-        update.message.reply_text(get_string(__get_chat_lang(context), msg='no_game_yet'))
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(__get_chat_lang(context), msg='no_game_yet'))
         return
 
     game = bd['games'][group_id]
@@ -503,7 +504,8 @@ def kick(update, context):
         return
 
     if game['is_finished']:
-        update.message.reply_text(get_string(lang, 'game_already_finished_kick', game['creator']['username']))
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(lang, 'game_already_finished_kick', game['creator']['username']))
         return
 
     reply_keyboard = [[]]
@@ -543,7 +545,8 @@ def kill(update, context, bot_not_started: bool = False):
     group_id = __get_chat_id(update)
 
     if not bd['games'].get(group_id):
-        update.message.reply_text(get_string(__get_chat_lang(context), msg='no_game_yet'))
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(__get_chat_lang(context), msg='no_game_yet'))
         return
 
     game = bd['games'][group_id]
@@ -553,7 +556,8 @@ def kill(update, context, bot_not_started: bool = False):
         return
 
     if game['is_finished']:
-        update.message.reply_text(get_string(lang, 'game_already_finished_kill', game['creator']['username']))
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(lang, 'game_already_finished_kill', game['creator']['username']))
         return
 
     context.bot.send_message(chat_id=group_id,
