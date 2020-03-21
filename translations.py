@@ -263,6 +263,10 @@ translations = {
         'ita': "Sei stato rimosso dalla partita da {}.",
         'eng': "You've been kicked from the game by {}."
     },
+    'no_words_received': {
+        'ita': "<i>Nessuna parola ricevuta.</i>",
+        'eng': "<i>No word received.</i>"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
