@@ -220,7 +220,7 @@ def start_game(update, context, timer: bool = False):
     context.bot.send_message(chat_id=group_chat_id,
                              text=get_string(__get_chat_lang(context), 'game_started_group'))
 
-    text = get_string(__get_chat_lang(context), 'game_started_private',
+    text = get_string(__get_game_lang(context, group_chat_id), 'game_started_private',
                       cd['timers']['durations']['ingame']) + "\n\n\n" + table_str
     for player in current_game['participants']:
         try:
@@ -229,9 +229,9 @@ def start_game(update, context, timer: bool = False):
                                      parse_mode=HTML)
         except Unauthorized:
             context.bot.send_message(chat_id=group_chat_id,
-                                     text=get_string(__get_chat_lang(context), 'bot_not_started_by_user',
+                                     text=get_string(__get_chat_lang(context), 'game_killed_user_did_not_start_the_bot',
                                                      current_game['participants'][player]['username']))
-            kill(update, context)  # TODO: implement
+            kill(update, context, bot_not_started=True)
 
     t = Timer(interval=cd['timers']['durations']['ingame'],
               function=__ingame_timer, args=(update, context, group_chat_id))
@@ -517,8 +517,17 @@ def kick(update, context):
                              reply_markup=reply_markup)
 
 
-def kill(update, context):
+def kill(update, context, bot_not_started: bool = False):
     __check_bot_data_is_initialized(context)
+
+    if bot_not_started:
+        bd = context.bot_data
+        cd = context.chat_data
+        group_id = __get_chat_id(update)
+        del bd['games'][group_id]
+        latest_game = __get_latest_game(context)
+        cd['games'].remove(latest_game)
+        return
 
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
