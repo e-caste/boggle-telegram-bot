@@ -343,7 +343,7 @@ def delete(update, context):
         for player_word in player_words:
             for word in words:
                 if player_word == word:
-                    player_words[player_word]['deleted'] = True
+                    players[user_id]['words'][player_word]['deleted'] = True
                     not_found.remove(word)
 
     if len(not_found) > 0:
@@ -452,8 +452,14 @@ def end_game(update, context):
     elif len(winners) > 1:
         winner_str = get_string(lang, 'game_winners_plural')
 
+    winners_usernames = ""
+    for user_id in winners:
+        winners_usernames += winners[user_id] + ", "
+    winners_usernames = winners_usernames[:-2]
+
     context.bot.send_message(chat_id=group_id,
-                             text=get_string(lang, 'game_finished', get_string(lang, winner_str), max_points),
+                             text=get_string(lang, 'game_finished',
+                                             winner_str, winners_usernames, max_points),
                              parse_mode=HTML)
 
 
@@ -803,7 +809,7 @@ def __get_latest_game(context) -> dict:
         for game in cd['games']:
             res = game if game['unix_epoch'] > res['unix_epoch'] else res
         return res
-    res['is_finished'] = False
+    res['is_finished'] = True
     return res
 
 
