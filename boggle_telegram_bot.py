@@ -1154,8 +1154,8 @@ def __get_settings_keyboard(chat_id: int, lang: str) -> InlineKeyboardMarkup:
 def __get_timers_keyboard(chat_id: int, lang: str) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([
         [InlineKeyboardButton(get_string(lang, 'settings_newgame_timer_button'),
-                              callback_data=f"settings_newgametimer_{chat_id}"),
-         InlineKeyboardButton(get_string(lang, 'settings_ingame_timer_button'),
+                              callback_data=f"settings_newgametimer_{chat_id}")],
+        [InlineKeyboardButton(get_string(lang, 'settings_ingame_timer_button'),
                               callback_data=f"settings_ingametimer_{chat_id}")],
         [InlineKeyboardButton("🔙", callback_data=f"back_to_settings_{chat_id}")]
     ])
