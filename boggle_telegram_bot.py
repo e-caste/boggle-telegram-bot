@@ -909,10 +909,6 @@ def __init_user_stats(context, user_id: int, username: str, group_id: int, new_p
                 'value': 0,
                 'percentage': 0
             },
-            # 'last': {
-            #     'value': 0,
-            #     'percentage': 0
-            # },
             'played': 0
         },
         'points': {
