@@ -349,7 +349,14 @@ def delete(update, context):
     if len(not_found) > 0:
         update.message.reply_text(get_string(lang, 'words_not_found_in_players_words', not_found))
     else:
+        player_words_without_points = __get_formatted_words(context, group_id, with_points=False)
         update.message.reply_text(get_string(lang, 'all_words_deleted'))
+        context.bot.edit_message_text(chat_id=group_id,
+                                      message_id=game['result_message']['message_id'],
+                                      text=get_string(lang, 'ingame_timer_expired_group',
+                                                      game['creator']['username'], game['creator']['username'],
+                                                      player_words_without_points),
+                                      parse_mode=HTML)
 
 
 def end_game(update, context):
@@ -696,13 +703,13 @@ def __ingame_timer(update, context, group_id: int):
                                                  player_words_with_points[user_id]),
                                  parse_mode=HTML)
 
-    context.bot.send_message(chat_id=group_id,
-                             text=get_string(__get_chat_lang(context), 'ingame_timer_expired_group',
-                                             game['creator']['username'], game['creator']['username'],
-                                             player_words_without_points),
-                             # .replace("<", "&lt;").replace(">", "&gt;").replace("'", "&#39;"),
-                             parse_mode=HTML)
-
+    message = context.bot.send_message(chat_id=group_id,
+                                       text=get_string(__get_chat_lang(context), 'ingame_timer_expired_group',
+                                                       game['creator']['username'], game['creator']['username'],
+                                                       player_words_without_points),
+                                       # .replace("<", "&lt;").replace(">", "&gt;").replace("'", "&#39;"),
+                                       parse_mode=HTML)
+    game['result_message'] = message
 
 
 def __check_bot_data_is_initialized(context):
@@ -976,14 +983,14 @@ def __get_formatted_words(context, group_id: int, with_points: bool, user_id: in
         res += f"<b>{players[player]['username']}</b>\n"
         words = players[player]['words']
         for word in words:
-            if words[word]['sent_by_other_players']:
+            if words[word]['sent_by_other_players'] or words[word]['deleted']:
                 res += "<strike>"
             else:
                 res += "<i>"
             res += f"{word}"
             if with_points:
                 res += f": {words[word]['points']}"
-            if words[word]['sent_by_other_players']:
+            if words[word]['sent_by_other_players'] or words[word]['deleted']:
                 res += "</strike>"
             else:
                 res += "</i>"
@@ -1050,6 +1057,6 @@ def main():
 if __name__ == '__main__':
     if not debug:
         os.chdir(working_directory)
-    else:
-        os.remove('_boggle_paroliere_bot_db')
+    # else:
+    #     os.remove('_boggle_paroliere_bot_db')
     main()
