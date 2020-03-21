@@ -309,6 +309,14 @@ translations = {
         'ita': "Tempo della partita",
         'eng': "Game duration"
     },
+    'settings_newgametimer_changed': {
+        'ita': "Durata del pre-partita cambiata!",
+        'eng': "Pre-game duration changed!"
+    },
+    'settings_ingametimer_changed': {
+        'ita': "Durata della partita cambiata!",
+        'eng': "Game duration changed!"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
