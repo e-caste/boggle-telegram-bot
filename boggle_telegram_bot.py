@@ -5,10 +5,10 @@
 This bot was made by e-caste in 2020
 """
 
-from telegram import ReplyKeyboardMarkup
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.parsemode import ParseMode
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
-                          ConversationHandler, PicklePersistence)
+                          CallbackQueryHandler, PicklePersistence)
 from telegram.utils.helpers import mention_html
 from telegram.error import Unauthorized
 import logging
@@ -448,7 +448,44 @@ def end_game(update, context):
 
 def kick(update, context):
     __check_bot_data_is_initialized(context)
-    pass
+
+    if __check_chat_is_group(update):
+        update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
+        return
+
+    bd = context.bot_data
+    user_id = __get_user_id(update)
+    group_id = __get_chat_id(update)
+
+    if not bd['games'].get(group_id):
+        update.message.reply_text(get_string(__get_chat_lang(context), msg='no_game_yet'))
+        return
+
+    game = bd['games'][group_id]
+    lang = game['lang']
+
+    if user_id != game['creator']['id']:
+        update.message.reply_text(get_string(lang, 'forbid_not_game_creator',
+                                             __get_username(update), game['creator']['username'], "/kick"))
+        return
+
+    if game['is_finished']:
+        update.message.reply_text(get_string(lang, 'game_already_finished_kick', game['creator']['username']))
+        return
+
+    reply_keyboard = [[]]
+    for user_id in game['participants']:
+        button = InlineKeyboardButton(game['participants'][user_id]['username'],
+                                      callback_data=f"kick_{user_id}_from_{group_id}")
+        if len(reply_keyboard[-1]) == 2:
+            reply_keyboard.append([button])
+        else:
+            reply_keyboard[-1].append(button)
+    reply_markup = InlineKeyboardMarkup(reply_keyboard)
+
+    context.bot.send_message(chat_id=group_id,
+                             text=get_string(lang, 'kick_user_choice_group', game['creator']['username']),
+                             reply_markup=reply_markup)
 
 
 def kill(update, context):
@@ -476,7 +513,7 @@ def kill(update, context):
         return
 
     if game['is_finished']:
-        update.message.reply_text(get_string(lang, 'game_already_finished', game['creator']['username']))
+        update.message.reply_text(get_string(lang, 'game_already_finished_kill', game['creator']['username']))
         return
 
     context.bot.send_message(chat_id=group_id,
@@ -521,6 +558,17 @@ def show_usage(update, context):
 def show_help(update, context):
     __check_bot_data_is_initialized(context)
     update.message.reply_text(text=get_string(__get_chat_lang(context), msg='help'))
+
+
+def query_handler(update, context):
+    query = update.callback_query
+    user_id = query.message.from_user.id
+
+    for user_id in game['participants']:
+        context.bot.send_message(chat_id=user_id,
+                                 text=get_string(lang, 'game_killed_private', game['creator']['username']))
+
+    # remove user from game in bd and cd
 
 
 def error(update, context):
@@ -943,6 +991,9 @@ def main():
     # handles all text messages in a private chat
     dp.add_handler(MessageHandler(Filters.text & ~ Filters.group, points_handler))
     dp.add_handler(MessageHandler(Filters.status_update.new_chat_members, bot_added_to_group))
+
+    # handles callback queries from InlineKeyboardButtons
+    dp.add_handler(CallbackQueryHandler(query_handler))
 
     # log all errors
     dp.add_error_handler(error)
