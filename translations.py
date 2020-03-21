@@ -297,7 +297,7 @@ translations = {
         'ita': "Lingua cambiata!",
         'eng': "Language changed!"
     },
-    'settings__timer_choice': {
+    'settings_timer_choice': {
         'ita': "Scegli quale timer vuoi cambiare:",
         'eng': "Choose which timer you want to change:"
     },
