@@ -199,7 +199,7 @@ def start_game(update, context, timer: bool = False):
                                  text=get_string(__get_chat_lang(context), 'no_game_yet'))
         return
 
-    if len(current_game['participants'] == 0):
+    if len(current_game['participants']) == 0:
         context.bot.send_message(chat_id=group_chat_id,
                                  text=get_string(__get_chat_lang(context), 'no_participants'))
         return
