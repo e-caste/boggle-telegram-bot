@@ -330,6 +330,11 @@ def delete(update, context):
 
     words = update.message.text.lower().split()[1:]  # skip /delete
 
+    if len(words) == 0:
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(lang, 'no_words_after_delete_command'))
+        return
+
     for word in words:
         for char in word:
             if char not in letters_sets[lang]:
