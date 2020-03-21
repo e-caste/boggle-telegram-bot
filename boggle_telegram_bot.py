@@ -563,12 +563,33 @@ def show_help(update, context):
 def query_handler(update, context):
     query = update.callback_query
     user_id = query.message.from_user.id
+    bd = context.bot_data
 
-    for user_id in game['participants']:
-        context.bot.send_message(chat_id=user_id,
-                                 text=get_string(lang, 'game_killed_private', game['creator']['username']))
+    if query.data.startswith("kick"):
+        user_id_to_kick = int(query.data.split("kick_")[1].split("_from_")[0])
+        group_id_to_kick_from = int(query.data.split("_from_")[1])
+        game = bd['games'][group_id_to_kick_from]
 
-    # remove user from game in bd and cd
+        if user_id != game['creator']['id']:
+            context.bot.send_message(chat_id=group_id_to_kick_from,
+                                     text="Only the game creator can choose who to kick!")
+            return
+
+        lang = __get_game_lang(context, group_id_to_kick_from)
+
+        context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                      message_id=query.message.message_id,
+                                      text=get_string(lang,
+                                                      'kick_user_successful',
+                                                      game['participants'][user_id_to_kick]['username']))
+
+        try:
+            context.bot.send_message(chat_id=user_id_to_kick,
+                                     text=get_string(lang, 'you_have_been_kicked', game['creator']['username']))
+        except Unauthorized:
+            pass
+
+        del game['participants'][user_id_to_kick]
 
 
 def error(update, context):
