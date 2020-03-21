@@ -289,6 +289,10 @@ translations = {
         'ita': "Dimensioni scacchiera",
         'eng': "Board dimensions"
     },
+    'settings_language_choice': {
+        'ita': "Scegli la lingua:",
+        'eng': "Choose your language:"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
