@@ -686,7 +686,7 @@ def __ingame_timer(update, context, group_id: int):
     game['is_finished'] = True
     __check_words_in_common(context, group_id)
     player_words_with_points = {}
-    for user_id in game['participants']:  # TODO: check why this function does not return the correct string
+    for user_id in game['participants']:
         player_words_with_points[user_id] = __get_formatted_words(context, group_id, with_points=True, user_id=user_id)
     player_words_without_points = __get_formatted_words(context, group_id, with_points=False)
 
@@ -702,7 +702,7 @@ def __ingame_timer(update, context, group_id: int):
                                              player_words_without_points),
                              # .replace("<", "&lt;").replace(">", "&gt;").replace("'", "&#39;"),
                              parse_mode=HTML)
-    # TODO: fix telegram.error.BadRequest: Can't parse entities: unsupported start tag "list" at byte offset 212
+
 
 
 def __check_bot_data_is_initialized(context):
