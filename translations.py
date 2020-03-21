@@ -140,7 +140,7 @@ translations = {
         'eng': "Sorry, {}, but only the game creator ({}) can use {}."
     },
     'game_started_group': {
-        'ita': "La partita è cominciata! Giocate in chat privata!!",
+        'ita': "La partita è cominciata! Giocate in chat privata!",
         'eng': "The game has begun! Let's play in the private chat!"
     },
     'game_started_private': {
