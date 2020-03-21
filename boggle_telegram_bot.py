@@ -466,7 +466,7 @@ def end_game(update, context):
 def kick(update, context):
     __check_bot_data_is_initialized(context)
 
-    if __check_chat_is_group(update):
+    if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
         return
 
@@ -988,6 +988,8 @@ def __get_formatted_words(context, group_id: int, with_points: bool, user_id: in
             else:
                 res += "</i>"
             res += "\n"
+        if len(words) == 0:
+            res += get_string(__get_game_lang(context, group_id), 'no_words_received')
         return res
 
     for player in players:
