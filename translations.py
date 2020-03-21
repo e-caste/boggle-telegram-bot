@@ -241,6 +241,10 @@ translations = {
         'eng': "The current game has been canceled! To create a new one, you can use /new. Remember to use /help if you"
                " have any doubts."
     },
+    'game_killed_private': {
+        'ita': "La partita a cui stavi giocando è stata annullata, dal suo creatore, {}.",
+        'eng': "The game you were playing has been canceled by its creator, {}."
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
