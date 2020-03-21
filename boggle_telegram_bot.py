@@ -320,10 +320,7 @@ def delete(update, context):
     game = bd['games'][group_id]
     lang = game['lang']
 
-    if user_id != game['creator']['id']:
-        context.bot.send_message(chat_id=group_id,
-                                 text=get_string(lang, 'forbid_not_game_creator',
-                                                 __get_username(update), game['creator']['username'], "/delete"))
+    if __forbid_not_game_creator(update, context, command="/delete"):
         return
 
     if not game['is_finished']:
@@ -389,9 +386,7 @@ def end_game(update, context):
     game = bd['games'][group_id]
     lang = game['lang']
 
-    if user_id != game['creator']['id']:
-        update.message.reply_text(get_string(lang, 'forbid_not_game_creator',
-                                             __get_username(update), game['creator']['username'], "/endgame"))
+    if __forbid_not_game_creator(update, context, command="/endgame"):
         return
 
     if not game['is_finished']:
@@ -499,9 +494,7 @@ def kick(update, context):
     game = bd['games'][group_id]
     lang = game['lang']
 
-    if user_id != game['creator']['id']:
-        update.message.reply_text(get_string(lang, 'forbid_not_game_creator',
-                                             __get_username(update), game['creator']['username'], "/kick"))
+    if __forbid_not_game_creator(update, context, command="/kick"):
         return
 
     if game['is_finished']:
@@ -551,9 +544,7 @@ def kill(update, context, bot_not_started: bool = False):
     game = bd['games'][group_id]
     lang = game['lang']
 
-    if user_id != game['creator']['id']:
-        update.message.reply_text(get_string(lang, 'forbid_not_game_creator',
-                                             __get_username(update), game['creator']['username'], "/kill"))
+    if __forbid_not_game_creator(update, context, command="/kill"):
         return
 
     if game['is_finished']:
