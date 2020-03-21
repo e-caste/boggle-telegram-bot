@@ -854,10 +854,18 @@ def __get_formatted_words(context, group_id: int, with_points: bool, user_id: in
         res += f"<b>{players[player]['username']}</b>\n"
         words = players[player]['words']
         for word in words:
-            res += f"<i>{word}"
+            if words[word]['sent_by_other_players']:
+                res += "<strike>"
+            else:
+                res += "<i>"
+            res += f"{word}"
             if with_points:
                 res += f": {words[word]['points']}"
-            res += "</i>\n"
+            if words[word]['sent_by_other_players']:
+                res += "</strike>"
+            else:
+                res += "</i>"
+            res += "\n"
         return res
 
     for player in players:
@@ -867,7 +875,7 @@ def __get_formatted_words(context, group_id: int, with_points: bool, user_id: in
                 return res
         else:
             res = __get_formatted_words_internal(res)
-        res += "\n\n"
+            res += "\n\n"
     return res
 
 
