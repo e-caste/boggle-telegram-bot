@@ -184,7 +184,7 @@ translations = {
     'ingame_timer_expired_group': {
         'ita': "Tempo scaduto! Ora il creatore della partita ({}), in accordo con gli altri giocatori, dovrà mandarmi "
                "la lista delle parole non valide. Basta un messaggio con la lista delle parole non valide di tutti i "
-               "giocatori, nella forma /delete <lista di parole separate da spazi', ma accetto anche delle singole "
+               "giocatori, nella forma /delete 'lista di parole separate da spazi', ma accetto anche delle singole "
                "parole, se ricevo /delete 'parola' (sempre senza ').\n\n<b>Mi raccomando, {}, ricordati di "
                "darmi il comando /endgame per concludere la partita e visualizzare i risultati!</b>\n\nQui di seguito "
                "la lista complessiva:\n\n{}",
