@@ -333,6 +333,10 @@ translations = {
         'ita': "Le statistiche del gruppo",
         'eng': "Group stats"
     },
+    'stats_shown_below': {
+        'ita': "Ecco le statistiche:",
+        'eng': "Here are your stats:"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot in una chat privata.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
