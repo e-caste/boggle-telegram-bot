@@ -781,7 +781,7 @@ def query_handler(update, context):
         if whose_stats == "group":
             __show_group_stats(context, chat_id)
         elif whose_stats == "user":
-            __show_user_stats(context, chat_id, __get_username(update), __get_chat_id(update))
+            __show_user_stats(context, chat_id, __get_username(query), __get_chat_id(query))
 
 
 def error(update, context):
