@@ -229,6 +229,12 @@ translations = {
         'eng': "I've deleted all the words you've sent me. Now you can either send me some other words with /delete '"
                "list of space separated words' or you can /endgame."
     },
+    'no_words_after_delete_command': {
+        'ita': "Il comando /delete da solo non basta, devi specificare quali parole vuoi cancellare.\nProva /delete "
+               "'parola/lista di parole da cancellare' (senza ').",
+        'eng': "The /delete command alone isn't enough, you have to specify which words you wish to delete.\nTry "
+               "/delete 'word/list of words to delete' (without ')"
+    },
     'game_finished': {
         'ita': "<b>Fine partita!</b>\n\n{}: {} con {} punti!",
         'eng': "<b>Game ended!</b>\n\n{}: {} with {} points!"
