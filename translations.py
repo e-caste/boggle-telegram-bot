@@ -265,7 +265,7 @@ translations = {
     },
     'no_words_received': {
         'ita': "<i>Nessuna parola ricevuta.</i>",
-        'eng': "<i>No word received.</i>"
+        'eng': "<i>No words received.</i>"
     },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
