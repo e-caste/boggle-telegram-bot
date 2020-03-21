@@ -337,6 +337,18 @@ translations = {
         'ita': "Ecco le statistiche:",
         'eng': "Here are your stats:"
     },
+    'stats_group_matches': {
+        'ita': "Numero di partite:",
+        'eng': "Number of games:"
+    },
+    'stats_group_points': {
+        'ita': "Punti totali di questo gruppo:",
+        'eng': "Total points of this group:"
+    },
+    'stats_group_average': {
+        'ita': "Media di punti per partita:",
+        'eng': "Average points per game:"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot in una chat privata.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
