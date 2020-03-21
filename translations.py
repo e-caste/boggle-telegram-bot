@@ -255,6 +255,10 @@ translations = {
         'ita': "Il creatore della partita, {}, può scegliere chi kickare tra i giocatori:",
         'eng': "The game creator, {}, can choose who to kick from the game among the players:"
     },
+    'kick_user_successful': {
+        'ita': "Il giocatore {} è stato rimosso dalla partita corrente.",
+        'eng': "The player {} has been kicked from the current game."
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
