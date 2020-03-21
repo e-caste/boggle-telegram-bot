@@ -109,6 +109,10 @@ translations = {
         'ita': "È già stata creata una partita! Puoi partecipare con /join.",
         'eng': "A game has already been created! You can still /join."
     },
+    'no_participants': {
+        'ita': "Non ci sono giocatori! Usa /join per entrare in partita.",
+        'eng': "There are no players! You can /join the game."
+    },
     'game_joined': {
         'ita': "Okay, {}, sei in partita! Il creatore della partita, {}, può farla cominciare con /startgame.",
         'eng': "Alright, {}, you're in! The game creator, {}, can start it with /startgame."
