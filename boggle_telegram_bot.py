@@ -199,8 +199,13 @@ def start_game(update, context, timer: bool = False):
                                  text=get_string(__get_chat_lang(context), 'no_game_yet'))
         return
 
+    if len(current_game['participants'] == 0):
+        context.bot.send_message(chat_id=group_chat_id,
+                                 text=get_string(__get_chat_lang(context), 'no_participants'))
+        return
+
     if not timer:
-        if __forbid_not_game_creator(update, context, command="/startgame"):
+        if __forbid_not_game_creator(update, context, group_chat_id, command="/startgame"):
             return
         else:
             cd['timers']['newgame'] = None
@@ -320,7 +325,7 @@ def delete(update, context):
     game = bd['games'][group_id]
     lang = game['lang']
 
-    if __forbid_not_game_creator(update, context, command="/delete"):
+    if __forbid_not_game_creator(update, context, group_id, command="/delete"):
         return
 
     if not game['is_finished']:
@@ -386,7 +391,7 @@ def end_game(update, context):
     game = bd['games'][group_id]
     lang = game['lang']
 
-    if __forbid_not_game_creator(update, context, command="/endgame"):
+    if __forbid_not_game_creator(update, context, group_id, command="/endgame"):
         return
 
     if not game['is_finished']:
@@ -500,7 +505,7 @@ def kick(update, context):
     game = bd['games'][group_id]
     lang = game['lang']
 
-    if __forbid_not_game_creator(update, context, command="/kick"):
+    if __forbid_not_game_creator(update, context, group_id, command="/kick"):
         return
 
     if game['is_finished']:
@@ -552,7 +557,7 @@ def kill(update, context, bot_not_started: bool = False):
     game = bd['games'][group_id]
     lang = game['lang']
 
-    if __forbid_not_game_creator(update, context, command="/kill"):
+    if __forbid_not_game_creator(update, context, group_id, command="/kill"):
         return
 
     if game['is_finished']:
@@ -1003,11 +1008,15 @@ def __get_current_game(context) -> dict:
     return res if not res['is_finished'] else None
 
 
-def __forbid_not_game_creator(update, context, command: str) -> bool:
-    current_game = __get_current_game(context)
+def __forbid_not_game_creator(update, context, group_id, command: str) -> bool:
+    bd = context.bot_data
+    if bd['games'].get(group_id):
+        current_game = bd['games'][group_id]
+    else:
+        current_game = __get_current_game(context)
     user_id = __get_user_id(update)
     if user_id != current_game['creator']['id']:
-        context.bot.send_message(chat_id=__get_chat_id(update),
+        context.bot.send_message(chat_id=group_id,
                                  text=get_string(__get_chat_lang(context), 'forbid_not_game_creator',
                                                  __get_username(update), current_game['creator']['username'], command))
         return True
@@ -1306,6 +1315,6 @@ def main():
 if __name__ == '__main__':
     if not debug:
         os.chdir(working_directory)
-    # else:
-    #     os.remove('_boggle_paroliere_bot_db')
+    else:
+        os.remove('_boggle_paroliere_bot_db')
     main()
