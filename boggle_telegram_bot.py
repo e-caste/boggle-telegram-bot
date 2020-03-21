@@ -453,7 +453,43 @@ def kick(update, context):
 
 def kill(update, context):
     __check_bot_data_is_initialized(context)
-    pass
+
+    if not __check_chat_is_group(update):
+        update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
+        return
+
+    bd = context.bot_data
+    cd = context.chat_data
+    user_id = __get_user_id(update)
+    group_id = __get_chat_id(update)
+
+    if not bd['games'].get(group_id):
+        update.message.reply_text(get_string(__get_chat_lang(context), msg='no_game_yet'))
+        return
+
+    game = bd['games'][group_id]
+    lang = game['lang']
+
+    if user_id != game['creator']['id']:
+        update.message.reply_text(get_string(lang, 'forbid_not_game_creator',
+                                             __get_username(update), game['creator']['username'], "/kill"))
+        return
+
+    if game['is_finished']:
+        update.message.reply_text(get_string(lang, 'game_already_finished', game['creator']['username']))
+        return
+
+    context.bot.send_message(chat_id=group_id,
+                             text=get_string(lang, 'game_killed_group'))
+
+    for user_id in game['participants']:
+        context.bot.send_message(chat_id=user_id,
+                                 text=get_string(lang, 'game_killed_private', game['creator']['username']))
+
+    del bd['games'][group_id]
+    latest_game = __get_latest_game(context)
+    cd['games'].remove(latest_game)
+
 
 
 def show_statistics(update, context):
