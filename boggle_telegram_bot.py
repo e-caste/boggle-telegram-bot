@@ -438,10 +438,13 @@ def end_game(update, context):
         us[user_id]['matches']['played'] += 1
         if winners.get(user_id) and len(winners) == 1:  # won
             us[user_id]['matches']['won']['value'] += 1
+            us[user_id]['matches']['latest']['won'] = True
         elif winners.get(user_id) and len(winners) > 1:  # even
             us[user_id]['matches']['even']['value'] += 1
+            us[user_id]['matches']['latest']['won'] = True
         elif not winners.get(user_id):  # lost
             us[user_id]['matches']['lost']['value'] += 1
+            us[user_id]['matches']['latest']['won'] = False
         for ending in ['won', 'even', 'lost']:
             us[user_id]['matches'][ending]['percentage'] = round(us[user_id]['matches'][ending]['value']
                                                                  / us[user_id]['matches']['played'] * 100, 2)
@@ -452,6 +455,9 @@ def end_game(update, context):
         us[user_id]['points']['last_match'] = players_points[user_id]
         us[user_id]['points']['total'] += players_points[user_id]
         us[user_id]['points']['average'] = round(us[user_id]['points']['total'] / us[user_id]['matches']['played'], 2)
+        us[user_id]['matches']['latest'] = players_points[user_id]
+        for word in game['participants'][user_id]['words']:
+            us[user_id]['matches']['latest']['words'][word] = game['participants'][user_id]['words'][word]['points']
 
     chat_game = __get_latest_game(context)
     cd['games'].remove(chat_game)
@@ -906,7 +912,12 @@ def __init_user_stats(context, user_id: int, username: str, group_id: int, new_p
                 'value': 0,
                 'percentage': 0
             },
-            'played': 0
+            'played': 0,
+            'latest': {
+                'won': False,
+                'points': 0,
+                'words': {}
+            }
         },
         'points': {
             'max': 0,
