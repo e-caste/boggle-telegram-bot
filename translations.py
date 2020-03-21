@@ -259,6 +259,10 @@ translations = {
         'ita': "Il giocatore {} è stato rimosso dalla partita corrente.",
         'eng': "The player {} has been kicked from the current game."
     },
+    'you_have_been_kicked': {
+        'ita': "Sei stato rimosso dalla partita da {}.",
+        'eng': "You've been kicked from the game by {}."
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
