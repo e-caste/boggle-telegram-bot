@@ -235,6 +235,12 @@ translations = {
         'ita': "E i vincitori parimerito sono",
         'eng': "And the even winners are"
     },
+    'game_killed_group': {
+        'ita': "La partita in corso è stata annullata! Per crearne una nuova, potete usare /new. Ricordatevi di usare "
+               "/help se avete dei dubbi.",
+        'eng': "The current game has been canceled! To create a new one, you can use /new. Remember to use /help if you"
+               " have any doubts."
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
