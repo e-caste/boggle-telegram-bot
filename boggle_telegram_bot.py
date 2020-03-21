@@ -861,7 +861,7 @@ def __init_chat_data(context):
         'ingame': None,
         'durations': {
             'newgame': 90,  # seconds
-            'ingame': 30  # seconds  # TODO: change to 180
+            'ingame': 180  # seconds
         }
     }
     cd['games'] = []
