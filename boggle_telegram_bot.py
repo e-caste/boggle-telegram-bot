@@ -646,9 +646,9 @@ def query_handler(update, context):
 
         elif setting == "english" or setting == "italiano":
             if setting == "english":
-                cd['settings']['language'] = 'eng'
+                cd['settings']['lang'] = 'eng'
             elif setting == "italiano":
-                cd['settings']['language'] = 'ita'
+                cd['settings']['lang'] = 'ita'
             context.bot.edit_message_text(chat_id=query.message.chat_id,
                                           message_id=query.message.message_id,
                                           text=get_string(__get_chat_lang(context), 'settings_language_changed'))
@@ -732,12 +732,14 @@ def query_handler(update, context):
         if destination == "settings":
             reply_keyboard = __get_settings_keyboard(chat_id, lang)
             context.bot.edit_message_text(chat_id=chat_id,
+                                          message_id=query.message.message_id,
                                           text=get_string(lang, 'settings_prompt'),
                                           reply_markup=reply_keyboard)
 
         elif destination == "timers":
             reply_keyboard = __get_timers_keyboard(chat_id, lang)
             context.bot.edit_message_text(chat_id=chat_id,
+                                          message_id=query.message.message_id,
                                           text=get_string(lang, 'settings_timer_choice'),
                                           reply_markup=reply_keyboard)
 
@@ -1137,16 +1139,16 @@ def __get_formatted_words(context, group_id: int, with_points: bool, user_id: in
 
 
 def __get_settings_keyboard(chat_id: int, lang: str) -> InlineKeyboardMarkup:
-    reply_keyboard = InlineKeyboardMarkup([
+    reply_keyboard = [
         [InlineKeyboardButton(get_string(lang, 'settings_button_language'),
                               callback_data=f"settings_language_{chat_id}")],
-    ])
+    ]
     if chat_id < 0:  # group
         reply_keyboard[0].append(InlineKeyboardButton(get_string(lang, 'settings_button_timers'),
                                                       callback_data=f"settings_timers_{chat_id}"))
         # TODO: uncomment this when more than 1 table dimension (4x4) gets added
         # [InlineKeyboardButton(get_string(lang, 'settings_button_table_dimensions'))]
-    return reply_keyboard
+    return InlineKeyboardMarkup(reply_keyboard)
 
 
 def __get_timers_keyboard(chat_id: int, lang: str) -> InlineKeyboardMarkup:
