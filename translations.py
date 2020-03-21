@@ -273,6 +273,10 @@ translations = {
         'ita': "<i>Nessuna parola ricevuta.</i>",
         'eng': "<i>No words received.</i>"
     },
+    'settings_prompt': {
+        'ita': "Qui puoi cambiare le impostazioni per questo gruppo",
+        'eng': "Here you can change the settings for this group chat"
+    },
     'settings_button_language': {
         'ita': "Lingua",
         'eng': "Language"
