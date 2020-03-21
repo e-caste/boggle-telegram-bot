@@ -438,13 +438,13 @@ def end_game(update, context):
         us[user_id]['matches']['played'] += 1
         if winners.get(user_id) and len(winners) == 1:  # won
             us[user_id]['matches']['won']['value'] += 1
-            us[user_id]['matches']['latest']['won'] = True
+            us[user_id]['matches']['latest']['won'] = "won"
         elif winners.get(user_id) and len(winners) > 1:  # even
             us[user_id]['matches']['even']['value'] += 1
-            us[user_id]['matches']['latest']['won'] = True
+            us[user_id]['matches']['latest']['won'] = "even"
         elif not winners.get(user_id):  # lost
             us[user_id]['matches']['lost']['value'] += 1
-            us[user_id]['matches']['latest']['won'] = False
+            us[user_id]['matches']['latest']['won'] = "lost"
         for ending in ['won', 'even', 'lost']:
             us[user_id]['matches'][ending]['percentage'] = round(us[user_id]['matches'][ending]['value']
                                                                  / us[user_id]['matches']['played'] * 100, 2)
@@ -452,7 +452,6 @@ def end_game(update, context):
             else us[user_id]['points']['max']
         us[user_id]['points']['min'] = players_points[user_id] if players_points[user_id] < us[user_id]['points']['max'] \
             else us[user_id]['points']['min']
-        us[user_id]['points']['last_match'] = players_points[user_id]
         us[user_id]['points']['total'] += players_points[user_id]
         us[user_id]['points']['average'] = round(us[user_id]['points']['total'] / us[user_id]['matches']['played'], 2)
         us[user_id]['matches']['latest'] = players_points[user_id]
@@ -573,7 +572,23 @@ def show_statistics(update, context):
     __check_bot_data_is_initialized(context)
     # TODO: if in group chat, ask the user if he wants group or their stats
     # TODO: if in private chat, show the user's stats
-    pass
+
+    user_id = __get_user_id(update)
+
+    if __check_chat_is_group(update):
+        lang = __get_chat_lang(context)
+        group_id = __get_chat_id(update)
+
+        reply_keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton(get_string(lang, 'stats_user_button'), callback_data=f"stats_user_{user_id}")],
+            [InlineKeyboardButton(get_string(lang, 'stats_group_button'), callback_data=f"stats_group_{group_id}")]
+        ])
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(lang, 'stats_prompt'),
+                                 reply_markup=reply_keyboard)
+
+    else:
+        __show_user_stats(context, user_id, __get_username(update))
 
 
 def settings(update, context):
@@ -755,6 +770,19 @@ def query_handler(update, context):
                                           text=get_string(lang, 'settings_timer_choice'),
                                           reply_markup=reply_keyboard)
 
+    elif query.data.startswith("stats"):
+        whose_stats = query.data.split("_")[1]
+        chat_id = query.data.split("_")[2]
+
+        context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                      message_id=query.message.message_id,
+                                      text=get_string(__get_chat_lang(context), 'stats_shown_below'))
+
+        if whose_stats == "group":
+            __show_group_stats(context, chat_id)
+        elif whose_stats == "user":
+            __show_user_stats(context, chat_id, __get_username(update), __get_chat_id(update))
+
 
 def error(update, context):
     """Log Errors caused by Updates."""
@@ -914,7 +942,7 @@ def __init_user_stats(context, user_id: int, username: str, group_id: int, new_p
             },
             'played': 0,
             'latest': {
-                'won': False,
+                'won': "",
                 'points': 0,
                 'words': {}
             }
@@ -922,13 +950,14 @@ def __init_user_stats(context, user_id: int, username: str, group_id: int, new_p
         'points': {
             'max': 0,
             'min': 0,
-            'last_match': 0,
             'average': 0,
             'total': 0
         }
     }
     if new_player:
         bd['stats']['users'][user_id] = initial_stats
+    if not bd['stats']['groups'].get(group_id):
+        __init_group_stats(context, group_id)
     bd['stats']['groups'][group_id][user_id] = initial_stats
 
 
@@ -1176,6 +1205,55 @@ def __get_timers_keyboard(chat_id: int, lang: str) -> InlineKeyboardMarkup:
     ])
 
 
+def __show_group_stats(context, group_id: int):
+    if not context.bot_data['stats']['groups'].get(group_id):
+        __init_group_stats(context, group_id)
+
+    stats = context.bot_data['stats']['groups'][group_id]
+    lang = __get_chat_lang(context)
+    text = f"<b>{get_string(lang, 'stats_group_matches')}</b> <code>{stats['matches']}</code>\n" \
+           f"<b>{get_string(lang, 'stats_group_points')}</b> <code>{stats['points']}</code>\n" \
+           f"<b>{get_string(lang, 'stats_group_average')}</b> <code>{stats['average']}</code>"
+
+    context.bot.send_message(chat_id=group_id,
+                             text=text,
+                             parse_mode=HTML)
+
+
+def __show_user_stats(context, user_id: int, username: str, group_id: int = None):
+    if not context.bot_data['stats']['users'].get(user_id):
+        __init_user_stats(context, user_id, username, group_id, new_player=True)
+
+    # username = context.bot_data['stats']['users'][user_id]['username']
+    stats = context.bot_data['stats']['users'][user_id]
+    lang = __get_chat_lang(context)
+
+    latest_game_words = ""
+    if len(stats['matches']['latest']['words']) > 0:
+        for word in stats['matches']['latest']['words']:
+            latest_game_words += f"{word} ({stats['matches']['latest']['words'][word]}), "
+        latest_game_words = latest_game_words[:-2]
+
+    text = f"<b>{get_string(lang, 'stats_user_matches')}</b>\n" \
+           f"<code>    </code><i>{get_string(lang, 'stats_user_won_matches')}</i> <code>{stats['matches']['won']['value']} - {stats['matches']['won']['percentage']}%</code>\n" \
+           f"<code>    </code><i>{get_string(lang, 'stats_user_even_matches')}</i> <code>{stats['matches']['even']['value']} - {stats['matches']['even']['percentage']}%</code>\n" \
+           f"<code>    </code><i>{get_string(lang, 'stats_user_lost_matches')}</i> <code>{stats['matches']['lost']['value']} - {stats['matches']['lost']['percentage']}%</code>\n" \
+           f"<code>    </code><i>{get_string(lang, 'stats_user_total_matches')}</i> <code>{stats['matches']['played']}</code>\n\n" \
+           f"<b>{get_string(lang, 'stats_user_points')}</b>\n" \
+           f"<code>    </code><i>{get_string(lang, 'stats_user_max_points')}</i> <code>{stats['points']['max']}</code>\n" \
+           f"<code>    </code><i>{get_string(lang, 'stats_user_min_points')}</i> <code>{stats['points']['min']}</code>\n" \
+           f"<code>    </code><i>{get_string(lang, 'stats_user_average_points')}</i> <code>{stats['points']['average']}</code>\n" \
+           f"<code>    </code><i>{get_string(lang, 'stats_user_total_points')}</i> <code>{stats['points']['total']}</code>\n\n" \
+           f"<b>{get_string(lang, 'stats_user_latest_game')}</b>\n" \
+           f"<code>    </code><i>{stats['matches']['latest']['won']}</i>\n" \
+           f"<code>    </code><i>{get_string(lang, 'stats_user_latest_game_points')}</i> <code>{stats['matches']['latest']['points']}</code>\n" \
+           f"<code>    </code><i>{get_string(lang, 'stats_user_latest_game_words')} {latest_game_words}</i>"
+
+    context.bot.send_message(chat_id=group_id if group_id else user_id,
+                             text=text,
+                             parse_mode=HTML)
+
+
 def main():
     pp = PicklePersistence(filename='_boggle_paroliere_bot_db')
     updater = Updater(token, persistence=pp, use_context=True)
@@ -1222,6 +1300,6 @@ def main():
 if __name__ == '__main__':
     if not debug:
         os.chdir(working_directory)
-    # else:
-    #     os.remove('_boggle_paroliere_bot_db')
+    else:
+        os.remove('_boggle_paroliere_bot_db')
     main()
