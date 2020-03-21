@@ -198,6 +198,12 @@ translations = {
         'ita': "Mi spiace, ma quel comando si può usare solo a partita finita.",
         'eng': "I'm sorry, but that command is only available after the game is finished."
     },
+    'game_already_finished': {
+        'ita': "Non si può annullare una partita già terminata! Il creatore della partita, {}, deve usare /endgame per "
+               "concludere la partita e visualizzare i punteggi.",
+        'eng': "You can't kill a game that has already ended! The game, creator, {}, must use /endgame to end the game "
+               "and show the scores."
+    },
     'char_not_alpha': {
         'ita': "Almeno un carattere nella parola '{}' non è disponibile tra quelli tra i dadi. Prova a correggerla e "
                "rimandami il messaggio.",
