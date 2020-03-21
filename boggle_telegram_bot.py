@@ -563,7 +563,6 @@ def kill(update, context, bot_not_started: bool = False):
     cd['games'].remove(latest_game)
 
 
-
 def show_statistics(update, context):
     __check_bot_data_is_initialized(context)
     # TODO: if in group chat, ask the user if he wants group or their stats
@@ -600,7 +599,8 @@ def show_usage(update, context):
 
 def show_help(update, context):
     __check_bot_data_is_initialized(context)
-    update.message.reply_text(text=get_string(__get_chat_lang(context), msg='help'))
+    context.bot.send_message(chat_id=__get_chat_id(update),
+                             text=get_string(__get_chat_lang(context), msg='help'))
 
 
 def query_handler(update, context):
