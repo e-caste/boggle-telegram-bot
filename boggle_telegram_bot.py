@@ -459,7 +459,7 @@ def end_game(update, context):
             else us[user_id]['points']['min']
         us[user_id]['points']['total'] += players_points[user_id]
         us[user_id]['points']['average'] = round(us[user_id]['points']['total'] / us[user_id]['matches']['played'], 2)
-        us[user_id]['matches']['latest'] = players_points[user_id]
+        # us[user_id]['matches']['latest'] = players_points[user_id]
         for word in game['participants'][user_id]['words']:
             us[user_id]['matches']['latest']['words'][word] = game['participants'][user_id]['words'][word]['points']
 
@@ -588,8 +588,6 @@ def kill(update, context, bot_not_started: bool = False):
 
 def show_statistics(update, context):
     __check_bot_data_is_initialized(context)
-    # TODO: if in group chat, ask the user if he wants group or their stats
-    # TODO: if in private chat, show the user's stats
 
     user_id = __get_user_id(update)
 
@@ -1324,6 +1322,6 @@ def main():
 if __name__ == '__main__':
     if not debug:
         os.chdir(working_directory)
-    else:
-        os.remove('_boggle_paroliere_bot_db')
+    # else:
+    #     os.remove('_boggle_paroliere_bot_db')
     main()
