@@ -548,13 +548,19 @@ def kill(update, context, bot_not_started: bool = False):
     cd = context.chat_data
     user_id = __get_user_id(update)
     group_id = __get_chat_id(update)
+    current_game = __get_current_game(context)
 
-    if not bd['games'].get(group_id):
+    if not bd['games'].get(group_id) and current_game is None:
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(__get_chat_lang(context), msg='no_game_yet'))
         return
 
-    game = bd['games'][group_id]
+    if bd['games'].get(group_id):
+        game = bd['games'][group_id]
+        delete_from_bd = True
+    else:
+        game = current_game
+        delete_from_bd = False
     lang = game['lang']
 
     if __forbid_not_game_creator(update, context, group_id, command="/kill"):
@@ -572,9 +578,12 @@ def kill(update, context, bot_not_started: bool = False):
         context.bot.send_message(chat_id=user_id,
                                  text=get_string(lang, 'game_killed_private', game['creator']['username']))
 
-    del bd['games'][group_id]
+    if delete_from_bd:
+        del bd['games'][group_id]
     latest_game = __get_latest_game(context)
     cd['games'].remove(latest_game)
+    cd['timers']['newgame'] = None
+    timers['newgame'][group_id]()
 
 
 def show_statistics(update, context):
