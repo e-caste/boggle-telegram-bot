@@ -140,10 +140,8 @@ translations = {
         'eng': "Sorry, {}, but only the game creator ({}) can use {}."
     },
     'game_started_group': {
-        'ita': "La partita è cominciata! Ho inviato a ciascuno dei partecipanti un messaggio in chat privata, lì "
-               "dovrete scrivermi tutte le parole che riuscite a trovare tra i dadi! Che vinca il migliore!",
-        'eng': "The game has begun! I've sent a message to each of the participants in their private chat, and that's "
-               "where you'll have to send me all of the words you can find among the dice! May the best player win!"
+        'ita': "La partita è cominciata! Giocate in chat privata!!",
+        'eng': "The game has begun! Let's play in the private chat!"
     },
     'game_started_private': {
         'ita': "Qui puoi mandarmi tutte le parole che trovi nella tabella seguente. Presto che è tardi, hai solo {} "
@@ -162,8 +160,8 @@ translations = {
                "I've discarded it."
     },
     'received_dm_but_word_too_short': {
-        'ita': "Questa parola è troppo corta: nel Paroliere le parole devono essere lunghe almeno 3 lettere.",
-        'eng': "This word is too short: in Boggle, words must be at least 3 letters long."
+        'ita': "Questa parola è troppo corta!",
+        'eng': "This word is too short!"
     },
     'received_dm_but_word_not_validated': {
         'ita': "Ehi, hai digitato una parola impossibile da comporre con queste lettere, quindi l'ho scartata.",
