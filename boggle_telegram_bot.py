@@ -567,7 +567,15 @@ def show_statistics(update, context):
 
 def settings(update, context):
     __check_bot_data_is_initialized(context)
-    pass
+
+    chat_id = __get_chat_id(update)
+    lang = __get_chat_lang(context)
+
+    reply_keyboard = __get_settings_keyboard(chat_id, lang)
+
+    context.bot.send_message(chat_id=chat_id,
+                             text=get_string(lang, 'settings_prompt'),
+                             reply_markup=reply_keyboard)
 
 
 def show_rules(update, context):
@@ -619,6 +627,119 @@ def query_handler(update, context):
             pass
 
         del game['participants'][user_id_to_kick]
+
+    elif query.data.startswith("settings"):
+        setting = query.data.split("_")[1]
+        chat_id = int(query.data.split("_")[2])
+        cd = context.chat_data
+
+        if setting == "language":
+            reply_markup = InlineKeyboardMarkup([
+                [InlineKeyboardButton("English 🇬🇧", callback_data=f"settings_english_{chat_id}"),
+                 InlineKeyboardButton("Italiano 🇮🇹", callback_data=f"settings_italiano_{chat_id}")],
+                [InlineKeyboardButton("🔙", callback_data=f"back_to_settings_{chat_id}")]
+            ])
+            context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                          message_id=query.message.message_id,
+                                          text=get_string(__get_chat_lang(context), 'settings_language_choice'),
+                                          reply_markup=reply_markup)
+
+        elif setting == "english" or setting == "italiano":
+            if setting == "english":
+                cd['settings']['language'] = 'eng'
+            elif setting == "italiano":
+                cd['settings']['language'] = 'ita'
+            context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                          message_id=query.message.message_id,
+                                          text=get_string(__get_chat_lang(context), 'settings_language_changed'))
+
+        elif setting == "timers":
+            reply_markup = __get_timers_keyboard(chat_id, __get_chat_lang(context))
+            context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                          message_id=query.message.message_id,
+                                          text=get_string(__get_chat_lang(context), 'settings_timer_choice'),
+                                          reply_markup=reply_markup)
+
+        elif setting == "newgametimer":
+            reply_markup = InlineKeyboardMarkup([
+                [InlineKeyboardButton("10s", callback_data=f"settings_new10s_{chat_id}"),
+                 InlineKeyboardButton("30s", callback_data=f"settings_new30s_{chat_id}")],
+                [InlineKeyboardButton("1min", callback_data=f"settings_new1min_{chat_id}"),
+                 InlineKeyboardButton("1min30s", callback_data=f"settings_new1min30s_{chat_id}")],
+                [InlineKeyboardButton("🔙", callback_data=f"back_to_timers_{chat_id}")]
+            ])
+            context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                          message_id=query.message.message_id,
+                                          text=get_string(__get_chat_lang(context), 'settings_newgame_timer_button'),
+                                          reply_markup=reply_markup)
+
+        elif setting == "ingametimer":
+            reply_markup = InlineKeyboardMarkup([
+                [InlineKeyboardButton("30s", callback_data=f"settings_in30s_{chat_id}"),
+                 InlineKeyboardButton("1min", callback_data=f"settings_in1min_{chat_id}")],
+                [InlineKeyboardButton("1min30s", callback_data=f"settings_in1min30s_{chat_id}"),
+                 InlineKeyboardButton("2min", callback_data=f"settings_in2min_{chat_id}")],
+                [InlineKeyboardButton("2min30s", callback_data=f"settings_in2min30s_{chat_id}"),
+                 InlineKeyboardButton("3min", callback_data=f"settings_in3min_{chat_id}")],
+                [InlineKeyboardButton("3min30s", callback_data=f"settings_in3min30s_{chat_id}"),
+                 InlineKeyboardButton("4min", callback_data=f"settings_in4min_{chat_id}")],
+                [InlineKeyboardButton("🔙", callback_data=f"back_to_timers_{chat_id}")]
+            ])
+            context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                          message_id=query.message.message_id,
+                                          text=get_string(__get_chat_lang(context), 'settings_ingame_timer_button'),
+                                          reply_markup=reply_markup)
+
+        elif setting in ["new10s", "new30s", "new1min", "new1min30s"]:
+            if setting == "new10s":
+                cd['timers']['durations']['newgame'] = 10
+            elif setting == "new30s":
+                cd['timers']['durations']['newgame'] = 30
+            elif setting == "new1min":
+                cd['timers']['durations']['newgame'] = 60
+            elif setting == "new1min30s":
+                cd['timers']['durations']['newgame'] = 90
+            context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                          message_id=query.message.message_id,
+                                          text=get_string(__get_chat_lang(context), 'settings_newgametimer_changed'))
+
+        elif setting in ["in30s", "in1min", "in1min30s", "in2min", "in2min30s", "in3min", "in3min30s", "in4min"]:
+            if setting == "in30s":
+                cd['timers']['durations']['ingame'] = 30
+            elif setting == "in1min":
+                cd['timers']['durations']['ingame'] = 60
+            elif setting == "in1min30s":
+                cd['timers']['durations']['ingame'] = 90
+            elif setting == "in2min":
+                cd['timers']['durations']['ingame'] = 120
+            elif setting == "in2min30s":
+                cd['timers']['durations']['ingame'] = 150
+            elif setting == "in3min":
+                cd['timers']['durations']['ingame'] = 180
+            elif setting == "in3min30s":
+                cd['timers']['durations']['ingame'] = 210
+            elif setting == "in4min":
+                cd['timers']['durations']['ingame'] = 240
+            context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                          message_id=query.message.message_id,
+                                          text=get_string(__get_chat_lang(context), 'settings_ingametimer_changed'))
+
+    elif query.data.startswith("back_to"):
+        destination = query.data.split("back_to_")[1].split("_")[0]
+        chat_id = int(query.data.split("_")[3])
+        lang = __get_chat_lang(context)
+
+        if destination == "settings":
+            reply_keyboard = __get_settings_keyboard(chat_id, lang)
+            context.bot.edit_message_text(chat_id=chat_id,
+                                          text=get_string(lang, 'settings_prompt'),
+                                          reply_markup=reply_keyboard)
+
+        elif destination == "timers":
+            reply_keyboard = __get_timers_keyboard(chat_id, lang)
+            context.bot.edit_message_text(chat_id=chat_id,
+                                          text=get_string(lang, 'settings_timer_choice'),
+                                          reply_markup=reply_keyboard)
 
 
 def error(update, context):
@@ -1013,6 +1134,29 @@ def __get_formatted_words(context, group_id: int, with_points: bool, user_id: in
             res = __get_formatted_words_internal(res)
             res += "\n\n"
     return res
+
+
+def __get_settings_keyboard(chat_id: int, lang: str) -> InlineKeyboardMarkup:
+    reply_keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton(get_string(lang, 'settings_button_language'),
+                              callback_data=f"settings_language_{chat_id}")],
+    ])
+    if chat_id < 0:  # group
+        reply_keyboard[0].append(InlineKeyboardButton(get_string(lang, 'settings_button_timers'),
+                                                      callback_data=f"settings_timers_{chat_id}"))
+        # TODO: uncomment this when more than 1 table dimension (4x4) gets added
+        # [InlineKeyboardButton(get_string(lang, 'settings_button_table_dimensions'))]
+    return reply_keyboard
+
+
+def __get_timers_keyboard(chat_id: int, lang: str) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton(get_string(lang, 'settings_newgame_timer_button'),
+                              callback_data=f"settings_newgametimer_{chat_id}"),
+         InlineKeyboardButton(get_string(lang, 'settings_ingame_timer_button'),
+                              callback_data=f"settings_ingametimer_{chat_id}")],
+        [InlineKeyboardButton("🔙", callback_data=f"back_to_settings_{chat_id}")]
+    ])
 
 
 def main():
