@@ -251,6 +251,10 @@ translations = {
         'ita': "La partita a cui stavi giocando è stata annullata, dal suo creatore, {}.",
         'eng': "The game you were playing has been canceled by its creator, {}."
     },
+    'kick_user_choice_group': {
+        'ita': "Il creatore della partita, {}, può scegliere chi kickare tra i giocatori:",
+        'eng': "The game creator, {}, can choose who to kick from the game among the players:"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
