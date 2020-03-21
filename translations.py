@@ -349,6 +349,58 @@ translations = {
         'ita': "Media di punti per partita:",
         'eng': "Average points per game:"
     },
+    'stats_user_matches': {
+        'ita': "Partite",
+        'eng': "Games"
+    },
+    'stats_user_won_matches': {
+        'ita': "Vinte:",
+        'eng': "Won:"
+    },
+    'stats_user_even_matches': {
+        'ita': "Vittorie parimerito:",
+        'eng': "Even:"
+    },
+    'stats_user_lost_matches': {
+        'ita': "Perse:",
+        'eng': "Lost:"
+    },
+    'stats_user_total_matches': {
+        'ita': "Giocate:",
+        'eng': "Played:"
+    },
+    'stats_user_points': {
+        'ita': "Punteggio",
+        'eng': "Points"
+    },
+    'stats_user_max_points': {
+        'ita': "Massimo:",
+        'eng': "Maximum"
+    },
+    'stats_user_min_points': {
+        'ita': "Minimo:",
+        'eng': "Minimum:"
+    },
+    'stats_user_average_points': {
+        'ita': "Medio:",
+        'eng': "Average"
+    },
+    'stats_user_total_points' : {
+        'ita': "Totali:",
+        'eng': "Total:"
+    },
+    'stats_user_latest_game': {
+        'ita': "Ultima partita",
+        'eng': "Latest game"
+    },
+    'stats_user_latest_game_points': {
+        'ita': "Punteggio:",
+        'eng': "Points:"
+    },
+    'stats_user_latest_game_words': {
+        'ita': "Parole:",
+        'eng': "Words:"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot in una chat privata.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
