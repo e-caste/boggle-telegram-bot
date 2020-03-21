@@ -273,6 +273,18 @@ translations = {
         'ita': "<i>Nessuna parola ricevuta.</i>",
         'eng': "<i>No words received.</i>"
     },
+    'settings_button_language': {
+        'ita': "Lingua",
+        'eng': "Language"
+    },
+    'settings_button_timers': {
+        'ita': "Timer",
+        'eng': "Timers"
+    },
+    'settings_button_table_dimensions': {
+        'ita': "Dimensioni scacchiera",
+        'eng': "Board dimensions"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
