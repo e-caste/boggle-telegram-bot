@@ -825,6 +825,8 @@ def __newgame_timer(update, context):
 
 
 def __ingame_timer(update, context, group_id: int):
+    if not context.bot_data['games'].get(group_id):
+        return  # the game has been canceled because a user hasn't started the bot
     game = context.bot_data['games'][group_id]
     game['ingame_timer'] = None
     game['is_finished'] = True
