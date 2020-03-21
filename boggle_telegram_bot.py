@@ -188,6 +188,17 @@ def start_game(update, context, timer: bool = False):
     bd = context.bot_data
     current_game = __get_current_game(context)
     group_chat_id = __get_chat_id(update)
+
+    if not __check_chat_is_group(update):
+        context.bot.send_message(chat_id=group_chat_id,
+                                 text=get_string(__get_chat_lang(context), 'chat_is_not_group'))
+        return
+
+    if current_game is None:
+        context.bot.send_message(chat_id=group_chat_id,
+                                 text=get_string(__get_chat_lang(context), 'no_game_yet'))
+        return
+
     if not timer:
         if __forbid_not_game_creator(update, context, command="/startgame"):
             return
