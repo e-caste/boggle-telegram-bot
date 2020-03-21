@@ -321,6 +321,18 @@ translations = {
         'ita': "Durata della partita cambiata!",
         'eng': "Game duration changed!"
     },
+    'stats_prompt': {
+        'ita': "Che statistiche vuoi vedere?",
+        'eng': "Which stats do you want to check out?"
+    },
+    'stats_user_button': {
+        'ita': "Le mie statistiche",
+        'eng': "My stats"
+    },
+    'stats_group_button': {
+        'ita': "Le statistiche del gruppo",
+        'eng': "Group stats"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot in una chat privata.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
