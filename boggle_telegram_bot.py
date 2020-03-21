@@ -313,19 +313,22 @@ def delete(update, context):
     bd = context.bot_data
 
     if not bd['games'].get(group_id):
-        update.message.reply_text(get_string(__get_chat_lang(context), msg='no_game_yet'))
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(__get_chat_lang(context), msg='no_game_yet'))
         return
 
     game = bd['games'][group_id]
     lang = game['lang']
 
     if user_id != game['creator']['id']:
-        update.message.reply_text(get_string(lang, 'forbid_not_game_creator',
-                                             __get_username(update), game['creator']['username'], "/delete"))
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(lang, 'forbid_not_game_creator',
+                                                 __get_username(update), game['creator']['username'], "/delete"))
         return
 
     if not game['is_finished']:
-        update.message.reply_text(get_string(lang, msg='game_not_yet_finished'))
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(lang, msg='game_not_yet_finished'))
         return
 
     words = update.message.text.lower().split()[1:]  # skip /delete
@@ -338,7 +341,8 @@ def delete(update, context):
     for word in words:
         for char in word:
             if char not in letters_sets[lang]:
-                update.message.reply_text(get_string(lang, 'char_not_alpha', word))
+                context.bot.send_message(chat_id=group_id,
+                                         text=get_string(lang, 'char_not_alpha', word))
                 return
 
     not_found = words
@@ -352,10 +356,12 @@ def delete(update, context):
                     not_found.remove(word)
 
     if len(not_found) > 0:
-        update.message.reply_text(get_string(lang, 'words_not_found_in_players_words', not_found))
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(lang, 'words_not_found_in_players_words', not_found))
     else:
         player_words_without_points = __get_formatted_words(context, group_id, with_points=False)
-        update.message.reply_text(get_string(lang, 'all_words_deleted'))
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(lang, 'all_words_deleted'))
         context.bot.edit_message_text(chat_id=group_id,
                                       message_id=game['result_message']['message_id'],
                                       text=get_string(lang, 'ingame_timer_expired_group',
