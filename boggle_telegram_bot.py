@@ -790,7 +790,7 @@ def query_handler(update, context):
 
     elif query.data.startswith("stats"):
         whose_stats = query.data.split("_")[1]
-        chat_id = query.data.split("_")[2]
+        chat_id = int(query.data.split("_")[2])
 
         context.bot.edit_message_text(chat_id=query.message.chat_id,
                                       message_id=query.message.message_id,
@@ -799,7 +799,10 @@ def query_handler(update, context):
         if whose_stats == "group":
             __show_group_stats(context, chat_id)
         elif whose_stats == "user":
-            __show_user_stats(context, chat_id, __get_username(query), __get_chat_id(query))
+            u = query.from_user.username
+            u2 = query.from_user.first_name
+            username = "@" + u if u else u2
+            __show_user_stats(context, chat_id, username, query.message.chat_id)
 
 
 def error(update, context):
@@ -1256,6 +1259,17 @@ def __show_user_stats(context, user_id: int, username: str, group_id: int = None
             latest_game_words += f"{word} ({stats['matches']['latest']['words'][word]}), "
         latest_game_words = latest_game_words[:-2]
 
+    won_latest_match = stats['matches']['latest']['won']
+    if lang == "ita":
+        if won_latest_match == "won":
+            won_latest_match = "Vinta"
+        elif won_latest_match == "even":
+            won_latest_match = "Vinta parimerito"
+        elif won_latest_match == "lost":
+            won_latest_match = "Persa"
+    elif lang == "eng":
+        won_latest_match = won_latest_match.capitalize()
+
     text = f"<b>{get_string(lang, 'stats_user_matches')}</b>\n" \
            f"<code>    </code><i>{get_string(lang, 'stats_user_won_matches')}</i> <code>{stats['matches']['won']['value']} - {stats['matches']['won']['percentage']}%</code>\n" \
            f"<code>    </code><i>{get_string(lang, 'stats_user_even_matches')}</i> <code>{stats['matches']['even']['value']} - {stats['matches']['even']['percentage']}%</code>\n" \
@@ -1267,7 +1281,7 @@ def __show_user_stats(context, user_id: int, username: str, group_id: int = None
            f"<code>    </code><i>{get_string(lang, 'stats_user_average_points')}</i> <code>{stats['points']['average']}</code>\n" \
            f"<code>    </code><i>{get_string(lang, 'stats_user_total_points')}</i> <code>{stats['points']['total']}</code>\n\n" \
            f"<b>{get_string(lang, 'stats_user_latest_game')}</b>\n" \
-           f"<code>    </code><i>{stats['matches']['latest']['won']}</i>\n" \
+           f"<code>    </code><i>{won_latest_match}</i>\n" \
            f"<code>    </code><i>{get_string(lang, 'stats_user_latest_game_points')}</i> <code>{stats['matches']['latest']['points']}</code>\n" \
            f"<code>    </code><i>{get_string(lang, 'stats_user_latest_game_words')} {latest_game_words}</i>"
 
