@@ -293,6 +293,10 @@ translations = {
         'ita': "Scegli la lingua:",
         'eng': "Choose your language:"
     },
+    'settings_language_changed': {
+        'ita': "Lingua cambiata!",
+        'eng': "Language changed!"
+    },
     'help': {
         'ita': "Usa /start per far partire il bot.\n"
                "Usa /new per cominciare una partita del Paroliere in un gruppo.\n"
