@@ -1,0 +1,3 @@
+🇬🇧 This bot allows you to play Boggle with your friends! Use /help, /rules, and /usage for all the details, and add it to a group chat to play!
+
+🇮🇹 Questo bot ti permette di giocare al Paroliere coi tuoi amici! Usa /help, /rules, e /usage per tutti i dettagli, e aggiungilo a un gruppo per giocare!
