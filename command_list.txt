@@ -1,0 +1,14 @@
+start - start the bot
+new - create a new game
+join - join a game
+startgame - force-start the game
+delete - delete invalid words
+endgame - end a game
+leave - leave a game
+kick - kick a user from a game
+kill - cancel a game
+stats - show stats
+settings - change settings
+rules - show rules
+usage - show usage
+help - show help
