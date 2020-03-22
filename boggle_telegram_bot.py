@@ -143,10 +143,10 @@ def join(update, context):
             context.bot.send_message(chat_id=group_chat_id,
                                      text=get_string(__get_chat_lang(context), 'game_joined',
                                                      __get_username(update), current_game['creator']['username']))
-            usernames = "<b>"
+            usernames = ""
             for user_id in current_game['participants']:
                 usernames += current_game['participants'][user_id]['username'] + ", "
-            usernames = usernames[:-2] + "</b>"
+            usernames = f"<b>{usernames[:-2]}</b>"
             context.bot.edit_message_text(chat_id=group_chat_id,
                                           message_id=current_game['newgame_message']['message_id'],
                                           text=get_string(__get_chat_lang(context), 'game_created',
