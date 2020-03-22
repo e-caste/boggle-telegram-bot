@@ -102,8 +102,8 @@ translations = {
         'eng': "You can only use this command in a group chat! Add me to a group with your friends to play."
     },
     'game_created': {
-        'ita': "Nuova partita creata da {}! Potete entrare con /join entro {} secondi.",
-        'eng': "New game created by {}! You can now /join within {} seconds."
+        'ita': "Nuova partita creata da {}! Potete entrare con /join entro {} secondi.\nIn partita:\n{}",
+        'eng': "New game created by {}! You can now /join within {} seconds.\nJoined:\n{}"
     },
     'game_already_created': {
         'ita': "È già stata creata una partita! Puoi partecipare con /join.",
@@ -114,12 +114,12 @@ translations = {
         'eng': "There are no players! You can /join the game."
     },
     'game_joined': {
-        'ita': "Okay, {}, sei in partita! Il creatore della partita, {}, può farla cominciare con /startgame.",
-        'eng': "Alright, {}, you're in! The game creator, {}, can start it with /startgame."
+        'ita': "Okay, {}, sei in partita!",
+        'eng': "Alright, {}, you're in!"
     },
     'game_left': {
-        'ita': "Va bene, {}, sarà per un'altra volta. Usa /join se vuoi rientrare in partita.",
-        'eng': "Okay, {}, we'll play another time. Use /join if you change your mind."
+        'ita': "Va bene, {}, sarà per un'altra volta.",
+        'eng': "Okay, {}, we'll play another time."
     },
     'already_in_game': {
         'ita': "Hey {}, sei già in una partita! Il creatore della partita, {}, può farla cominciare col comando "
