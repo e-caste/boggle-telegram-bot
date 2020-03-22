@@ -588,12 +588,17 @@ def kick(update, context):
     __check_bot_was_restarted(update, context)
 
     bd = context.bot_data
-    user_id = __get_user_id(update)
+    # user_id = __get_user_id(update)
     group_id = __get_chat_id(update)
+    current_game = __get_current_game(context)
 
-    if not bd['games'].get(group_id):
+    if not bd['games'].get(group_id) and current_game is None:
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(__get_chat_lang(context), msg='no_game_yet'))
+        return
+    elif not bd['games'].get(group_id) and current_game is not None:
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(__get_chat_lang(context), msg='cant_kick_players_before_starting'))
         return
 
     game = bd['games'][group_id]
