@@ -417,8 +417,8 @@ translations = {
         'eng': "Words:"
     },
     'game_canceled_because_bot_restarted': {
-        'ita': "Mi spiace, ma la partita a cui stavi giocando è stata annullata perché sono stato riavviato e (d'oh!) "
-               "ho perso il timer, quindi non avrei saputo dirti quando sarebbe terminata.\nPuoi creare una nuova "
+        'ita': "Mi spiace, ma la partita a cui stavate giocando è stata annullata perché sono stato riavviato e (d'oh!)"
+               " ho perso il timer, quindi non avrei saputo dirvi quando sarebbe terminata.\nPotete creare una nuova "
                "partita con /new!",
         'eng': "I'm sorry, but the game you were playing has been canceled because I've been restarted and (d'oh!) I've"
                " lost my timer, so I wouldn't have been able to tell you when it should have ended.\nYou can still "
