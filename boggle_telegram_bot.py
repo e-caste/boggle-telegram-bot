@@ -649,7 +649,7 @@ def kill(update, context, bot_not_started: bool = False, bot_restarted: bool = F
 
     bd = context.bot_data
     cd = context.chat_data
-    user_id = __get_user_id(update)
+    # user_id = __get_user_id(update)
     group_id = __get_chat_id(update)
     current_game = __get_current_game(context)
 
