@@ -279,6 +279,7 @@ def start_game(update, context, timer: bool = False):
 
     bd['games'][group_chat_id] = current_game
     bd['games'][group_chat_id]['table_grid'] = table_grid
+    bd['games'][group_chat_id]['table_str'] = table_str
 
     context.bot.send_message(chat_id=group_chat_id,
                              text=get_string(__get_chat_lang(context), 'game_started_group'))
@@ -338,16 +339,22 @@ def points_handler(update, context):
 
     if len(word) < 3:
         update.message.reply_text(get_string(__get_game_lang(context, group_id), 'received_dm_but_word_too_short'))
+        update.message.reply_text(text=bd['games'][group_id]['table_str'],
+                                  parse_mode=HTML)
         return
 
     if "q" in word and "qu" not in word:
         update.message.reply_text(get_string(__get_game_lang(context, group_id), 'received_dm_but_q_without_u'))
+        update.message.reply_text(text=bd['games'][group_id]['table_str'],
+                                  parse_mode=HTML)
         return
 
     word = word.replace("qu", "q")
 
     if not __validate_word_by_boggle_rules(word, bd['games'][group_id]['table_grid']):
         update.message.reply_text(get_string(__get_game_lang(context, group_id), 'received_dm_but_word_not_validated'))
+        update.message.reply_text(text=bd['games'][group_id]['table_str'],
+                                  parse_mode=HTML)
         return
 
     word = word.replace("q", "qu")
@@ -359,9 +366,13 @@ def points_handler(update, context):
             'sent_by_other_players': False,
             'deleted': False
         }
+        update.message.reply_text(text=bd['games'][group_id]['table_str'],
+                                  parse_mode=HTML)
     else:
         update.message.reply_text(get_string(__get_game_lang(context, group_id), 'received_dm_but_word_already_sent',
                                              word))
+        update.message.reply_text(text=bd['games'][group_id]['table_str'],
+                                  parse_mode=HTML)
 
 
 def delete(update, context):
