@@ -740,7 +740,6 @@ def show_help(update, context):
 
 def query_handler(update, context):
     __check_bot_data_is_initialized(context)
-    __check_bot_was_restarted(update, context)
 
     query = update.callback_query
     user_id = query.message.from_user.id
