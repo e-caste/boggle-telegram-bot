@@ -172,7 +172,7 @@ def join(update, context):
             context.bot.edit_message_text(chat_id=group_chat_id,
                                           message_id=current_game['newgame_message']['message_id'],
                                           text=get_string(__get_chat_lang(context), 'game_created',
-                                                          __get_username(update),
+                                                          current_game['creator']['username'],
                                                           cd['timers']['durations']['newgame'], usernames),
                                           parse_mode=HTML)
 
@@ -230,7 +230,7 @@ def leave(update, context):
             context.bot.edit_message_text(chat_id=group_chat_id,
                                           message_id=current_game['newgame_message']['message_id'],
                                           text=get_string(__get_chat_lang(context), 'game_created',
-                                                          __get_username(update),
+                                                          current_game['creator']['username'],
                                                           cd['timers']['durations']['newgame'], usernames),
                                           parse_mode=HTML)
 
