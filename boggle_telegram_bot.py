@@ -65,6 +65,14 @@ def new(update, context):
 
     group_chat_id = __get_chat_id(update)
     cd = context.chat_data
+    bd = context.bot_data
+
+    if bd['games'].get(group_chat_id):
+        context.bot.send_message(chat_id=__get_chat_id(update),
+                                 text=get_string(__get_chat_lang(context), 'game_already_created',
+                                                 __get_username(update)))
+        return
+
     if not cd.get('timers'):
         __init_chat_data(context)
 
