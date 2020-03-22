@@ -409,7 +409,8 @@ def end_game(update, context):
     bd = context.bot_data
 
     if not bd['games'].get(group_id):
-        update.message.reply_text(get_string(__get_chat_lang(context), msg='no_game_yet'))
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(__get_chat_lang(context), msg='no_game_yet'))
         return
 
     game = bd['games'][group_id]
@@ -419,7 +420,8 @@ def end_game(update, context):
         return
 
     if not game['is_finished']:
-        update.message.reply_text(get_string(lang, msg='game_not_yet_finished'))
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(lang, msg='game_not_yet_finished'))
         return
 
     us = bd['stats']['users']
