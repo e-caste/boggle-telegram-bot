@@ -1095,7 +1095,7 @@ def __get_formatted_table(shuffled_dice: list) -> str:
                 formatted_table += line
             formatted_table += "\n"
 
-    return "<code>" + formatted_table + "</code>"
+    return f"<code>{formatted_table}</code>"
 
 
 def __convert_table_list_to_matrix(table: list) -> list:
