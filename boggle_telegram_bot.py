@@ -285,7 +285,7 @@ def start_game(update, context, timer: bool = False):
                   for row in range(row_col_num) for col in range(row_col_num)}
 
     bd['games'][group_chat_id] = current_game
-    bd['games'][group_chat_id]['table_str'] = table_str.replace("Q", "Qu")
+    bd['games'][group_chat_id]['table_str'] = table_str
     bd['games'][group_chat_id]['table_grid'] = table_grid
 
     context.bot.send_message(chat_id=group_chat_id,
