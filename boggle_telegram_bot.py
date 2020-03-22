@@ -1470,8 +1470,6 @@ def main():
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
-    # TODO: add init function that tells all players in games during bot's restart they have to begin the game again,
-    #  and deletes all context.bot_data['games'] and context.chat_data current_game
     dp.add_handler(CommandHandler('start', start))
     dp.add_handler(CommandHandler('new', new))
     dp.add_handler(CommandHandler('join', join))
