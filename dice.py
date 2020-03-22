@@ -57,7 +57,7 @@ def get_shuffled_dice(lang: str, table_dimensions: str) -> list:
         raise TableDimensionsNotFoundException(f"The table dimensions {table_dimensions} "
                                                f"are not available for the language {lang}.")
 
-    tmp = dice[lang][table_dimensions]
+    tmp = dice[lang][table_dimensions].copy()
     shuffle(tmp)
     for i, die in enumerate(tmp):
         tmp[i] = choice(die)
