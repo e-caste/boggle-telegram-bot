@@ -40,6 +40,7 @@ timers = {
 
 def start(update, context):
     __check_bot_data_is_initialized(context)
+    __check_bot_was_restarted(update, context)
 
     reply = get_string(__get_chat_lang(context), 'welcome', update.message.from_user.first_name)
     logger.info(f"User {__get_username(update)} started the bot.")
@@ -62,6 +63,8 @@ def new(update, context):
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
         return
+
+    __check_bot_was_restarted(update, context)
 
     group_chat_id = __get_chat_id(update)
     cd = context.chat_data
@@ -117,6 +120,8 @@ def join(update, context):
         update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
         return
 
+    __check_bot_was_restarted(update, context)
+
     group_chat_id = __get_chat_id(update)
     cd = context.chat_data
     bd = context.bot_data
@@ -137,8 +142,6 @@ def join(update, context):
         context.bot.send_message(chat_id=__get_chat_id(update),
                                  text=get_string(__get_chat_lang(context), msg='no_game_yet'))
         return
-
-    # TODO: add check that the user joining has started the bot in a private chat
 
     if cd['timers']['newgame']:
         current_game = __get_current_game(context)
@@ -184,6 +187,8 @@ def leave(update, context):
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
         return
+
+    __check_bot_was_restarted(update, context)
 
     group_chat_id = __get_chat_id(update)
     user_id = __get_user_id(update)
@@ -251,6 +256,8 @@ def start_game(update, context, timer: bool = False):
         context.bot.send_message(chat_id=group_chat_id,
                                  text=get_string(__get_chat_lang(context), 'chat_is_not_group'))
         return
+
+    __check_bot_was_restarted(update, context)
 
     if current_game is None:
         context.bot.send_message(chat_id=group_chat_id,
@@ -382,6 +389,8 @@ def delete(update, context):
         update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
         return
 
+    __check_bot_was_restarted(update, context)
+
     user_id = __get_user_id(update)
     group_id = __get_chat_id(update)
     bd = context.bot_data
@@ -447,6 +456,8 @@ def end_game(update, context):
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
         return
+
+    __check_bot_was_restarted(update, context)
 
     user_id = __get_user_id(update)
     group_id = __get_chat_id(update)
@@ -569,6 +580,8 @@ def kick(update, context):
         update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
         return
 
+    __check_bot_was_restarted(update, context)
+
     bd = context.bot_data
     user_id = __get_user_id(update)
     group_id = __get_chat_id(update)
@@ -604,13 +617,14 @@ def kick(update, context):
                              reply_markup=reply_markup)
 
 
-def kill(update, context, bot_not_started: bool = False):
+def kill(update, context, bot_not_started: bool = False, bot_restarted: bool = False, group_id: int = None):
     __check_bot_data_is_initialized(context)
 
-    if bot_not_started:
+    if bot_not_started or bot_restarted:
         bd = context.bot_data
         cd = context.chat_data
-        group_id = __get_chat_id(update)
+        if bot_not_started:
+            group_id = __get_chat_id(update)
         del bd['games'][group_id]
         latest_game = __get_latest_game(context)
         cd['games'].remove(latest_game)
@@ -619,6 +633,9 @@ def kill(update, context, bot_not_started: bool = False):
     if not __check_chat_is_group(update):
         update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
         return
+
+    if not bot_restarted:
+        __check_bot_was_restarted(update, context)
 
     bd = context.bot_data
     cd = context.chat_data
@@ -664,6 +681,7 @@ def kill(update, context, bot_not_started: bool = False):
 
 def show_statistics(update, context):
     __check_bot_data_is_initialized(context)
+    __check_bot_was_restarted(update, context)
 
     user_id = __get_user_id(update)
 
@@ -685,6 +703,7 @@ def show_statistics(update, context):
 
 def settings(update, context):
     __check_bot_data_is_initialized(context)
+    __check_bot_was_restarted(update, context)
 
     chat_id = __get_chat_id(update)
     lang = __get_chat_lang(context)
@@ -698,6 +717,7 @@ def settings(update, context):
 
 def show_rules(update, context):
     __check_bot_data_is_initialized(context)
+    __check_bot_was_restarted(update, context)
     context.bot.send_message(chat_id=__get_chat_id(update),
                              text=get_string(__get_chat_lang(context), 'rules'),
                              parse_mode=HTML)
@@ -705,6 +725,7 @@ def show_rules(update, context):
 
 def show_usage(update, context):
     __check_bot_data_is_initialized(context)
+    __check_bot_was_restarted(update, context)
     context.bot.send_message(chat_id=__get_chat_id(update),
                              text=get_string(__get_chat_lang(context), 'usage'),
                              parse_mode=HTML)
@@ -712,11 +733,15 @@ def show_usage(update, context):
 
 def show_help(update, context):
     __check_bot_data_is_initialized(context)
+    __check_bot_was_restarted(update, context)
     context.bot.send_message(chat_id=__get_chat_id(update),
                              text=get_string(__get_chat_lang(context), msg='help'))
 
 
 def query_handler(update, context):
+    __check_bot_data_is_initialized(context)
+    __check_bot_was_restarted(update, context)
+
     query = update.callback_query
     user_id = query.message.from_user.id
     bd = context.bot_data
@@ -1366,6 +1391,22 @@ def __show_user_stats(context, user_id: int, username: str, group_id: int = None
                              parse_mode=HTML)
 
 
+def __check_bot_was_restarted(update, context):
+    bd = context.bot_data
+    # to_kill = []
+    if not __check_chat_is_group(update):
+        return
+    group_id = __get_chat_id(update)
+    # for group_id in bd['games']:
+    if group_id in bd['games'] and not (timers['newgame'].get(group_id) or timers['ingame'].get(group_id)):
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(__get_chat_lang(context),
+                                                 'game_canceled_because_bot_restarted'))
+            # to_kill.append(group_id)
+    # for group_id in to_kill:
+        kill(update, context, bot_restarted=True, group_id=group_id)
+
+
 def main():
     pp = PicklePersistence(filename='_boggle_paroliere_bot_db')
     updater = Updater(token, persistence=pp, use_context=True)
@@ -1412,6 +1453,6 @@ def main():
 if __name__ == '__main__':
     if not debug:
         os.chdir(working_directory)
-    else:
-        os.remove('_boggle_paroliere_bot_db')
+    # else:
+    #     os.remove('_boggle_paroliere_bot_db')
     main()
