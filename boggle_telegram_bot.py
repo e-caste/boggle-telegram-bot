@@ -699,10 +699,14 @@ def kill(update, context, bot_not_started: bool = False, bot_restarted: bool = F
 
     if delete_from_bd:
         del bd['games'][group_id]
+        timers['ingame'][group_id]()
+        timers['ingame'][group_id] = None
+    else:
+        cd['timers']['newgame'] = None
+        timers['newgame'][group_id]()
+        timers['newgame'][group_id] = None
     latest_game = __get_latest_game(context)
     cd['games'].remove(latest_game)
-    cd['timers']['newgame'] = None
-    timers['newgame'][group_id]()
 
 
 def show_statistics(update, context):
