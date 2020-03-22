@@ -223,6 +223,10 @@ translations = {
         'eng': "You can't kick a player from a game that has already ended! The game, creator, {}, must use /endgame to"
                " end the game and show the scores."
     },
+    'cant_kick_players_before_starting': {
+        'ita': "Non puoi rimuovere dei giocatori dalla partita prima che cominci.",
+        'eng': "You can't kick players from a game before it begins."
+    },
     'char_not_alpha': {
         'ita': "Almeno un carattere nella parola '{}' non è disponibile tra quelli tra i dadi. Prova a correggerla e "
                "rimandami il messaggio.",
