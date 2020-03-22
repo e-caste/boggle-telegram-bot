@@ -1,5 +1,10 @@
 # boggle-telegram-bot
 
+<p align="center">
+  <img  height="400" src="https://imgur.com/vppVYwS.png">
+  <img  height="400" src="https://imgur.com/PxloRJW.png">
+</p>
+
 ## How to run
 
 If you want to run this bot on your own server, you need at least Python 3.6 and to follow these simple steps:
@@ -13,4 +18,4 @@ If you want to run this bot on your own server, you need at least Python 3.6 and
 
 ## About
 
-You can find it at https://t.me/boggle_paroliere_bot.
+You can find this bot at https://t.me/boggle_paroliere_bot. Add it to a group chat to play!
