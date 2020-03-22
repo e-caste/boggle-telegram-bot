@@ -12,6 +12,10 @@ It allows potentially infinite players to play Boggle at the same time, while ke
 
 This bot also has persistency, so that it can save all your stats to a database that will survive <i>at least</i> a restart (but I can't promise anything in case of a zombie apocalypse).
 
+## How to play
+
+You can find this bot at https://t.me/boggle_paroliere_bot. Add it to a group chat to play!
+
 ## How to run
 
 If you want to run this bot on your own server, you need at least Python 3.6 and to follow these simple steps:
@@ -22,7 +26,3 @@ If you want to run this bot on your own server, you need at least Python 3.6 and
 - `pip install -r requirements.txt`
 - `python boggle_telegram_bot.py`  
 - When you're done: `deactivate` to exit the virtual environment where you've installed the requirements.
-
-## How to play
-
-You can find this bot at https://t.me/boggle_paroliere_bot. Add it to a group chat to play!
