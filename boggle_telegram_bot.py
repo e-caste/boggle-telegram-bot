@@ -43,7 +43,6 @@ timers = {
 }
 
 
-# TODO: add logger to each function
 def start(update, context):
     __check_bot_data_is_initialized(context)
 
@@ -58,6 +57,7 @@ def start(update, context):
 
 def bot_added_to_group(update, context):
     if update.message.new_chat_members[0].username == context.bot.username:
+        logger.info(f"Added to group {update.message.chat.title} - ID: {__get_chat_id(update)}")
         context.bot.send_message(chat_id=__get_chat_id(update),
                                  text=get_string(__get_chat_lang(context), 'bot_added_to_group'),
                                  parse_mode=HTML)
