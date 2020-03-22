@@ -278,6 +278,7 @@ def start_game(update, context, timer: bool = False):
 
     table_list = get_shuffled_dice(cd['settings']['lang'], cd['settings']['table_dimensions'])
     table_str = __get_formatted_table(table_list)
+    bd['games'][group_chat_id]['table_str'] = table_str
 
     row_col_num = int(sqrt(len(table_list)))
     table_list = [letter if letter != "Qu" else "Q" for letter in table_list]
@@ -286,7 +287,6 @@ def start_game(update, context, timer: bool = False):
 
     bd['games'][group_chat_id] = current_game
     bd['games'][group_chat_id]['table_grid'] = table_grid
-    bd['games'][group_chat_id]['table_str'] = table_str
 
     context.bot.send_message(chat_id=group_chat_id,
                              text=get_string(__get_chat_lang(context), 'game_started_group'))
