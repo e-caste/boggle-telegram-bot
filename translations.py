@@ -137,6 +137,10 @@ translations = {
         'ita': "{}, non sei ancora entrato in partita! Usa /join per entrare.",
         'eng': "{}, you're not in a game yet! You can /join the current game if you want."
     },
+    'not_in_game': {
+        'ita': "{}, non sei nella partita in corso.",
+        'eng': "{}, you're not in the current game."
+    },
     'no_game_yet': {
         'ita': "Non è ancora stata creata nessuna partita. Puoi crearne una con /new.",
         'eng': "No game has been created yet. You can create one with /new."
