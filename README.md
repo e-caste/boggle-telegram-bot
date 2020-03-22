@@ -10,6 +10,12 @@
 Dark magic, Python 🐍, and the [python_telegram_bot](https://github.com/python-telegram-bot/python-telegram-bot) library.  
 It allows potentially infinite players to play Boggle at the same time, while keeping the social distance required in these trying times.  
 
+#### Some cool (🆒!) features:
+- automatic word validation: if it's not possible to make, the bot will tell you
+- automatic detection for re-sent words and words that are too short
+- integrated check for words in common with other players
+- personal and group statistics  
+
 This bot also has persistency, so that it can save all your stats to a database that will survive <i>at least</i> a restart (but I can't promise anything in case of a zombie apocalypse).
 
 ## How to play
