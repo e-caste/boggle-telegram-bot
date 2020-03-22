@@ -13,7 +13,6 @@ from telegram.utils.helpers import mention_html
 from telegram.error import Unauthorized
 import logging
 from secret import token, castes_chat_id, working_directory
-from math import ceil
 import os
 import sys
 import traceback
@@ -22,10 +21,6 @@ from threading import Timer
 from dice import get_shuffled_dice, letters_sets
 from math import sqrt
 from time import time
-# from datetime import time
-import shutil
-from string import whitespace
-from contextlib import suppress
 
 HTML = ParseMode.HTML
 debug = sys.platform.startswith("darwin")
