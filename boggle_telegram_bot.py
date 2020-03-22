@@ -1166,7 +1166,7 @@ def __check_words_in_common(context, group_id: int):
                 for player_2 in players_2:
                     words_2 = players_2[player_2]['words']
                     for word_2 in words_2:
-                        if not words[word]['sent_by_other_players']:
+                        if not words_2[word_2]['sent_by_other_players']:
                             if word == word_2:
                                 words[word]['sent_by_other_players'] = True
                                 words_2[word_2]['sent_by_other_players'] = True
