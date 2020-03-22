@@ -43,8 +43,6 @@ def start(update, context):
 
     reply = get_string(__get_chat_lang(context), 'welcome', update.message.from_user.first_name)
     logger.info(f"User {__get_username(update)} started the bot.")
-    # if context.user_data:  # TODO: add stats to reply
-    #     reply += ""
     context.bot.send_message(chat_id=__get_chat_id(update),
                              text=reply,
                              parse_mode=HTML)
