@@ -118,13 +118,25 @@ def join(update, context):
 
     group_chat_id = __get_chat_id(update)
     cd = context.chat_data
+    bd = context.bot_data
+
+    if bd['games'].get(group_chat_id):
+        if cd['timers'].get('newgame'):
+            context.bot.send_message(chat_id=__get_chat_id(update),
+                                     text=get_string(__get_chat_lang(context), 'game_already_created',
+                                                     __get_username(update)))
+        else:
+            context.bot.send_message(chat_id=__get_chat_id(update),
+                                     text=get_string(__get_chat_lang(context), 'game_already_started',
+                                                     __get_username(update)))
+        return
+
     if not cd.get('timers'):
         __init_chat_data(context)
         context.bot.send_message(chat_id=__get_chat_id(update),
                                  text=get_string(__get_chat_lang(context), msg='no_game_yet'))
         return
 
-    bd = context.bot_data
     # TODO: add check that the user joining has started the bot in a private chat
 
     if cd['timers']['newgame']:
@@ -174,6 +186,7 @@ def leave(update, context):
 
     group_chat_id = __get_chat_id(update)
     cd = context.chat_data
+
     if not cd.get('timers'):
         __init_chat_data(context)
         context.bot.send_message(chat_id=__get_chat_id(update),
