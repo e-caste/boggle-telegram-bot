@@ -185,7 +185,21 @@ def leave(update, context):
         return
 
     group_chat_id = __get_chat_id(update)
+    user_id = __get_user_id(update)
     cd = context.chat_data
+    bd = context.bot_data
+
+    if bd['games'].get(group_chat_id):
+        if bd['games'][group_chat_id]['participants'].get(user_id):
+            context.bot.send_message(chat_id=group_chat_id,
+                                     text=get_string(__get_chat_lang(context), 'game_left',
+                                                     __get_username(update)))
+            return
+        else:
+            context.bot.send_message(chat_id=group_chat_id,
+                                     text=get_string(__get_chat_lang(context), 'not_in_game',
+                                                     __get_username(update)))
+            return
 
     if not cd.get('timers'):
         __init_chat_data(context)
