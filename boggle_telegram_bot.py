@@ -81,6 +81,10 @@ def new(update, context):
         t.start()
         cd['timers']['newgame'] = t.name
         timers['newgame'][group_chat_id] = t.cancel  # pass callable
+
+        message = context.bot.send_message(chat_id=__get_chat_id(update),
+                                           text=get_string(__get_chat_lang(context), 'game_created', __get_username(update),
+                                                           cd['timers']['durations']['newgame'], ""))
         cd['games'].append({
             'unix_epoch': int(time()),
             'creator': {
@@ -90,11 +94,9 @@ def new(update, context):
             'participants': {},
             'is_finished': False,
             'ingame_timer': None,
-            'lang': __get_chat_lang(context)
+            'lang': __get_chat_lang(context),
+            'newgame_message': message
         })
-        context.bot.send_message(chat_id=__get_chat_id(update),
-                                 text=get_string(__get_chat_lang(context), 'game_created', __get_username(update),
-                                                 cd['timers']['durations']['newgame']))
     else:
         context.bot.send_message(chat_id=__get_chat_id(update),
                                  text=get_string(__get_chat_lang(context), 'game_already_created',
@@ -141,6 +143,16 @@ def join(update, context):
             context.bot.send_message(chat_id=group_chat_id,
                                      text=get_string(__get_chat_lang(context), 'game_joined',
                                                      __get_username(update), current_game['creator']['username']))
+            usernames = "<b>"
+            for user_id in current_game['participants']:
+                usernames += current_game['participants'][user_id]['username'] + ", "
+            usernames = usernames[:-2] + "</b>"
+            context.bot.edit_message_text(chat_id=group_chat_id,
+                                          message_id=current_game['newgame_message']['message_id'],
+                                          text=get_string(__get_chat_lang(context), 'game_created',
+                                                          __get_username(update),
+                                                          cd['timers']['durations']['newgame'], usernames),
+                                          parse_mode=HTML)
 
     else:
         context.bot.send_message(chat_id=__get_chat_id(update),
@@ -171,6 +183,18 @@ def leave(update, context):
             context.bot.send_message(chat_id=group_chat_id,
                                      text=get_string(__get_chat_lang(context), 'game_left',
                                                      __get_username(update)))
+
+            usernames = ""
+            for user_id in current_game['participants']:
+                usernames += current_game['participants'][user_id]['username'] + ", "
+            usernames = f"<b>{usernames[:-2]}</b>"
+            context.bot.edit_message_text(chat_id=group_chat_id,
+                                          message_id=current_game['newgame_message']['message_id'],
+                                          text=get_string(__get_chat_lang(context), 'game_created',
+                                                          __get_username(update),
+                                                          cd['timers']['durations']['newgame'], usernames),
+                                          parse_mode=HTML)
+
         else:
             context.bot.send_message(chat_id=group_chat_id,
                                      text=get_string(__get_chat_lang(context), 'not_yet_in_game',
