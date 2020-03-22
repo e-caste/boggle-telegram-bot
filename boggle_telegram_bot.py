@@ -541,7 +541,12 @@ def end_game(update, context):
             else us[user_id]['points']['min']
         us[user_id]['points']['total'] += players_points[user_id]
         us[user_id]['points']['average'] = round(us[user_id]['points']['total'] / us[user_id]['matches']['played'], 2)
-        # us[user_id]['matches']['latest'] = players_points[user_id]
+        us[user_id]['matches']['latest']['points'] = players_points[user_id]
+        to_delete = []
+        for word in us[user_id]['matches']['latest']['words']:
+            to_delete.append(word)
+        for word in to_delete:
+            del us[user_id]['matches']['latest']['words'][word]
         for word in game['participants'][user_id]['words']:
             us[user_id]['matches']['latest']['words'][word] = game['participants'][user_id]['words'][word]['points']
 
