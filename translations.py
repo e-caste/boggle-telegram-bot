@@ -102,8 +102,9 @@ translations = {
         'eng': "You can only use this command in a group chat! Add me to a group with your friends to play."
     },
     'game_created': {
-        'ita': "Nuova partita creata da {}! Potete entrare con /join entro {} secondi.\nIn partita:\n{}",
-        'eng': "New game created by {}! You can now /join within {} seconds.\nJoined:\n{}"
+        'ita': "Nuova partita creata da {}! Potete entrare con /join entro {} secondi. /startgame per cominciare.\nIn "
+               "partita:\n{}",
+        'eng': "New game created by {}! You can now /join within {} seconds. /startgame to begin.\nJoined:\n{}"
     },
     'game_already_created': {
         'ita': "È già stata creata una partita! Puoi partecipare con /join.",
