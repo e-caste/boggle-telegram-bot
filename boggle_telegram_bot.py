@@ -480,9 +480,13 @@ def end_game(update, context):
         winners_usernames += winners[user_id] + ", "
     winners_usernames = winners_usernames[:-2]
 
+    text = get_string(lang, 'game_finished', winner_str, winners_usernames, max_points) + "\n"
+    players_points = {k: v for k, v in sorted(players_points.items(), key=lambda item: item[1])}
+    for user_id in players_points:
+        text += f"<i>{game['participants'][user_id]['username']}: {players_points[user_id]}</i>\n"
+
     context.bot.send_message(chat_id=group_id,
-                             text=get_string(lang, 'game_finished',
-                                             winner_str, winners_usernames, max_points),
+                             text=text,
                              parse_mode=HTML)
 
 
