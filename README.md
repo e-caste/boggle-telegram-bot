@@ -1,8 +1,8 @@
 # boggle-telegram-bot
 
 <p align="center">
-  <img  height="400" src="https://imgur.com/vppVYwS.png">
-  <img  height="400" src="https://imgur.com/PxloRJW.png">
+  <img  height="600" src="https://imgur.com/vppVYwS.png">
+  <img  height="600" src="https://imgur.com/FCCSec6.png">
 </p>
 
 ## How it works
