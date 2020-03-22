@@ -22,7 +22,7 @@ This bot also has persistency, so that it can save all your stats to a database 
 
 You can find this bot at https://t.me/boggle_paroliere_bot. Add it to a group chat to play!
 
-## How to run
+## How to host
 
 If you want to run this bot on your own server, you need at least Python 3.6 and to follow these simple steps:
 - `git clone https://github.com/e-caste/boggle-telegram-bot`
