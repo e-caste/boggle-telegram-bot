@@ -89,7 +89,8 @@ def new(update, context):
         timers['newgame'][group_chat_id] = t.cancel  # pass callable
 
         message = context.bot.send_message(chat_id=__get_chat_id(update),
-                                           text=get_string(__get_chat_lang(context), 'game_created', __get_username(update),
+                                           text=get_string(__get_chat_lang(context), 'game_created',
+                                                           __get_username(update),
                                                            cd['timers']['durations']['newgame'], ""))
         cd['games'].append({
             'unix_epoch': int(time()),
@@ -540,9 +541,10 @@ def end_game(update, context):
     winners_usernames = winners_usernames[:-2]
 
     text = get_string(lang, 'game_finished', winner_str, winners_usernames, max_points) + "\n"
-    players_points = {k: v for k, v in sorted(players_points.items(), key=lambda item: item[1])}
+    players_points = {k: v for k, v in sorted(players_points.items(), key=lambda item: item[1], reverse=True)}
     for user_id in players_points:
-        text += f"<i>{game['participants'][user_id]['username']}: {players_points[user_id]}</i>\n"
+        if user_id not in winners:
+            text += f"<i>{game['participants'][user_id]['username']}: {players_points[user_id]}</i>\n"
 
     context.bot.send_message(chat_id=group_id,
                              text=text,
@@ -1399,6 +1401,6 @@ def main():
 if __name__ == '__main__':
     if not debug:
         os.chdir(working_directory)
-    # else:
-    #     os.remove('_boggle_paroliere_bot_db')
+    else:
+        os.remove('_boggle_paroliere_bot_db')
     main()
