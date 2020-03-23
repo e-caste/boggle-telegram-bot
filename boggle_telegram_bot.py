@@ -281,6 +281,10 @@ def start_game(update, context, timer: bool = False):
         if __forbid_not_game_creator(update, context, group_chat_id, command="/startgame"):
             return
         else:
+            if bd['games'].get(group_chat_id):
+                context.bot.send_message(chat_id=group_chat_id,
+                                         text=get_string(__get_chat_lang(context), 'game_already_started'))
+                return
             cd['timers']['newgame'] = None
             timers['newgame'][group_chat_id]()  # cancel timer if started by game creator
 
