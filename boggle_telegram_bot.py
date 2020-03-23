@@ -206,6 +206,7 @@ def leave(update, context):
                 context.bot.send_message(chat_id=group_chat_id,
                                          text=get_string(__get_chat_lang(context), 'game_left',
                                                          __get_username(update)))
+                del game['participants'][user_id]
                 logger.info(f"User {__get_username(update)} left a game in group"
                             f" {__get_group_name(update)} - {__get_chat_id(update)}")
             else:
