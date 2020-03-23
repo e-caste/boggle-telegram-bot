@@ -223,6 +223,12 @@ translations = {
         'eng': "You can't kick a player from a game that has already ended! The game, creator, {}, must use /endgame to"
                " end the game and show the scores."
     },
+    'game_already_finished_leave': {
+        'ita': "Non puoi abbandonare una partita già terminata! Il creatore della partita, {}, deve usare"
+               " /endgame per concludere la partita e visualizzare i punteggi.",
+        'eng': "You can't leave a game that's already finished! The game, creator, {}, must use /endgame to"
+               " end the game and show the scores."
+    },
     'cant_kick_players_before_starting': {
         'ita': "Non puoi rimuovere dei giocatori dalla partita prima che cominci.",
         'eng': "You can't kick players from a game before it begins."
