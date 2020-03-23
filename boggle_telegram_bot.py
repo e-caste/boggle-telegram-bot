@@ -307,6 +307,7 @@ def start_game(update, context, timer: bool = False):
 
     text = get_string(__get_game_lang(context, group_chat_id), 'game_started_private',
                       cd['timers']['durations']['ingame']) + "\n\n\n" + table_str
+    kill_game = False
     for player in current_game['participants']:
         try:
             context.bot.send_message(chat_id=player,
@@ -316,8 +317,11 @@ def start_game(update, context, timer: bool = False):
             context.bot.send_message(chat_id=group_chat_id,
                                      text=get_string(__get_chat_lang(context), 'game_killed_user_did_not_start_the_bot',
                                                      current_game['participants'][player]['username']))
-            kill(update, context, bot_not_started=True)
-            return
+            kill_game = True
+
+    if kill_game:
+        kill(update, context, bot_not_started=True)
+        return
 
     t = Timer(interval=cd['timers']['durations']['ingame'],
               function=__ingame_timer, args=(update, context, group_chat_id))
