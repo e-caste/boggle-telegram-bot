@@ -639,13 +639,19 @@ def kick(update, context):
 
     reply_keyboard = [[]]
     for user_id in game['participants']:
-        button = InlineKeyboardButton(game['participants'][user_id]['username'],
-                                      callback_data=f"kick_{user_id}_from_{group_id}")
-        if len(reply_keyboard[-1]) == 2:
-            reply_keyboard.append([button])
-        else:
-            reply_keyboard[-1].append(button)
+        if user_id != game['creator']['id']:
+            button = InlineKeyboardButton(game['participants'][user_id]['username'],
+                                          callback_data=f"kick_{user_id}_from_{group_id}")
+            if len(reply_keyboard[-1]) == 2:
+                reply_keyboard.append([button])
+            else:
+                reply_keyboard[-1].append(button)
     reply_markup = InlineKeyboardMarkup(reply_keyboard)
+
+    if len(reply_keyboard[-1]) == 0:
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(lang, 'no_users_to_kick'))
+        return
 
     context.bot.send_message(chat_id=group_id,
                              text=get_string(lang, 'kick_user_choice_group', game['creator']['username']),
