@@ -200,8 +200,9 @@ def leave(update, context):
     bd = context.bot_data
 
     if bd['games'].get(group_chat_id):
-        if bd['games'][group_chat_id]['participants'].get(user_id):
-            if not bd['games'][group_chat_id]['is_finished']:
+        game = bd['games'][group_chat_id]
+        if game['participants'].get(user_id):
+            if not game['is_finished']:
                 context.bot.send_message(chat_id=group_chat_id,
                                          text=get_string(__get_chat_lang(context), 'game_left',
                                                          __get_username(update)))
