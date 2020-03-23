@@ -803,7 +803,7 @@ def query_handler(update, context):
 
         if user_id != game['creator']['id']:
             context.bot.send_message(chat_id=group_id_to_kick_from,
-                                     text="Only the game creator can choose who to kick!")
+                                     text=get_string(game['lang'], 'forbid_kick_to_not_game_creator'))
             return
 
         lang = __get_game_lang(context, group_id_to_kick_from)
