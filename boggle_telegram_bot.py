@@ -201,17 +201,21 @@ def leave(update, context):
 
     if bd['games'].get(group_chat_id):
         if bd['games'][group_chat_id]['participants'].get(user_id):
-            context.bot.send_message(chat_id=group_chat_id,
-                                     text=get_string(__get_chat_lang(context), 'game_left',
-                                                     __get_username(update)))
-            logger.info(f"User {__get_username(update)} left a game in group"
-                        f" {__get_group_name(update)} - {__get_chat_id(update)}")
-            return
+            if not bd['games'][group_chat_id]['is_finished']:
+                context.bot.send_message(chat_id=group_chat_id,
+                                         text=get_string(__get_chat_lang(context), 'game_left',
+                                                         __get_username(update)))
+                logger.info(f"User {__get_username(update)} left a game in group"
+                            f" {__get_group_name(update)} - {__get_chat_id(update)}")
+            else:
+                context.bot.send_message(chat_id=group_chat_id,
+                                         text=get_string(__get_chat_lang(context), 'game_already_finished_leave',
+                                                         bd['games'][group_chat_id]['creator']['username']))
         else:
             context.bot.send_message(chat_id=group_chat_id,
                                      text=get_string(__get_chat_lang(context), 'not_in_game',
                                                      __get_username(update)))
-            return
+        return
 
     if not cd.get('timers'):
         __init_chat_data(context)
