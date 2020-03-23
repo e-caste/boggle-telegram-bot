@@ -819,7 +819,8 @@ def query_handler(update, context):
                                       text=get_string(lang,
                                                       'kick_user_successful',
                                                       game['participants'][user_id_to_kick]['username']))
-        logger.info(f"User {__get_username_from_query(query)} started a game in group"
+        logger.info(f"User {__get_username_from_query(query)} kicked "
+                    f"{game['participants'][user_id_to_kick]['username']} from a game in group"
                     f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
 
         try:
