@@ -793,7 +793,7 @@ def query_handler(update, context):
     __check_bot_data_is_initialized(context)
 
     query = update.callback_query
-    user_id = query.message.from_user.id
+    user_id = __get_user_id_from_query(query)
     bd = context.bot_data
 
     if query.data.startswith("kick"):
@@ -1472,6 +1472,10 @@ def __get_group_name(update) -> str:
 
 def __get_group_name_from_query(query) -> str:
     return query.message.chat.title
+
+
+def __get_user_id_from_query(query) -> int:
+    return query.from_user.id
 
 
 def __get_username_from_query(query) -> str:
