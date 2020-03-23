@@ -317,6 +317,7 @@ def start_game(update, context, timer: bool = False):
                                      text=get_string(__get_chat_lang(context), 'game_killed_user_did_not_start_the_bot',
                                                      current_game['participants'][player]['username']))
             kill(update, context, bot_not_started=True)
+            return
 
     t = Timer(interval=cd['timers']['durations']['ingame'],
               function=__ingame_timer, args=(update, context, group_chat_id))
