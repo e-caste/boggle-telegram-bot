@@ -284,6 +284,10 @@ translations = {
         'ita': "Il creatore della partita, {}, può scegliere chi kickare tra i giocatori:",
         'eng': "The game creator, {}, can choose who to kick from the game among the players:"
     },
+    'no_users_to_kick': {
+        'ita': "Non ci sono giocatori da rimuovere.",
+        'eng': "No players to kick."
+    }.,
     'kick_user_successful': {
         'ita': "Il giocatore {} è stato rimosso dalla partita corrente.",
         'eng': "The player {} has been kicked from the current game."
