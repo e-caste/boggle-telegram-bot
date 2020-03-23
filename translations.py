@@ -287,7 +287,7 @@ translations = {
     'no_users_to_kick': {
         'ita': "Non ci sono giocatori da rimuovere.",
         'eng': "No players to kick."
-    }.,
+    },
     'kick_user_successful': {
         'ita': "Il giocatore {} è stato rimosso dalla partita corrente.",
         'eng': "The player {} has been kicked from the current game."
