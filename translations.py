@@ -288,6 +288,10 @@ translations = {
         'ita': "Non ci sono giocatori da rimuovere.",
         'eng': "No players to kick."
     },
+    'forbid_kick_to_not_game_creator': {
+        'ita': "Solo il creatore della partita può scegliere chi rimuovere!",
+        'eng': "Only the game creator can choose who to kick!"
+    },
     'kick_user_successful': {
         'ita': "Il giocatore {} è stato rimosso dalla partita corrente.",
         'eng': "The player {} has been kicked from the current game."
