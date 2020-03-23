@@ -352,6 +352,8 @@ def points_handler(update, context):
     for char in word:
         if char not in letters_sets[bd['games'][group_id]['lang']]:
             update.message.reply_text(get_string(__get_game_lang(context, group_id), 'received_dm_but_char_not_alpha'))
+            update.message.reply_text(text=bd['games'][group_id]['table_str'],
+                                      parse_mode=HTML)
             return
 
     if len(word) < 3:
