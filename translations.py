@@ -265,7 +265,7 @@ translations = {
         'eng': "And the even winners are"
     },
     'game_killed_user_did_not_start_the_bot': {
-        'ita': "La partita è stata annullata perché {} non mi ha avviato! Per farlo, entra nella chat privata con me e"
+        'ita': "La partita è stata annullata perché {} non mi ha avviato! Per farlo, entra nella chat privata con me e "
                "seleziona Avvia o mandami il comando /start.",
         'eng': "The game has been canceled because {} didn't start me! To do so, go to your private chat with me and "
                "select Start or send me the /start command."
