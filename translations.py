@@ -200,12 +200,12 @@ translations = {
                "giocatori, nella forma /delete 'lista di parole separate da spazi', ma accetto anche delle singole "
                "parole, se ricevo /delete 'parola' (sempre senza ').\n\n<b>Mi raccomando, {}, ricordati di "
                "darmi il comando /endgame per concludere la partita e visualizzare i risultati!</b>\n\nQui di seguito "
-               "la lista complessiva:\n\n{}",
+               "la lista complessiva:",
         'eng': "Time's up! Now the game creator ({}), in agreement with the other players, will have to send me the "
                "list of invalid words. A single message with the list of these words for all players in the form "
                "/delete 'list of space separated words' works, but I also accept messages for a single word like "
                "/delete 'word' (do not include ').\n\n<b>{}, please remember to send me the /endgame command to "
-               "end the game and to see the results!</b>\n\nBelow you can find the list of words for each player:\n\n{}"
+               "end the game and to see the results!</b>\n\nBelow you can find the list of words for each player:"
     },
     'game_not_yet_finished': {
         'ita': "Mi spiace, ma quel comando si può usare solo a partita finita.",
