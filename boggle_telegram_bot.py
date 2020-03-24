@@ -10,7 +10,7 @@ from telegram.parsemode import ParseMode
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           CallbackQueryHandler, PicklePersistence)
 from telegram.utils.helpers import mention_html
-from telegram.error import Unauthorized
+from telegram.error import Unauthorized, BadRequest
 import logging
 from secret import token, castes_chat_id, working_directory
 import os
@@ -418,7 +418,7 @@ def delete(update, context):
 
     __check_bot_was_restarted(update, context)
 
-    user_id = __get_user_id(update)
+    # user_id = __get_user_id(update)
     group_id = __get_chat_id(update)
     bd = context.bot_data
 
@@ -466,15 +466,22 @@ def delete(update, context):
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(lang, 'words_not_found_in_players_words', not_found))
     else:
-        player_words_without_points = __get_formatted_words(context, group_id, with_points=False)
+        # player_words_without_points = __get_formatted_words(context, group_id, with_points=False)
+        player_words_without_points = {}
+        for user_id in game['participants']:
+            player_words_without_points[user_id] = __get_formatted_words(context, group_id,
+                                                                         with_points=False, user_id=user_id)
+            try:
+                context.bot.edit_message_text(chat_id=group_id,
+                                              message_id=game['participants'][user_id]['result_message_id'],
+                                              text=player_words_without_points[user_id],
+                                              parse_mode=HTML)
+            except BadRequest:  # message is not modified because it doesn't contain any of the deleted words
+                pass
+
         context.bot.send_message(chat_id=group_id,
-                                 text=get_string(lang, 'all_words_deleted'))
-        context.bot.edit_message_text(chat_id=group_id,
-                                      message_id=game['result_message']['message_id'],
-                                      text=get_string(lang, 'ingame_timer_expired_group',
-                                                      game['creator']['username'], game['creator']['username'],
-                                                      player_words_without_points),
-                                      parse_mode=HTML)
+                                 text=get_string(lang, 'all_words_deleted'),
+                                 parse_mode=HTML)
         logger.info(f"User {__get_username(update)} deleted some words in group"
                     f" {__get_group_name(update)} - {__get_chat_id(update)}")
 
@@ -488,7 +495,7 @@ def end_game(update, context):
 
     __check_bot_was_restarted(update, context)
 
-    user_id = __get_user_id(update)
+    # user_id = __get_user_id(update)
     group_id = __get_chat_id(update)
     cd = context.chat_data
     bd = context.bot_data
@@ -1053,7 +1060,7 @@ def __ingame_timer(update, context, group_id: int):
     player_words_with_points = {}
     for user_id in game['participants']:
         player_words_with_points[user_id] = __get_formatted_words(context, group_id, with_points=True, user_id=user_id)
-    player_words_without_points = __get_formatted_words(context, group_id, with_points=False)
+    # player_words_without_points = __get_formatted_words(context, group_id, with_points=False)
 
     for user_id in player_words_with_points:
         context.bot.send_message(chat_id=user_id,
@@ -1061,13 +1068,20 @@ def __ingame_timer(update, context, group_id: int):
                                                  player_words_with_points[user_id]),
                                  parse_mode=HTML)
 
-    message = context.bot.send_message(chat_id=group_id,
-                                       text=get_string(__get_chat_lang(context), 'ingame_timer_expired_group',
-                                                       game['creator']['username'], game['creator']['username'],
-                                                       player_words_without_points),
-                                       # .replace("<", "&lt;").replace(">", "&gt;").replace("'", "&#39;"),
-                                       parse_mode=HTML)
-    game['result_message'] = message
+    context.bot.send_message(chat_id=group_id,
+                             text=get_string(__get_chat_lang(context), 'ingame_timer_expired_group',
+                                             game['creator']['username'], game['creator']['username']),
+                             # .replace("<", "&lt;").replace(">", "&gt;").replace("'", "&#39;"),
+                             parse_mode=HTML)
+
+    player_words_without_points = {}
+    for user_id in game['participants']:
+        player_words_without_points[user_id] = __get_formatted_words(context, group_id,
+                                                                     with_points=False, user_id=user_id)
+        message = context.bot.send_message(chat_id=group_id,
+                                           text=player_words_without_points[user_id],
+                                           parse_mode=HTML)
+        game['participants'][user_id]['result_message_id'] = message['message_id']
 
 
 def __check_bot_data_is_initialized(context):
