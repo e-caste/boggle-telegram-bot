@@ -8,7 +8,7 @@
 ## How it works
 
 Dark magic, Python 🐍, and the [python_telegram_bot](https://github.com/python-telegram-bot/python-telegram-bot) library.  
-It allows potentially infinite players to play Boggle at the same time, while keeping the social distance required in these trying times.  
+This bot allows potentially infinite players to play Boggle at the same time, while keeping the social distance required in these trying times.  
 
 #### Some cool (🆒!) features:
 - automatic word validation: if a word's not possible to make, the bot will tell you
