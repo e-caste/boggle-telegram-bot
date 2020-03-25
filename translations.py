@@ -39,8 +39,11 @@ __usage = {
 }
 
 __rules = {
-    'ita': "<b>Punteggi</b>\n"
+    'ita': "<b>Punteggi 4x4</b>\n"
            "1-2 lettere: 0 punti\n3-4 lettere: 1 punto\n5 lettere: 2 punti\n6 lettere: 3 punti\n7 lettere: 5 punti\n"
+           "8+ lettere: 11 punti\n\n"
+           "<b>Punteggi 5x5</b>\n"
+           "1-2-3 lettere: 0 punti\n4 lettere: 1 punto\n5 lettere: 2 punti\n6 lettere: 3 punti\n7 lettere: 5 punti\n"
            "8+ lettere: 11 punti\n\n"
            "<b>Regole del gioco</b>\n"
            "Lo scopo del gioco è trovare il maggior numero possibile di parole nel tempo dato composte da lettere "
@@ -55,8 +58,11 @@ __rules = {
            " avverbi, congiunzioni, interiezioni, onomatopee, preposizioni e pronomi sono sempre validi;\nverbi"
            " coniugati, sigle, parole straniere di uso comune in Italiano, nomi propri e geografici possono essere"
            " aggiunti per semplificare il gioco.",
-    'eng': "<b>Scoring</b>\n"
+    'eng': "<b>Scoring 4x4</b>\n"
            "1-2 letters: 0 points\n3-4 letters: 1 point\n5 letters: 2 points\n6 letters: 3 points\n7 letters: 5 points"
+           "\n8+ letters: 11 points\n\n"
+           "<b>Scoring 4x4</b>\n"
+           "1-2-3 letters: 0 points\n4 letters: 1 point\n5 letters: 2 points\n6 letters: 3 points\n7 letters: 5 points"
            "\n8+ letters: 11 points\n\n"
            "<b>Rules of the game</b>\n"
            "The goal of the game is to find the maximum possible amount of words, made with adjacent letters both"
