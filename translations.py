@@ -329,7 +329,7 @@ translations = {
         'eng': "Timers"
     },
     'settings_button_table_dimensions': {
-        'ita': "Dimensioni scacchiera",
+        'ita': "Dimensioni tabella",
         'eng': "Board dimensions"
     },
     'settings_language_choice': {
