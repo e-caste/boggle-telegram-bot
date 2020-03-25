@@ -884,6 +884,8 @@ def query_handler(update, context):
                  InlineKeyboardButton("30s", callback_data=f"settings_new30s_{chat_id}")],
                 [InlineKeyboardButton("1min", callback_data=f"settings_new1min_{chat_id}"),
                  InlineKeyboardButton("1min30s", callback_data=f"settings_new1min30s_{chat_id}")],
+                [InlineKeyboardButton("2min", callback_data=f"settings_new2min_{chat_id}"),
+                 InlineKeyboardButton("2min30s", callback_data=f"settings_new2min30s_{chat_id}")],
                 [InlineKeyboardButton("🔙", callback_data=f"back_to_timers_{chat_id}")]
             ])
             context.bot.edit_message_text(chat_id=query.message.chat_id,
@@ -901,6 +903,8 @@ def query_handler(update, context):
                  InlineKeyboardButton("3min", callback_data=f"settings_in3min_{chat_id}")],
                 [InlineKeyboardButton("3min30s", callback_data=f"settings_in3min30s_{chat_id}"),
                  InlineKeyboardButton("4min", callback_data=f"settings_in4min_{chat_id}")],
+                [InlineKeyboardButton("4min30s", callback_data=f"settings_in4min30s_{chat_id}"),
+                 InlineKeyboardButton("5min", callback_data=f"settings_in5min_{chat_id}")],
                 [InlineKeyboardButton("🔙", callback_data=f"back_to_timers_{chat_id}")]
             ])
             context.bot.edit_message_text(chat_id=query.message.chat_id,
@@ -917,9 +921,14 @@ def query_handler(update, context):
                 cd['timers']['durations']['newgame'] = 60
             elif setting == "new1min30s":
                 cd['timers']['durations']['newgame'] = 90
+            elif setting == "new2min":
+                cd['timers']['durations']['newgame'] = 120
+            elif setting == "new2min30s":
+                cd['timers']['durations']['newgame'] = 150
             context.bot.edit_message_text(chat_id=query.message.chat_id,
                                           message_id=query.message.message_id,
-                                          text=get_string(__get_chat_lang(context), 'settings_newgametimer_changed'))
+                                          text=get_string(__get_chat_lang(context), 'settings_newgametimer_changed',
+                                                          setting[3:]))
             logger.info(f"User {__get_username_from_query(query)} changed the newgame timer to {setting[3:]} in group"
                         f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
 
@@ -940,9 +949,14 @@ def query_handler(update, context):
                 cd['timers']['durations']['ingame'] = 210
             elif setting == "in4min":
                 cd['timers']['durations']['ingame'] = 240
+            elif setting == "in4min30s":
+                cd['timers']['durations']['ingame'] = 270
+            elif setting == "in5min":
+                cd['timers']['durations']['ingame'] = 300
             context.bot.edit_message_text(chat_id=query.message.chat_id,
                                           message_id=query.message.message_id,
-                                          text=get_string(__get_chat_lang(context), 'settings_ingametimer_changed'))
+                                          text=get_string(__get_chat_lang(context), 'settings_ingametimer_changed',
+                                                          setting[2:]))
             logger.info(f"User {__get_username_from_query(query)} changed the ingame timer to {setting[2:]} in group"
                         f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
 
