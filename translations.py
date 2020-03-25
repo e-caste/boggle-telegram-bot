@@ -364,6 +364,10 @@ translations = {
         'ita': "Scegli la dimensione della tabella:",
         'eng': "Choose the board dimensions:"
     },
+    'settings_board_changed': {
+        'ita': "Dimensioni della tabella cambiate in {}!",
+        'eng': "Board dimensions changed to {}!"
+    },
     'stats_prompt': {
         'ita': "Che statistiche vuoi vedere?",
         'eng': "Which stats do you want to check out?"
