@@ -353,12 +353,12 @@ translations = {
         'eng': "Game duration"
     },
     'settings_newgametimer_changed': {
-        'ita': "Durata del pre-partita cambiata!",
-        'eng': "Pre-game duration changed!"
+        'ita': "Durata del pre-partita cambiata in {}!",
+        'eng': "Pre-game duration changed to {}!"
     },
     'settings_ingametimer_changed': {
-        'ita': "Durata della partita cambiata!",
-        'eng': "Game duration changed!"
+        'ita': "Durata della partita cambiata in {}!",
+        'eng': "Game duration changed to {}!"
     },
     'settings_board_choice': {
         'ita': "Scegli la dimensione della tabella:",
