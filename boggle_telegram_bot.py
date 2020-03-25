@@ -107,6 +107,7 @@ def new(update, context):
             'is_finished': False,
             'ingame_timer': None,
             'lang': __get_chat_lang(context),
+            'dim': cd['settings']['table_dimensions'],
             'newgame_message': message
         })
     else:
@@ -371,23 +372,26 @@ def points_handler(update, context):
                                       parse_mode=HTML)
             return
 
-    if len(word) < 3:
+    game = bd['games'][group_id]
+
+    if (len(word) < 3 and game['dim'] == "4x4") \
+            or (len(word) < 4 and game['dim'] == "5x5"):
         update.message.reply_text(get_string(__get_game_lang(context, group_id), 'received_dm_but_word_too_short'))
-        update.message.reply_text(text=bd['games'][group_id]['table_str'],
+        update.message.reply_text(text=game['table_str'],
                                   parse_mode=HTML)
         return
 
     if "q" in word and "qu" not in word:
         update.message.reply_text(get_string(__get_game_lang(context, group_id), 'received_dm_but_q_without_u'))
-        update.message.reply_text(text=bd['games'][group_id]['table_str'],
+        update.message.reply_text(text=game['table_str'],
                                   parse_mode=HTML)
         return
 
     word = word.replace("qu", "q")
 
-    if not __validate_word_by_boggle_rules(word, bd['games'][group_id]['table_grid']):
+    if not __validate_word_by_boggle_rules(word, game['table_grid']):
         update.message.reply_text(get_string(__get_game_lang(context, group_id), 'received_dm_but_word_not_validated'))
-        update.message.reply_text(text=bd['games'][group_id]['table_str'],
+        update.message.reply_text(text=game['table_str'],
                                   parse_mode=HTML)
         return
 
@@ -396,16 +400,16 @@ def points_handler(update, context):
 
     if not words.get(word):
         words[word] = {
-            'points': __get_points_for_word(word),
+            'points': __get_points_for_word(word, game['dim']),
             'sent_by_other_players': False,
             'deleted': False
         }
-        update.message.reply_text(text=bd['games'][group_id]['table_str'],
+        update.message.reply_text(text=game['table_str'],
                                   parse_mode=HTML)
     else:
         update.message.reply_text(get_string(__get_game_lang(context, group_id), 'received_dm_but_word_already_sent',
                                              word))
-        update.message.reply_text(text=bd['games'][group_id]['table_str'],
+        update.message.reply_text(text=game['table_str'],
                                   parse_mode=HTML)
 
 
@@ -942,6 +946,23 @@ def query_handler(update, context):
             logger.info(f"User {__get_username_from_query(query)} changed the ingame timer to {setting[2:]} in group"
                         f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
 
+        elif setting == "board":
+            reply_markup = InlineKeyboardMarkup([
+                [InlineKeyboardButton("4x4", callback_data=f"settings_4x4_{chat_id}"),
+                 InlineKeyboardButton("5x5", callback_data=f"settings_5x5_{chat_id}")],
+                [InlineKeyboardButton("🔙", callback_data=f"back_to_settings_{chat_id}")]
+            ])
+            context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                          message_id=query.message.message_id,
+                                          text=get_string(__get_chat_lang(context), 'settings_board_choice'),
+                                          reply_markup=reply_markup)
+
+        elif setting in ["4x4", "5x5"]:
+            cd['settings']['table_dimensions'] = setting
+            context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                          message_id=query.message.message_id,
+                                          text=get_string(__get_chat_lang(context), 'settings_board_changed', setting))
+
     elif query.data.startswith("back_to"):
         destination = query.data.split("back_to_")[1].split("_")[0]
         chat_id = int(query.data.split("_")[3])
@@ -1320,11 +1341,16 @@ def __get_path_to_word(grid: dict, path: list) -> str:
     return ''.join([grid[p] for p in path])
 
 
-def __get_points_for_word(word: str) -> int:
+def __get_points_for_word(word: str, dim: str) -> int:
     length = len(word)
     if length < 3:
         return 0
-    elif length == 3 or length == 4:
+    elif length == 3:
+        if dim == "4x4":
+            return 1
+        elif dim == "5x5":
+            return 0
+    elif length == 4:
         return 1
     elif length == 5:
         return 2
@@ -1396,8 +1422,8 @@ def __get_settings_keyboard(chat_id: int, lang: str) -> InlineKeyboardMarkup:
     if chat_id < 0:  # group
         reply_keyboard[0].append(InlineKeyboardButton(get_string(lang, 'settings_button_timers'),
                                                       callback_data=f"settings_timers_{chat_id}"))
-        # TODO: uncomment this when more than 1 table dimension (4x4) gets added
-        # [InlineKeyboardButton(get_string(lang, 'settings_button_table_dimensions'))]
+        reply_keyboard.append([InlineKeyboardButton(get_string(lang, 'settings_button_table_dimensions'),
+                                                    callback_data=f"settings_board_{chat_id}")])
     return InlineKeyboardMarkup(reply_keyboard)
 
 
