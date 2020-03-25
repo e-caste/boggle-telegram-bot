@@ -912,7 +912,7 @@ def query_handler(update, context):
                                           text=get_string(__get_chat_lang(context), 'settings_ingame_timer_button'),
                                           reply_markup=reply_markup)
 
-        elif setting in ["new10s", "new30s", "new1min", "new1min30s"]:
+        elif setting in ["new10s", "new30s", "new1min", "new1min30s", "new2min", "new2min30s"]:
             if setting == "new10s":
                 cd['timers']['durations']['newgame'] = 10
             elif setting == "new30s":
@@ -932,7 +932,8 @@ def query_handler(update, context):
             logger.info(f"User {__get_username_from_query(query)} changed the newgame timer to {setting[3:]} in group"
                         f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
 
-        elif setting in ["in30s", "in1min", "in1min30s", "in2min", "in2min30s", "in3min", "in3min30s", "in4min"]:
+        elif setting in ["in30s", "in1min", "in1min30s", "in2min", "in2min30s", "in3min", "in3min30s", "in4min",
+                         "in4min30s", "in5min"]:
             if setting == "in30s":
                 cd['timers']['durations']['ingame'] = 30
             elif setting == "in1min":
