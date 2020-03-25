@@ -976,6 +976,8 @@ def query_handler(update, context):
             context.bot.edit_message_text(chat_id=query.message.chat_id,
                                           message_id=query.message.message_id,
                                           text=get_string(__get_chat_lang(context), 'settings_board_changed', setting))
+            logger.info(f"User {__get_username_from_query(query)} changed the board dimensions to {setting} in group"
+                        f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
 
     elif query.data.startswith("back_to"):
         destination = query.data.split("back_to_")[1].split("_")[0]
