@@ -360,6 +360,10 @@ translations = {
         'ita': "Durata della partita cambiata!",
         'eng': "Game duration changed!"
     },
+    'settings_board_choice': {
+        'ita': "Scegli la dimensione della tabella:",
+        'eng': "Choose the board dimensions:"
+    },
     'stats_prompt': {
         'ita': "Che statistiche vuoi vedere?",
         'eng': "Which stats do you want to check out?"
