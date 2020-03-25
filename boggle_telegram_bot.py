@@ -663,6 +663,7 @@ def kick(update, context):
                 reply_keyboard.append([button])
             else:
                 reply_keyboard[-1].append(button)
+    reply_keyboard.append([InlineKeyboardButton(get_string(lang, 'close_button'), callback_data="close")])
     reply_markup = InlineKeyboardMarkup(reply_keyboard)
 
     if len(reply_keyboard[-1]) == 0:
@@ -755,7 +756,8 @@ def show_statistics(update, context):
 
         reply_keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton(get_string(lang, 'stats_user_button'), callback_data=f"stats_user_{user_id}")],
-            [InlineKeyboardButton(get_string(lang, 'stats_group_button'), callback_data=f"stats_group_{group_id}")]
+            [InlineKeyboardButton(get_string(lang, 'stats_group_button'), callback_data=f"stats_group_{group_id}")],
+            [InlineKeyboardButton(get_string(lang, 'close_button'), callback_data="close")]
         ])
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(lang, 'stats_prompt'),
@@ -813,7 +815,12 @@ def query_handler(update, context):
     user_id = __get_user_id_from_query(query)
     bd = context.bot_data
 
-    if query.data.startswith("kick"):
+    if query.data.startswith("close"):
+        context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                      message_id=query.message.message_id,
+                                      text=get_string(__get_chat_lang(context), 'closed_message'))
+
+    elif query.data.startswith("kick"):
         user_id_to_kick = int(query.data.split("kick_")[1].split("_from_")[0])
         group_id_to_kick_from = int(query.data.split("_from_")[1])
         game = bd['games'][group_id_to_kick_from]
@@ -1441,6 +1448,7 @@ def __get_settings_keyboard(chat_id: int, lang: str) -> InlineKeyboardMarkup:
                                                       callback_data=f"settings_timers_{chat_id}"))
         reply_keyboard.append([InlineKeyboardButton(get_string(lang, 'settings_button_table_dimensions'),
                                                     callback_data=f"settings_board_{chat_id}")])
+        reply_keyboard.append([InlineKeyboardButton(get_string(lang, 'close_button'), callback_data="close")])
     return InlineKeyboardMarkup(reply_keyboard)
 
 
