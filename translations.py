@@ -448,6 +448,14 @@ translations = {
         'ita': "Parole:",
         'eng': "Words:"
     },
+    'close_button': {
+        'ita': "❌ Chiudi",
+        'eng': "❌ Close"
+    },
+    'closed_message': {
+        'ita': "Annullato.",
+        'eng': "Canceled."
+    },
     'game_canceled_because_bot_restarted': {
         'ita': "Mi spiace, ma la partita a cui stavate giocando è stata annullata perché sono stato riavviato e (d'oh!)"
                " ho perso il timer, quindi non avrei saputo dirvi quando sarebbe terminata.\nPotete creare una nuova "
