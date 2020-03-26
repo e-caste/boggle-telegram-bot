@@ -317,8 +317,8 @@ translations = {
         'eng': "<i>No words received.</i>"
     },
     'settings_prompt': {
-        'ita': "Qui puoi cambiare le impostazioni per questo gruppo",
-        'eng': "Here you can change the settings for this group chat"
+        'ita': "Qui puoi cambiare le impostazioni per questa chat",
+        'eng': "Here you can change the settings for this chat"
     },
     'settings_button_language': {
         'ita': "Lingua",
