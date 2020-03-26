@@ -1562,7 +1562,7 @@ def __get_chat_id_from_query(query) -> int:
 
 def main():
     pp = PicklePersistence(filename='_boggle_paroliere_bot_db')
-    updater = Updater(token, persistence=pp, use_context=True)
+    updater = Updater(token, persistence=pp, use_context=True, request_kwargs={'read_timeout': 10})
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
