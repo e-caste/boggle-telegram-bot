@@ -1,8 +1,9 @@
 # boggle-telegram-bot
 [![Supported Python versions](https://img.shields.io/badge/python-3.6-brightgreen)]() [![GitHub license](https://img.shields.io/github/license/e-caste/boggle-telegram-bot)](https://github.com/e-caste/boggle-telegram-bot/blob/master/LICENSE)
 <p align="center">
-  <img  height="600" src="https://imgur.com/vppVYwS.png">
-  <img  height="600" src="https://imgur.com/eEQNweY.png">
+  <img  height="500" src="https://imgur.com/vppVYwS.png">
+  <img  height="500" src="https://imgur.com/eEQNweY.png">
+  <img  height="500" src="https://imgur.com/MX1gAhR.png">
 </p>
 
 ## How it works
