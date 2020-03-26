@@ -110,6 +110,7 @@ def new(update, context):
             'dim': cd['settings']['table_dimensions'],
             'newgame_message': message
         })
+        join(update, context)  # auto-join game creator
     else:
         context.bot.send_message(chat_id=__get_chat_id(update),
                                  text=get_string(__get_chat_lang(context), 'game_already_created',
