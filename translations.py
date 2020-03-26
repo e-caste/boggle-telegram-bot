@@ -361,12 +361,40 @@ translations = {
         'eng': "Game duration changed to {}!"
     },
     'settings_board_choice': {
-        'ita': "Scegli la dimensione della tabella:",
+        'ita': "Scegli le dimensioni della tabella:",
         'eng': "Choose the board dimensions:"
     },
     'settings_board_changed': {
         'ita': "Dimensioni della tabella cambiate in {}!",
         'eng': "Board dimensions changed to {}!"
+    },
+    'settings_button_auto_join': {
+        'ita': "Auto join",
+        'eng': "Auto join"
+    },
+    'settings_button_auto_join_enable': {
+        'ita': "Abilita",
+        'eng': "Enable"
+    },
+    'settings_button_auto_join_disable': {
+        'ita': "Disabilita",
+        'eng': "Disable"
+    },
+    'settings_auto_join_choice': {
+        'ita': "Scegli se vuoi che il creatore di una partita vi entri automaticamente dopo aver usato /new:",
+        'eng': "Choose if you want the game creator to automatically join it after using /new:"
+    },
+    'settings_auto_join_changed': {
+        'ita': "Auto join {}!",
+        'eng': "Auto join {}!"
+    },
+    'settings_auto_join_enabled': {
+        'ita': "abilitato",
+        'eng': "enabled"
+    },
+    'settings_auto_join_disabled': {
+        'ita': "disabilitato",
+        'eng': "disabled"
     },
     'stats_prompt': {
         'ita': "Che statistiche vuoi vedere?",
