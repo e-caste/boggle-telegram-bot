@@ -110,7 +110,8 @@ def new(update, context):
             'dim': cd['settings']['table_dimensions'],
             'newgame_message': message
         })
-        join(update, context)  # auto-join game creator
+        if cd['settings']['auto_join']:
+            join(update, context)  # auto-join game creator
     else:
         context.bot.send_message(chat_id=__get_chat_id(update),
                                  text=get_string(__get_chat_lang(context), 'game_already_created',
@@ -988,6 +989,31 @@ def query_handler(update, context):
             logger.info(f"User {__get_username_from_query(query)} changed the board dimensions to {setting} in group"
                         f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
 
+        elif setting == "autojoin":
+            reply_markup = InlineKeyboardMarkup([
+                [InlineKeyboardButton(get_string(__get_chat_lang(context), 'settings_button_auto_join_enable'),
+                                      callback_data=f"settings_autojoinenable_{chat_id}"),
+                 InlineKeyboardButton(get_string(__get_chat_lang(context), 'settings_button_auto_join_disable'),
+                                      callback_data=f"settings_autojoindisable_{chat_id}")],
+                [InlineKeyboardButton("🔙", callback_data=f"back_to_settings_{chat_id}")]
+            ])
+            context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                          message_id=query.message.message_id,
+                                          text=get_string(__get_chat_lang(context), 'settings_auto_join_choice'),
+                                          reply_markup=reply_markup)
+
+        elif setting in ["autojoinenable", "autojoindisable"]:
+            cd['settings']['auto_join'] = True if setting == "autojoinenable" else False
+            changed_to = get_string(__get_chat_lang(context), 'settings_auto_join_enabled' if setting == "autojoinenable"
+                                    else 'settings_auto_join_disabled')
+            context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                          message_id=query.message.message_id,
+                                          text=get_string(__get_chat_lang(context), 'settings_auto_join_changed',
+                                                          changed_to))
+            logger.info(f"User {__get_username_from_query(query)} changed the auto join to {changed_to} in group"
+                        f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
+
+
     elif query.data.startswith("back_to"):
         destination = query.data.split("back_to_")[1].split("_")[0]
         chat_id = int(query.data.split("_")[3])
@@ -1158,7 +1184,8 @@ def __init_chat_data(context):
     cd['ingame_user_ids'] = []
     cd['settings'] = {
         'lang': 'eng',
-        'table_dimensions': '4x4'
+        'table_dimensions': '4x4',
+        'auto_join': True
     }
 
 
@@ -1449,6 +1476,8 @@ def __get_settings_keyboard(chat_id: int, lang: str) -> InlineKeyboardMarkup:
                                                       callback_data=f"settings_timers_{chat_id}"))
         reply_keyboard.append([InlineKeyboardButton(get_string(lang, 'settings_button_table_dimensions'),
                                                     callback_data=f"settings_board_{chat_id}")])
+        reply_keyboard[1].append(InlineKeyboardButton(get_string(lang, 'settings_button_auto_join'),
+                                                      callback_data=f"settings_autojoin_{chat_id}"))
         reply_keyboard.append([InlineKeyboardButton(get_string(lang, 'close_button'), callback_data="close")])
     return InlineKeyboardMarkup(reply_keyboard)
 
@@ -1457,8 +1486,8 @@ def __get_timers_keyboard(chat_id: int, lang: str) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([
         [InlineKeyboardButton(get_string(lang, 'settings_newgame_timer_button'),
                               callback_data=f"settings_newgametimer_{chat_id}")],
-        [InlineKeyboardButton(get_string(lang, 'settings_ingame_timer_button'),
-                              callback_data=f"settings_ingametimer_{chat_id}")],
+        [InlineKeyboardButton(get_string(lang, 'settings_button_auto_join'),
+                              callback_data=f"settings_autojoin_{chat_id}")],
         [InlineKeyboardButton("🔙", callback_data=f"back_to_settings_{chat_id}")]
     ])
 
