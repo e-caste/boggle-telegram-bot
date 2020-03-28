@@ -74,11 +74,13 @@ def new(update, context):
         if cd['timers'].get('newgame'):
             context.bot.send_message(chat_id=__get_chat_id(update),
                                      text=get_string(__get_chat_lang(context), 'game_already_created',
-                                                     __get_username(update)))
+                                                     __get_username(update)),
+                                     parse_mode=HTML)
         else:
             context.bot.send_message(chat_id=__get_chat_id(update),
                                      text=get_string(__get_chat_lang(context), 'game_already_started',
-                                                     __get_username(update)))
+                                                     __get_username(update)),
+                                     parse_mode=HTML)
         return
 
     if not cd.get('timers'):
@@ -94,7 +96,8 @@ def new(update, context):
         message = context.bot.send_message(chat_id=__get_chat_id(update),
                                            text=get_string(__get_chat_lang(context), 'game_created',
                                                            __get_username(update),
-                                                           cd['timers']['durations']['newgame'], ""))
+                                                           cd['timers']['durations']['newgame'], ""),
+                                           parse_mode=HTML)
         logger.info(f"New game by {__get_username(update)} in group"
                     f" {__get_group_name(update)} - {__get_chat_id(update)}")
         cd['games'].append({
@@ -115,7 +118,8 @@ def new(update, context):
     else:
         context.bot.send_message(chat_id=__get_chat_id(update),
                                  text=get_string(__get_chat_lang(context), 'game_already_created',
-                                                 __get_username(update)))
+                                                 __get_username(update)),
+                                 parse_mode=HTML)
 
 
 def join(update, context):
@@ -135,11 +139,13 @@ def join(update, context):
         if cd['timers'].get('newgame'):
             context.bot.send_message(chat_id=__get_chat_id(update),
                                      text=get_string(__get_chat_lang(context), 'game_already_created',
-                                                     __get_username(update)))
+                                                     __get_username(update)),
+                                     parse_mode=HTML)
         else:
             context.bot.send_message(chat_id=__get_chat_id(update),
                                      text=get_string(__get_chat_lang(context), 'game_already_started',
-                                                     __get_username(update)))
+                                                     __get_username(update)),
+                                     parse_mode=HTML)
         return
 
     if not cd.get('timers'):
@@ -156,7 +162,8 @@ def join(update, context):
             context.bot.send_message(chat_id=group_chat_id,
                                      text=get_string(__get_chat_lang(context), 'already_in_game',
                                                      __get_username(update),
-                                                     current_game['creator']['username']))
+                                                     current_game['creator']['username']),
+                                     parse_mode=HTML)
         else:
             if group_chat_id not in bd['stats']['groups']:
                 __init_group_stats(context, group_chat_id)
@@ -169,7 +176,8 @@ def join(update, context):
             __join_user_to_game(update, context)
             context.bot.send_message(chat_id=group_chat_id,
                                      text=get_string(__get_chat_lang(context), 'game_joined',
-                                                     __get_username(update), current_game['creator']['username']))
+                                                     __get_username(update), current_game['creator']['username']),
+                                     parse_mode=HTML)
             logger.info(f"User {__get_username(update)} joined a game in group"
                         f" {__get_group_name(update)} - {__get_chat_id(update)}")
             usernames = ""
@@ -208,18 +216,21 @@ def leave(update, context):
             if not game['is_finished']:
                 context.bot.send_message(chat_id=group_chat_id,
                                          text=get_string(__get_chat_lang(context), 'game_left',
-                                                         __get_username(update)))
+                                                         __get_username(update)),
+                                         parse_mode=HTML)
                 del game['participants'][user_id]
                 logger.info(f"User {__get_username(update)} left a game in group"
                             f" {__get_group_name(update)} - {__get_chat_id(update)}")
             else:
                 context.bot.send_message(chat_id=group_chat_id,
                                          text=get_string(__get_chat_lang(context), 'game_already_finished_leave',
-                                                         bd['games'][group_chat_id]['creator']['username']))
+                                                         bd['games'][group_chat_id]['creator']['username']),
+                                         parse_mode=HTML)
         else:
             context.bot.send_message(chat_id=group_chat_id,
                                      text=get_string(__get_chat_lang(context), 'not_in_game',
-                                                     __get_username(update)))
+                                                     __get_username(update)),
+                                     parse_mode=HTML)
         return
 
     if not cd.get('timers'):
@@ -236,7 +247,8 @@ def leave(update, context):
             __remove_user_from_game(update, context)
             context.bot.send_message(chat_id=group_chat_id,
                                      text=get_string(__get_chat_lang(context), 'game_left',
-                                                     __get_username(update)))
+                                                     __get_username(update)),
+                                     parse_mode=HTML)
             logger.info(f"User {__get_username(update)} left a game in group"
                         f" {__get_group_name(update)} - {__get_chat_id(update)}")
 
@@ -254,7 +266,8 @@ def leave(update, context):
         else:
             context.bot.send_message(chat_id=group_chat_id,
                                      text=get_string(__get_chat_lang(context), 'not_yet_in_game',
-                                                     __get_username(update)))
+                                                     __get_username(update)),
+                                     parse_mode=HTML)
 
     else:
         context.bot.send_message(chat_id=__get_chat_id(update),
@@ -325,7 +338,8 @@ def start_game(update, context, timer: bool = False):
         except Unauthorized:
             context.bot.send_message(chat_id=group_chat_id,
                                      text=get_string(__get_chat_lang(context), 'game_killed_user_did_not_start_the_bot',
-                                                     current_game['participants'][player]['username']))
+                                                     current_game['participants'][player]['username']),
+                                     parse_mode=HTML)
             kill_game = True
 
     if kill_game:
@@ -653,7 +667,8 @@ def kick(update, context):
 
     if game['is_finished']:
         context.bot.send_message(chat_id=group_id,
-                                 text=get_string(lang, 'game_already_finished_kick', game['creator']['username']))
+                                 text=get_string(lang, 'game_already_finished_kick', game['creator']['username']),
+                                 parse_mode=HTML)
         return
 
     reply_keyboard = [[]]
@@ -675,7 +690,8 @@ def kick(update, context):
 
     context.bot.send_message(chat_id=group_id,
                              text=get_string(lang, 'kick_user_choice_group', game['creator']['username']),
-                             reply_markup=reply_markup)
+                             reply_markup=reply_markup,
+                             parse_mode=HTML)
 
 
 def kill(update, context, bot_not_started: bool = False, bot_restarted: bool = False, group_id: int = None):
@@ -722,7 +738,8 @@ def kill(update, context, bot_not_started: bool = False, bot_restarted: bool = F
 
     if game['is_finished']:
         context.bot.send_message(chat_id=group_id,
-                                 text=get_string(lang, 'game_already_finished_kill', game['creator']['username']))
+                                 text=get_string(lang, 'game_already_finished_kill', game['creator']['username']),
+                                 parse_mode=HTML)
         return
 
     context.bot.send_message(chat_id=group_id,
@@ -732,7 +749,8 @@ def kill(update, context, bot_not_started: bool = False, bot_restarted: bool = F
 
     for user_id in game['participants']:
         context.bot.send_message(chat_id=user_id,
-                                 text=get_string(lang, 'game_killed_private', game['creator']['username']))
+                                 text=get_string(lang, 'game_killed_private', game['creator']['username']),
+                                 parse_mode=HTML)
 
     if delete_from_bd:
         del bd['games'][group_id]
@@ -845,7 +863,8 @@ def query_handler(update, context):
 
         try:
             context.bot.send_message(chat_id=user_id_to_kick,
-                                     text=get_string(lang, 'you_have_been_kicked', game['creator']['username']))
+                                     text=get_string(lang, 'you_have_been_kicked', game['creator']['username']),
+                                     parse_mode=HTML)
         except Unauthorized:
             pass
 
@@ -1013,7 +1032,6 @@ def query_handler(update, context):
             logger.info(f"User {__get_username_from_query(query)} changed the auto join to {changed_to} in group"
                         f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
 
-
     elif query.data.startswith("back_to"):
         destination = query.data.split("back_to_")[1].split("_")[0]
         chat_id = int(query.data.split("_")[3])
@@ -1082,9 +1100,7 @@ def error(update, context):
 
 
 def __get_username(update) -> str:
-    u = update.message.from_user.username
-    u2 = update.message.from_user.first_name
-    return "@" + str(u) if u else str(u2)  # TODO: check if @ can be used with the first_name
+    return mention_html(update.message.from_user.id, update.message.from_user.first_name)
 
 
 def __get_chat_lang(context) -> str:
@@ -1282,7 +1298,8 @@ def __forbid_not_game_creator(update, context, group_id, command: str) -> bool:
     if user_id != current_game['creator']['id']:
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(__get_chat_lang(context), 'forbid_not_game_creator',
-                                                 __get_username(update), current_game['creator']['username'], command))
+                                                 __get_username(update), current_game['creator']['username'], command),
+                                 parse_mode=HTML)
         return True
     return False
 
@@ -1581,9 +1598,7 @@ def __get_user_id_from_query(query) -> int:
 
 
 def __get_username_from_query(query) -> str:
-    u = query.from_user.username
-    u2 = query.from_user.first_name
-    return "@" + u if u else u2
+    return mention_html(query.from_user.id, query.from_user.first_name)
 
 
 def __get_chat_id_from_query(query) -> int:
