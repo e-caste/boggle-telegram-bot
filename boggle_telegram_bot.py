@@ -545,18 +545,17 @@ def isthere(update, context):
                                          text=get_string(lang, 'char_not_alpha', word))
                 return
 
-    not_played = words
+    played = []
     players = game['participants']
     for user_id in players:
         player_words = [w for w in players[user_id]['words']]
         for player_word in player_words:
             for word in words:
                 if player_word == word:
-                    players[user_id]['words'][player_word]['deleted'] = True
-                    not_played.remove(word)
+                    played.append(word)
 
-    played_str = "\n".join([word for word in words if word not in not_played])
-    not_played_str = "\n".join(not_played)
+    played_str = "\n".join(played)
+    not_played_str = "\n".join([word for word in words if word not in played])
 
     context.bot.send_message(chat_id=group_id,
                              text=get_string(lang, 'isthere_words', played_str, not_played_str),
