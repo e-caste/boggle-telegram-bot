@@ -3,6 +3,7 @@ new - create a new game
 join - join a game
 startgame - force-start the game
 delete - delete invalid words
+isthere - check if words have been played
 endgame - end a game
 leave - leave a game
 kick - kick a user from a game
