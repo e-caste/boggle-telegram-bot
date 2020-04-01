@@ -447,11 +447,11 @@ def delete(update, context):
                                  text=get_string(__get_chat_lang(context), msg='no_game_yet'))
         return
 
-    game = bd['games'][group_id]
-    lang = game['lang']
-
     if __forbid_not_game_creator(update, context, group_id, command="/delete"):
         return
+
+    game = bd['games'][group_id]
+    lang = game['lang']
 
     if not game['is_finished']:
         context.bot.send_message(chat_id=group_id,
@@ -504,6 +504,65 @@ def delete(update, context):
                                  parse_mode=HTML)
         logger.info(f"User {__get_username(update)} deleted some words in group"
                     f" {__get_group_name(update)} - {__get_chat_id(update)}")
+
+
+def isthere(update, context):
+    __check_bot_data_is_initialized(context)
+
+    if not __check_chat_is_group(update):
+        update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
+        return
+
+    __check_bot_was_restarted(update, context)
+
+    group_id = __get_chat_id(update)
+    bd = context.bot_data
+
+    if not bd['games'].get(group_id):
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(__get_chat_lang(context), msg='no_game_yet'))
+        return
+
+    game = bd['games'][group_id]
+    lang = game['lang']
+
+    if not game['is_finished']:
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(lang, msg='game_not_yet_finished'))
+        return
+
+    words = update.message.text.lower().split()[1:]  # skip /isthere
+
+    if len(words) == 0:
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(lang, 'no_words_after_isthere_command'))
+        return
+
+    for word in words:
+        for char in word:
+            if char not in letters_sets[lang]:
+                context.bot.send_message(chat_id=group_id,
+                                         text=get_string(lang, 'char_not_alpha', word))
+                return
+
+    not_played = words
+    players = game['participants']
+    for user_id in players:
+        player_words = [w for w in players[user_id]['words']]
+        for player_word in player_words:
+            for word in words:
+                if player_word == word:
+                    players[user_id]['words'][player_word]['deleted'] = True
+                    not_played.remove(word)
+
+    played_str = "\n".join([word for word in words if word not in not_played])
+    not_played_str = "\n".join(not_played)
+
+    context.bot.send_message(chat_id=group_id,
+                             text=get_string(lang, 'isthere_words', played_str, not_played_str),
+                             parse_mode=HTML)
+    logger.info(f"User {__get_username(update)} checked which words were played in group"
+                f" {__get_group_name(update)} - {__get_chat_id(update)}")
 
 
 def end_game(update, context):
@@ -1617,6 +1676,7 @@ def main():
     dp.add_handler(CommandHandler('join', join))
     dp.add_handler(CommandHandler('startgame', start_game))
     dp.add_handler(CommandHandler('delete', delete))
+    dp.add_handler(CommandHandler('isthere', isthere))
     dp.add_handler(CommandHandler('endgame', end_game))
     dp.add_handler(CommandHandler('leave', leave))
     dp.add_handler(CommandHandler('kick', kick))
