@@ -270,6 +270,10 @@ translations = {
         'eng': "The /isthere command alone isn't enough, you have to specify which words you wish to check have been "
                "played.\nTry /isthere 'word/list of words to check' (without ')"
     },
+    'isthere_words': {
+        'ita': "Parole <b>giocate</b>:\n{}\n\nParole <b>non giocate</b>:\n{}",
+        'eng': "Words <b>played</b>:\n{}\n\nWords <b>not played</b>:\n{}"
+    },
     'game_finished': {
         'ita': "<b>Fine partita!</b>\n\n{}: {} con {} punti!",
         'eng': "<b>Game ended!</b>\n\n{}: {} with {} points!"
