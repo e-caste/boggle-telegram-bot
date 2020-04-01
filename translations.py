@@ -264,6 +264,12 @@ translations = {
         'eng': "The /delete command alone isn't enough, you have to specify which words you wish to delete.\nTry "
                "/delete 'word/list of words to delete' (without ')"
     },
+    'no_words_after_isthere_command': {
+        'ita': "Il comando /isthere da solo non basta, devi specificare quali parole vuoi controllare che siano state "
+               "giocate.\nProva /isthere 'parola/lista di parole da controllare' (senza ').",
+        'eng': "The /isthere command alone isn't enough, you have to specify which words you wish to check have been "
+               "played.\nTry /isthere 'word/list of words to check' (without ')"
+    },
     'game_finished': {
         'ita': "<b>Fine partita!</b>\n\n{}: {} con {} punti!",
         'eng': "<b>Game ended!</b>\n\n{}: {} with {} points!"
