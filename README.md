@@ -33,3 +33,5 @@ If you want to run this bot on your own server, you need at least Python 3.6 and
 - `pip install -r requirements.txt`
 - `python boggle_telegram_bot.py`  
 - When you're done: `deactivate` to exit the virtual environment where you've installed the requirements.
+
+There is no noticeable improvement by using PyPy instead of CPython.
