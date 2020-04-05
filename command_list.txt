@@ -5,6 +5,7 @@ startgame - force-start the game
 delete - delete invalid words
 isthere - check if words have been played
 endgame - end a game
+last - check ranking of last n games
 leave - leave a game
 kick - kick a user from a game
 kill - cancel a game
