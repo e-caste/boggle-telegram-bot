@@ -281,8 +281,9 @@ translations = {
         'eng': "Here's the ranking of the last {} games:"
     },
     'not_enough_games_for_last_command': {
-        'ita': "Non ci sono ancora {} partite. Vi mostro la classifica per tutte le partite che avete giocato:",
-        'eng': "There are not {} games yet. I'll show you the ranking for all the games you've played:"
+        'ita': "Non avete ancora giocato {} partite. Vi mostro la classifica per tutte le partite che avete giocato, "
+               "cioè {}:",
+        'eng': "You haven't played {} games yet. I'll show you the ranking for all the games you've played ({}):"
     },
     'isthere_words': {
         'ita': "Parole <b>giocate</b>:\n{}\n\nParole <b>non giocate</b>:\n{}",
