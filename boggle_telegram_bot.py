@@ -736,7 +736,7 @@ def last(update, context):
             else:
                 players_points[player] = game_score
                 username = game['participants'][player]['username']
-                if '<a href="tg://user?id="' in username:  # saved as mention_html
+                if '<a href="tg://user?id=' in username:  # saved as mention_html
                     # TODO: check for ultra rare edge case where the username contains the string </a>
                     username = username.split(f'<a href="tg://user?id={player}">')[1].split("</a>")[0]
                 players_usernames[player] = username
