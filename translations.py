@@ -276,6 +276,10 @@ translations = {
         'eng': "The /last command has to be followed by the number of most recent games you want to see the ranking "
                "of.\nThe format "
     },
+    'last_n_games_ranking': {
+        'ita': "Ecco la classifica delle ultime {} partite:",
+        'eng': "Here's the ranking of the last {} games:"
+    },
     'not_enough_games_for_last_command': {
         'ita': "Non ci sono ancora {} partite. Vi mostro la classifica per tutte le partite che avete giocato:",
         'eng': "There are not {} games yet. I'll show you the ranking for all the games you've played:"
