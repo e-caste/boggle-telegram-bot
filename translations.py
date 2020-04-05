@@ -276,6 +276,10 @@ translations = {
         'eng': "The /last command has to be followed by the number of most recent games you want to see the ranking "
                "of.\nThe format "
     },
+    'not_enough_games_for_last_command': {
+        'ita': "Non ci sono ancora {} partite. Vi mostro la classifica per tutte le partite che avete giocato:",
+        'eng': "There are not {} games yet. I'll show you the ranking for all the games you've played:"
+    },
     'isthere_words': {
         'ita': "Parole <b>giocate</b>:\n{}\n\nParole <b>non giocate</b>:\n{}",
         'eng': "Words <b>played</b>:\n{}\n\nWords <b>not played</b>:\n{}"
