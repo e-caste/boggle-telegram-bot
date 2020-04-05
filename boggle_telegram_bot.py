@@ -694,6 +694,64 @@ def end_game(update, context):
                 f" {__get_group_name(update)} - {__get_chat_id(update)}")
 
 
+def last(update, context):
+    __check_bot_data_is_initialized(context)
+
+    lang = __get_chat_lang(context)
+
+    if not __check_chat_is_group(update):
+        update.message.reply_text(get_string(lang, msg='chat_is_not_group'))
+        return
+
+    group_id = __get_chat_id(update)
+    last_n = update.message.text.lower().split()[1:]  # skip /last
+
+    if len(last_n) != 1 or (len(last_n) == 1 and not last_n[0].isdigit()):
+        context.bot.send_message(chat_id=group_id,
+                                 text=get_string(lang, 'wrong_format_after_last_command'))
+        return
+
+    last_n = int(last_n[0])
+    cd = context.chat_data
+
+    tot_n_games = len(cd['games'])
+    if tot_n_games < last_n:
+        msg = get_string(lang, 'not_enough_games_for_last_command', last_n, tot_n_games)
+        last_n = tot_n_games
+    else:
+        msg = get_string(lang, 'last_n_games_ranking', last_n)
+
+    last_n_games = cd['games'][-last_n:]
+    players_points = {}
+    players_usernames = {}
+    for game in last_n_games:
+        for player in game['participants']:
+            game_score = 0
+            words = game['participants'][player]['words']
+            for word in words:
+                game_score += words[word]['points'] \
+                    if not words[word]['deleted'] and not words[word]['sent_by_other_players'] else 0
+            if player in players_points:
+                players_points[player] += game_score
+            else:
+                players_points[player] = game_score
+                username = game['participants'][player]['username']
+                if '<a href="tg://user?id="' in username:  # saved as mention_html
+                    # TODO: check for ultra rare edge case where the username contains the string </a>
+                    username = username.split(f'<a href="tg://user?id={player}">')[1].split("</a>")[0]
+                players_usernames[player] = username
+
+    players_points = {k: v for k, v in sorted(players_points.items(), key=lambda item: item[1], reverse=True)}
+
+    ranking = "\n".join([f"<code>#{i+1}</code> <b>{mention_html(p, players_usernames[p])}</b>: "
+                         f"<code>{players_points[p]}</code>"
+                         for i, p in enumerate(players_points)])
+
+    context.bot.send_message(chat_id=group_id,
+                             text=f"{msg}\n{ranking}",
+                             parse_mode=HTML)
+
+
 def kick(update, context):
     __check_bot_data_is_initialized(context)
 
@@ -1678,6 +1736,7 @@ def main():
     dp.add_handler(CommandHandler('isthere', isthere))
     dp.add_handler(CommandHandler('endgame', end_game))
     dp.add_handler(CommandHandler('leave', leave))
+    dp.add_handler(CommandHandler('last', last))
     dp.add_handler(CommandHandler('kick', kick))
     dp.add_handler(CommandHandler('kill', kill))
     dp.add_handler(CommandHandler('stats', show_statistics))
