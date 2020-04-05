@@ -270,6 +270,12 @@ translations = {
         'eng': "The /isthere command alone isn't enough, you have to specify which words you wish to check have been "
                "played.\nTry /isthere 'word/list of words to check' (without ')"
     },
+    'wrong_format_after_last_command': {
+        'ita': "Il comando /last dev'essere seguito dal numero di partite più recenti di cui fare la classifica.\n"
+               "Il formato è: /last n",
+        'eng': "The /last command has to be followed by the number of most recent games you want to see the ranking "
+               "of.\nThe format "
+    },
     'isthere_words': {
         'ita': "Parole <b>giocate</b>:\n{}\n\nParole <b>non giocate</b>:\n{}",
         'eng': "Words <b>played</b>:\n{}\n\nWords <b>not played</b>:\n{}"
