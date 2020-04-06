@@ -1013,7 +1013,7 @@ def query_handler(update, context):
             context.bot.edit_message_text(chat_id=query.message.chat_id,
                                           message_id=query.message.message_id,
                                           text=get_string(__get_chat_lang(context), 'settings_language_changed'))
-            logger.info(f"User {__get_user_id_from_query(query)} the language to {setting}"
+            logger.info(f"User {__get_user_for_log_from_query(query)} the language to {setting}"
                         f" in chat {__get_chat_id_from_query(query)}")
 
         elif setting == "timers":
