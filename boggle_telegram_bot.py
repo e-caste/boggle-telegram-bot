@@ -749,6 +749,8 @@ def last(update, context):
     context.bot.send_message(chat_id=group_id,
                              text=f"{msg}\n{ranking}",
                              parse_mode=HTML)
+    logger.info(f"User {__get_username(update)} asked for the ranking of the last {last_n} games in group"
+                f" {__get_group_name(update)} - {__get_chat_id(update)}")
 
 
 def kick(update, context):
@@ -1216,6 +1218,10 @@ def error(update, context):
 
 def __get_username(update) -> str:
     return mention_html(update.message.from_user.id, update.message.from_user.first_name)
+
+
+def __get_user_for_log(update) -> str:
+    return f"{update.message.from_user.first_name} ({update.message.from_user.id})"
 
 
 def __get_chat_lang(context) -> str:
@@ -1714,6 +1720,10 @@ def __get_user_id_from_query(query) -> int:
 
 def __get_username_from_query(query) -> str:
     return mention_html(query.from_user.id, query.from_user.first_name)
+
+
+def __get_user_for_log_from_query(query) -> str:
+    return f"{query.from_user.first_name} ({query.from_user.id})"
 
 
 def __get_chat_id_from_query(query) -> int:
