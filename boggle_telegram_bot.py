@@ -706,7 +706,7 @@ def last(update, context):
     group_id = __get_chat_id(update)
     last_n = update.message.text.lower().split()[1:]  # skip /last
 
-    if len(last_n) != 1 or (len(last_n) == 1 and not last_n[0].isdigit()):
+    if len(last_n) != 1 or (len(last_n) == 1 and not last_n[0].isdigit()):  # handles negative integers, floats, strings
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(lang, 'wrong_format_after_last_command'))
         return
@@ -736,14 +736,13 @@ def last(update, context):
             else:
                 players_points[player] = game_score
                 username = game['participants'][player]['username']
-                if '<a href="tg://user?id=' in username:  # saved as mention_html
-                    # TODO: check for ultra rare edge case where the username contains the string </a>
-                    username = username.split(f'<a href="tg://user?id={player}">')[1].split("</a>")[0]
+                if '<a href="tg://user?id=' not in username:  # not saved as mention_html
+                    username = mention_html(player, username)
                 players_usernames[player] = username
 
     players_points = {k: v for k, v in sorted(players_points.items(), key=lambda item: item[1], reverse=True)}
 
-    ranking = "\n".join([f"<code>#{i+1}</code> <b>{mention_html(p, players_usernames[p])}</b>: "
+    ranking = "\n".join([f"<code>#{i+1}</code> <b>{players_usernames[p]}</b>: "
                          f"<code>{players_points[p]}</code>"
                          for i, p in enumerate(players_points)])
 
