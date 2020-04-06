@@ -98,7 +98,7 @@ def new(update, context):
                                                            __get_username(update),
                                                            cd['timers']['durations']['newgame'], ""),
                                            parse_mode=HTML)
-        logger.info(f"New game by {__get_user_for_log(update)} in group"
+        logger.info(f"User {__get_user_for_log(update)} created a game in group"
                     f" {__get_group_name(update)} - {__get_chat_id(update)}")
         cd['games'].append({
             'unix_epoch': int(time()),
