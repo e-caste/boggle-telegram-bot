@@ -43,7 +43,7 @@ def start(update, context):
     __check_bot_was_restarted(update, context)
 
     reply = get_string(__get_chat_lang(context), 'welcome', update.message.from_user.first_name)
-    logger.info(f"User {__get_username(update)} started the bot.")
+    logger.info(f"User {__get_user_for_log(update)} started the bot.")
     context.bot.send_message(chat_id=__get_chat_id(update),
                              text=reply,
                              parse_mode=HTML)
@@ -98,7 +98,7 @@ def new(update, context):
                                                            __get_username(update),
                                                            cd['timers']['durations']['newgame'], ""),
                                            parse_mode=HTML)
-        logger.info(f"New game by {__get_username(update)} in group"
+        logger.info(f"New game by {__get_user_for_log(update)} in group"
                     f" {__get_group_name(update)} - {__get_chat_id(update)}")
         cd['games'].append({
             'unix_epoch': int(time()),
@@ -178,7 +178,7 @@ def join(update, context):
                                      text=get_string(__get_chat_lang(context), 'game_joined',
                                                      __get_username(update), current_game['creator']['username']),
                                      parse_mode=HTML)
-            logger.info(f"User {__get_username(update)} joined a game in group"
+            logger.info(f"User {__get_user_for_log(update)} joined a game in group"
                         f" {__get_group_name(update)} - {__get_chat_id(update)}")
             usernames = ""
             for user_id in current_game['participants']:
@@ -219,7 +219,7 @@ def leave(update, context):
                                                          __get_username(update)),
                                          parse_mode=HTML)
                 del game['participants'][user_id]
-                logger.info(f"User {__get_username(update)} left a game in group"
+                logger.info(f"User {__get_user_for_log(update)} left a game in group"
                             f" {__get_group_name(update)} - {__get_chat_id(update)}")
             else:
                 context.bot.send_message(chat_id=group_chat_id,
@@ -249,7 +249,7 @@ def leave(update, context):
                                      text=get_string(__get_chat_lang(context), 'game_left',
                                                      __get_username(update)),
                                      parse_mode=HTML)
-            logger.info(f"User {__get_username(update)} left a game in group"
+            logger.info(f"User {__get_user_for_log(update)} left a game in group"
                         f" {__get_group_name(update)} - {__get_chat_id(update)}")
 
             usernames = ""
@@ -324,7 +324,7 @@ def start_game(update, context, timer: bool = False):
 
     context.bot.send_message(chat_id=group_chat_id,
                              text=get_string(__get_chat_lang(context), 'game_started_group'))
-    logger.info(f"User {__get_username(update)} started a game in group"
+    logger.info(f"User {__get_user_for_log(update)} started a game in group"
                 f" {__get_group_name(update)} - {__get_chat_id(update)}")
 
     text = get_string(__get_game_lang(context, group_chat_id), 'game_started_private',
@@ -502,7 +502,7 @@ def delete(update, context):
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(lang, 'all_words_deleted'),
                                  parse_mode=HTML)
-        logger.info(f"User {__get_username(update)} deleted some words in group"
+        logger.info(f"User {__get_user_for_log(update)} deleted some words in group"
                     f" {__get_group_name(update)} - {__get_chat_id(update)}")
 
 
@@ -560,7 +560,7 @@ def isthere(update, context):
     context.bot.send_message(chat_id=group_id,
                              text=get_string(lang, 'isthere_words', played_str, not_played_str),
                              parse_mode=HTML)
-    logger.info(f"User {__get_username(update)} checked which words were played in group"
+    logger.info(f"User {__get_user_for_log(update)} checked which words were played in group"
                 f" {__get_group_name(update)} - {__get_chat_id(update)}")
 
 
@@ -690,7 +690,7 @@ def end_game(update, context):
     context.bot.send_message(chat_id=group_id,
                              text=text,
                              parse_mode=HTML)
-    logger.info(f"User {__get_username(update)} ended a game in group"
+    logger.info(f"User {__get_user_for_log(update)} ended a game in group"
                 f" {__get_group_name(update)} - {__get_chat_id(update)}")
 
 
@@ -749,7 +749,7 @@ def last(update, context):
     context.bot.send_message(chat_id=group_id,
                              text=f"{msg}\n{ranking}",
                              parse_mode=HTML)
-    logger.info(f"User {__get_username(update)} asked for the ranking of the last {last_n} games in group"
+    logger.info(f"User {__get_user_for_log(update)} asked for the ranking of the last {last_n} games in group"
                 f" {__get_group_name(update)} - {__get_chat_id(update)}")
 
 
@@ -861,7 +861,7 @@ def kill(update, context, bot_not_started: bool = False, bot_restarted: bool = F
 
     context.bot.send_message(chat_id=group_id,
                              text=get_string(lang, 'game_killed_group'))
-    logger.info(f"User {__get_username(update)} killed a game in group"
+    logger.info(f"User {__get_user_for_log(update)} killed a game in group"
                 f" {__get_group_name(update)} - {__get_chat_id(update)}")
 
     for user_id in game['participants']:
@@ -902,7 +902,7 @@ def show_statistics(update, context):
 
     else:
         __show_user_stats(context, user_id, __get_username(update))
-        logger.info(f"User {__get_username(update)} asked for his stats in a private chat")
+        logger.info(f"User {__get_user_for_log(update)} asked for his stats in a private chat")
 
 
 def settings(update, context):
@@ -925,7 +925,7 @@ def show_rules(update, context):
     context.bot.send_message(chat_id=__get_chat_id(update),
                              text=get_string(__get_chat_lang(context), 'rules'),
                              parse_mode=HTML)
-    logger.info(f"User {__get_username(update)} asked for the rules")
+    logger.info(f"User {__get_user_for_log(update)} asked for the rules")
 
 
 def show_usage(update, context):
@@ -934,7 +934,7 @@ def show_usage(update, context):
     context.bot.send_message(chat_id=__get_chat_id(update),
                              text=get_string(__get_chat_lang(context), 'usage'),
                              parse_mode=HTML)
-    logger.info(f"User {__get_username(update)} asked for the usage")
+    logger.info(f"User {__get_user_for_log(update)} asked for the usage")
 
 
 def show_help(update, context):
@@ -942,7 +942,7 @@ def show_help(update, context):
     __check_bot_was_restarted(update, context)
     context.bot.send_message(chat_id=__get_chat_id(update),
                              text=get_string(__get_chat_lang(context), msg='help'))
-    logger.info(f"User {__get_username(update)} asked for help")
+    logger.info(f"User {__get_user_for_log(update)} asked for help")
 
 
 def query_handler(update, context):
@@ -974,7 +974,7 @@ def query_handler(update, context):
                                       text=get_string(lang,
                                                       'kick_user_successful',
                                                       game['participants'][user_id_to_kick]['username']))
-        logger.info(f"User {__get_username_from_query(query)} kicked "
+        logger.info(f"User {__get_user_for_log_from_query(query)} kicked "
                     f"{game['participants'][user_id_to_kick]['username']} from a game in group"
                     f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
 
@@ -1013,7 +1013,7 @@ def query_handler(update, context):
             context.bot.edit_message_text(chat_id=query.message.chat_id,
                                           message_id=query.message.message_id,
                                           text=get_string(__get_chat_lang(context), 'settings_language_changed'))
-            logger.info(f"User {__get_username_from_query(query)} the language to {setting}"
+            logger.info(f"User {__get_user_id_from_query(query)} the language to {setting}"
                         f" in chat {__get_chat_id_from_query(query)}")
 
         elif setting == "timers":
@@ -1074,7 +1074,7 @@ def query_handler(update, context):
                                           message_id=query.message.message_id,
                                           text=get_string(__get_chat_lang(context), 'settings_newgametimer_changed',
                                                           setting[3:]))
-            logger.info(f"User {__get_username_from_query(query)} changed the newgame timer to {setting[3:]} in group"
+            logger.info(f"User {__get_user_for_log_from_query(query)} changed the newgame timer to {setting[3:]} in group"
                         f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
 
         elif setting in ["in30s", "in1min", "in1min30s", "in2min", "in2min30s", "in3min", "in3min30s", "in4min",
@@ -1103,7 +1103,7 @@ def query_handler(update, context):
                                           message_id=query.message.message_id,
                                           text=get_string(__get_chat_lang(context), 'settings_ingametimer_changed',
                                                           setting[2:]))
-            logger.info(f"User {__get_username_from_query(query)} changed the ingame timer to {setting[2:]} in group"
+            logger.info(f"User {__get_user_for_log_from_query(query)} changed the ingame timer to {setting[2:]} in group"
                         f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
 
         elif setting == "board":
@@ -1122,7 +1122,7 @@ def query_handler(update, context):
             context.bot.edit_message_text(chat_id=query.message.chat_id,
                                           message_id=query.message.message_id,
                                           text=get_string(__get_chat_lang(context), 'settings_board_changed', setting))
-            logger.info(f"User {__get_username_from_query(query)} changed the board dimensions to {setting} in group"
+            logger.info(f"User {__get_user_for_log_from_query(query)} changed the board dimensions to {setting} in group"
                         f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
 
         elif setting == "autojoin":
@@ -1146,7 +1146,7 @@ def query_handler(update, context):
                                           message_id=query.message.message_id,
                                           text=get_string(__get_chat_lang(context), 'settings_auto_join_changed',
                                                           changed_to))
-            logger.info(f"User {__get_username_from_query(query)} changed the auto join to {changed_to} in group"
+            logger.info(f"User {__get_user_for_log_from_query(query)} changed the auto join to {changed_to} in group"
                         f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
 
     elif query.data.startswith("back_to"):
@@ -1178,11 +1178,11 @@ def query_handler(update, context):
 
         if whose_stats == "group":
             __show_group_stats(context, chat_id)
-            logger.info(f"User {__get_username_from_query(query)} asked for the stats of group"
+            logger.info(f"User {__get_user_for_log_from_query(query)} asked for the stats of group"
                         f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
         elif whose_stats == "user":
             __show_user_stats(context, chat_id, __get_username_from_query(query), __get_chat_id_from_query(query))
-            logger.info(f"User {__get_username_from_query(query)} asked for their stats in group"
+            logger.info(f"User {__get_user_for_log_from_query(query)} asked for their stats in group"
                         f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
 
 
