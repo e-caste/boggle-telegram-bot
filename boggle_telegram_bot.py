@@ -664,6 +664,13 @@ def end_game(update, context):
         for word in game['participants'][user_id]['words']:
             us[user_id]['matches']['latest']['words'][word] = game['participants'][user_id]['words'][word]['points']
 
+    for user_id in game['participants']:
+        context.bot.edit_message_text(chat_id=group_id,
+                                      message_id=game['participants'][user_id]['result_message_id'],
+                                      text=__get_formatted_words(context, group_id, with_points=True, only_valid=True,
+                                                                 user_id=user_id),
+                                      parse_mode=HTML)
+
     chat_game = __get_latest_game(context)
     cd['games'].remove(chat_game)
     cd['games'].append(game)
@@ -1569,7 +1576,8 @@ def __check_words_in_common(context, group_id: int):
                                 words_2[word_2]['sent_by_other_players'] = True
 
 
-def __get_formatted_words(context, group_id: int, with_points: bool, user_id: int = None) -> str:
+def __get_formatted_words(context, group_id: int, with_points: bool, only_valid: bool = False,
+                          user_id: int = None) -> str:
     players = context.bot_data['games'][group_id]['participants']
     res = ""
 
@@ -1583,7 +1591,11 @@ def __get_formatted_words(context, group_id: int, with_points: bool, user_id: in
                 res += "<i>"
             res += f"{word}"
             if with_points:
-                res += f": {words[word]['points']}"
+                if only_valid:
+                    res += f": {words[word]['points']}" if not words[word]['deleted'] \
+                                                        and not words[word]['sent_by_other_players'] else ""
+                else:
+                    res += f": {words[word]['points']}"
             if words[word]['sent_by_other_players'] or words[word]['deleted']:
                 res += "</strike>"
             else:
