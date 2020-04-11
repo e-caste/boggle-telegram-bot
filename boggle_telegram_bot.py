@@ -665,11 +665,14 @@ def end_game(update, context):
             us[user_id]['matches']['latest']['words'][word] = game['participants'][user_id]['words'][word]['points']
 
     for user_id in game['participants']:
-        context.bot.edit_message_text(chat_id=group_id,
-                                      message_id=game['participants'][user_id]['result_message_id'],
-                                      text=__get_formatted_words(context, group_id, with_points=True, only_valid=True,
-                                                                 user_id=user_id),
-                                      parse_mode=HTML)
+        try:
+            context.bot.edit_message_text(chat_id=group_id,
+                                          message_id=game['participants'][user_id]['result_message_id'],
+                                          text=__get_formatted_words(context, group_id, with_points=True, only_valid=True,
+                                                                     user_id=user_id),
+                                          parse_mode=HTML)
+        except BadRequest:
+            pass
 
     chat_game = __get_latest_game(context)
     cd['games'].remove(chat_game)
