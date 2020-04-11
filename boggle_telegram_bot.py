@@ -683,10 +683,7 @@ def end_game(update, context):
     elif len(winners) > 1:
         winner_str = get_string(lang, 'game_winners_plural')
 
-    winners_usernames = ""
-    for user_id in winners:
-        winners_usernames += winners[user_id] + ", "
-    winners_usernames = winners_usernames[:-2]
+    winners_usernames = ', '.join([winners[uid] for uid in winners])
 
     text = get_string(lang, 'game_finished', winner_str, winners_usernames, max_points) + "\n"
     players_points = {k: v for k, v in sorted(players_points.items(), key=lambda item: item[1], reverse=True)}
