@@ -710,6 +710,8 @@ def last(update, context):
         update.message.reply_text(get_string(lang, msg='chat_is_not_group'))
         return
 
+    __check_bot_was_restarted(update, context)
+
     group_id = __get_chat_id(update)
     last_n = update.message.text.lower().split()[1:]  # skip /last
 
