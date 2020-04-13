@@ -505,6 +505,10 @@ translations = {
         'ita': "Che notifica vuoi ricevere?",
         'eng': "Which notification would you like to get?"
     },
+    'notify_just_once': {
+        'ita': "Solo per la prossima partita",
+        'eng': "Just once for the next game"
+    }
     'close_button': {
         'ita': "❌ Chiudi",
         'eng': "❌ Close"
