@@ -928,6 +928,33 @@ def settings(update, context):
                              reply_markup=reply_keyboard)
 
 
+def notify(update, context):
+    __check_bot_data_is_initialized(context)
+    __check_bot_was_restarted(update, context)
+
+    if not __check_chat_is_group(update):
+        update.message.reply_text(get_string(__get_chat_lang(context), msg='chat_is_not_group'))
+        return
+
+    lang = __get_chat_lang(context)
+    group_id = __get_chat_id(update)
+    user_id = __get_user_id(update)
+
+    reply_keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton(get_string(lang, 'notify_justonce_button'),
+                              callback_data=f"notify_justonce_g{group_id}_u{user_id}")],
+        [InlineKeyboardButton(get_string(lang, 'notify_allgames_button'),
+                              callback_data=f"notify_allgames_g{group_id}_u{user_id}")],
+        [InlineKeyboardButton(get_string(lang, 'notify_disable_button'),
+                              callback_data=f"notify_disable_g{group_id}_u{user_id}")],
+        [InlineKeyboardButton(get_string(lang, 'close_button'), callback_data="close")]
+    ])
+
+    context.bot.send_message(chat_id=group_id,
+                             text=get_string(lang, 'notify_prompt'),
+                             reply_markup=reply_keyboard)
+
+
 def show_rules(update, context):
     __check_bot_data_is_initialized(context)
     __check_bot_was_restarted(update, context)
