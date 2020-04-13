@@ -1791,6 +1791,7 @@ def main():
     dp.add_handler(CommandHandler('kill', kill))
     dp.add_handler(CommandHandler('stats', show_statistics))
     dp.add_handler(CommandHandler('settings', settings))
+    dp.add_handler(CommandHandler('notify', notify))
     dp.add_handler(CommandHandler('rules', show_rules))
     dp.add_handler(CommandHandler('usage', show_usage))
     dp.add_handler(CommandHandler('help', show_help))
