@@ -508,6 +508,10 @@ translations = {
     'notify_just_once': {
         'ita': "Solo per la prossima partita",
         'eng': "Just once for the next game"
+    },
+    'notify_all_games': {
+        'ita': "Per tutte le partite in questo gruppo",
+        'eng': "For all games in this group chat"
     }
     'close_button': {
         'ita': "❌ Chiudi",
