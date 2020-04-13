@@ -501,6 +501,10 @@ translations = {
         'ita': "Parole:",
         'eng': "Words:"
     },
+    'notify_prompt': {
+        'ita': "Che notifica vuoi ricevere?",
+        'eng': "Which notification would you like to get?"
+    },
     'close_button': {
         'ita': "❌ Chiudi",
         'eng': "❌ Close"
