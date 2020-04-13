@@ -512,7 +512,11 @@ translations = {
     'notify_all_games': {
         'ita': "Per tutte le partite in questo gruppo",
         'eng': "For all games in this group chat"
-    }
+    },
+    'notify_disable': {
+        'ita': "Disabilita notifiche",
+        'eng': "Disable notifications"
+    },
     'close_button': {
         'ita': "❌ Chiudi",
         'eng': "❌ Close"
