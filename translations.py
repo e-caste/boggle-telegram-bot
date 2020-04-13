@@ -505,15 +505,15 @@ translations = {
         'ita': "Che notifica vuoi ricevere?",
         'eng': "Which notification would you like to get?"
     },
-    'notify_just_once': {
+    'notify_justonce_button': {
         'ita': "Solo per la prossima partita",
         'eng': "Just once for the next game"
     },
-    'notify_all_games': {
+    'notify_allgames_button': {
         'ita': "Per tutte le partite in questo gruppo",
         'eng': "For all games in this group chat"
     },
-    'notify_disable': {
+    'notify_disable_button': {
         'ita': "Disabilita notifiche",
         'eng': "Disable notifications"
     },
