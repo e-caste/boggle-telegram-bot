@@ -11,6 +11,7 @@ kick - kick a user from a game
 kill - cancel a game
 stats - show stats
 settings - change settings
+notify - receive notifications for new games
 rules - show rules
 usage - show usage
 help - show help
