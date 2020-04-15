@@ -541,6 +541,10 @@ translations = {
         'ita': "Non ti sarebbero arrivate comunque le notifiche, {}, ma meglio stare sicuri.",
         'eng': "You were already unsubscribed from all notifications, {}."
     },
+    'notify_newgame': {
+        'ita': "È stata creata una partita nel gruppo {}!",
+        'eng': "A new game was created in group {}!"
+    },
     'close_button': {
         'ita': "❌ Chiudi",
         'eng': "❌ Close"
