@@ -518,12 +518,20 @@ translations = {
         'eng': "Disable notifications"
     },
     'notify_justonce_confirm': {
-        'ita': "Va bene, {}, sarai notificato della prossima partita in questo gruppo!",
+        'ita': "Va bene, {}, ti avviserò della prossima partita in questo gruppo!",
         'eng': "Alright, {}, you'll be notified of the next game in this group chat!"
     },
     'notify_justonce_alreadypresent': {
         'ita': "Sei già in attesa della notifica della prossima partita, {}!",
         'eng': "You're already subscribed to the notification for the next game, {}!"
+    },
+    'notify_allgames_confirm': {
+        'ita': "Va bene, {}, ti avviserò di tutte le prossime partite in questo gruppo!",
+        'eng': "Alright, {}, you'll be notified of all the next games in this group chat!"
+    },
+    'notify_allgames_alreadypresent': {
+        'ita': "Sei già in attesa delle notifiche delle partite di questo gruppo, {}!",
+        'eng': "You're already subscribed to the notifications for the next games, {}!"
     },
     'close_button': {
         'ita': "❌ Chiudi",
