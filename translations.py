@@ -517,6 +517,10 @@ translations = {
         'ita': "Disabilita notifiche",
         'eng': "Disable notifications"
     },
+    'notify_justonce_confirm': {
+        'ita': "Va bene, {}, sarai notificato della prossima partita in questo gruppo!",
+        'eng': "Alright, {}, you'll be notified of the next game in this group chat!"
+    },
     'close_button': {
         'ita': "❌ Chiudi",
         'eng': "❌ Close"
