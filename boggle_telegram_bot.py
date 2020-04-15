@@ -1271,40 +1271,46 @@ def query_handler(update, context):
                 notify['justonce'].append(user_id)
                 if user_id in notify['allgames']:
                     notify['allgames'].remove(user_id)
-                context.bot.send_message(chat_id=group_id,
-                                         text=get_string(lang, 'notify_justonce_confirm', username),
-                                         parse_mode=HTML)
+                context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                              message_id=query.message.message_id,
+                                              text=get_string(lang, 'notify_justonce_confirm', username),
+                                              parse_mode=HTML)
             else:
-                context.bot.send_message(chat_id=group_id,
-                                         text=get_string(lang, 'notify_justonce_alreadypresent', username),
-                                         parse_mode=HTML)
+                context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                              message_id=query.message.message_id,
+                                              text=get_string(lang, 'notify_justonce_alreadypresent', username),
+                                              parse_mode=HTML)
 
         elif command == "allgames":
             if user_id not in notify['allgames']:
                 if user_id in notify['justonce']:
                     notify['justonce'].remove(user_id)
                 notify['allgames'].append(user_id)
-                context.bot.send_message(chat_id=group_id,
-                                         text=get_string(lang, 'notify_allgames_confirm', username),
-                                         parse_mode=HTML)
+                context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                              message_id=query.message.message_id,
+                                              text=get_string(lang, 'notify_allgames_confirm', username),
+                                              parse_mode=HTML)
             else:
-                context.bot.send_message(chat_id=group_id,
-                                         text=get_string(lang, 'notify_allgames_alreadypresent', username),
-                                         parse_mode=HTML)
+                context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                              message_id=query.message.message_id,
+                                              text=get_string(lang, 'notify_allgames_alreadypresent', username),
+                                              parse_mode=HTML)
 
         elif command == "disable":
             if user_id not in notify['justonce'] and user_id not in notify['allgames']:
-                context.bot.send_message(chat_id=group_id,
-                                         text=get_string(lang, 'notify_disable_notpresent', username),
-                                         parse_mode=HTML)
+                context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                              message_id=query.message.message_id,
+                                              text=get_string(lang, 'notify_disable_notpresent', username),
+                                              parse_mode=HTML)
             else:
                 if user_id in notify['justonce']:
                     notify['justonce'].remove(user_id)
                 if user_id in notify['allgames']:
                     notify['allgames'].remove(user_id)
-                context.bot.send_message(chat_id=group_id,
-                                         text=get_string(lang, 'notify_disable_confirm', username),
-                                         parse_mode=HTML)
+                context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                              message_id=query.message.message_id,
+                                              text=get_string(lang, 'notify_disable_confirm', username),
+                                              parse_mode=HTML)
 
 
 def error(update, context):
