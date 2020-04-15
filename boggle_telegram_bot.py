@@ -966,15 +966,17 @@ def notify(update, context):
     lang = __get_chat_lang(context)
     group_id = __get_chat_id(update)
     user_id = __get_user_id(update)
-    username = __get_username(update)
+    username = update.message.from_user.first_name
+    if len(username) > 25:  # 27 = 64 - len(f"notify_justonce_{group_id}_{user_id}_"), 25 for good measure
+        username = "dude"  # hacky way to prevent exceeding 64B maximum length of callback_data
 
     reply_keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton(get_string(lang, 'notify_justonce_button'),
-                              callback_data=f"notify_justonce_g{group_id}_u{user_id}_n{username}")],
+                              callback_data=f"notify_justonce_{group_id}_{user_id}_{username}")],
         [InlineKeyboardButton(get_string(lang, 'notify_allgames_button'),
-                              callback_data=f"notify_allgames_g{group_id}_u{user_id}_n{username}")],
+                              callback_data=f"notify_allgames_{group_id}_{user_id}_{username}")],
         [InlineKeyboardButton(get_string(lang, 'notify_disable_button'),
-                              callback_data=f"notify_disable_g{group_id}_u{user_id}_n{username}")],
+                              callback_data=f"notify_disable_{group_id}_{user_id}_{username}")],
         [InlineKeyboardButton(get_string(lang, 'close_button'), callback_data="close")]
     ])
 
@@ -1251,9 +1253,9 @@ def query_handler(update, context):
 
     elif query.data.startswith("notify"):
         command = query.data.split("_")[1]
-        group_id = query.data.split("_")[2][1:]  # remove initial g
-        user_id = query.data.split("_")[3][1:]  # remove initial u
-        username = query.data.split("_")[4][1:]  # remove initial n
+        group_id = query.data.split("_")[2]
+        user_id = query.data.split("_")[3]
+        username = query.data.split("_")[4]
 
         notify = context.chat_data['notify']
         lang = __get_chat_lang(context)
