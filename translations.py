@@ -533,6 +533,10 @@ translations = {
         'ita': "Sei già in attesa delle notifiche delle partite di questo gruppo, {}!",
         'eng': "You're already subscribed to the notifications for the next games, {}!"
     },
+    'notify_disable_notpresent': {
+        'ita': "Non ti sarebbero arrivate comunque le notifiche, {}, ma meglio stare sicuri.",
+        'eng': "You were already unsubscribed from all notifications, {}."
+    },
     'close_button': {
         'ita': "❌ Chiudi",
         'eng': "❌ Close"
