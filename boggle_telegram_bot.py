@@ -939,14 +939,15 @@ def notify(update, context):
     lang = __get_chat_lang(context)
     group_id = __get_chat_id(update)
     user_id = __get_user_id(update)
+    username = __get_username(update)
 
     reply_keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton(get_string(lang, 'notify_justonce_button'),
-                              callback_data=f"notify_justonce_g{group_id}_u{user_id}")],
+                              callback_data=f"notify_justonce_g{group_id}_u{user_id}_n{username}")],
         [InlineKeyboardButton(get_string(lang, 'notify_allgames_button'),
-                              callback_data=f"notify_allgames_g{group_id}_u{user_id}")],
+                              callback_data=f"notify_allgames_g{group_id}_u{user_id}_n{username}")],
         [InlineKeyboardButton(get_string(lang, 'notify_disable_button'),
-                              callback_data=f"notify_disable_g{group_id}_u{user_id}")],
+                              callback_data=f"notify_disable_g{group_id}_u{user_id}_n{username}")],
         [InlineKeyboardButton(get_string(lang, 'close_button'), callback_data="close")]
     ])
 
@@ -1221,6 +1222,55 @@ def query_handler(update, context):
             logger.info(f"User {__get_user_for_log_from_query(query)} asked for their stats in group"
                         f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
 
+    elif query.data.startswith("notify"):
+        command = query.data.split("_")[1]
+        group_id = query.data.split("_")[2][1:]  # remove initial g
+        user_id = query.data.split("_")[3][1:]  # remove initial u
+        username = query.data.split("_")[4][1:]  # remove initial n
+
+        notify = context.chat_data['notify']
+        lang = __get_chat_lang(context)
+
+        if command == "justonce":
+            if user_id not in notify['justonce']:
+                notify['justonce'].append(user_id)
+                if user_id in notify['allgames']:
+                    notify['allgames'].remove(user_id)
+                context.bot.send_message(chat_id=group_id,
+                                         text=get_string(lang, 'notify_justonce_confirm', username),
+                                         parse_mode=HTML)
+            else:
+                context.bot.send_message(chat_id=group_id,
+                                         text=get_string(lang, 'notify_justonce_alreadypresent', username),
+                                         parse_mode=HTML)
+
+        elif command == "allgames":
+            if user_id not in notify['allgames']:
+                if user_id in notify['justonce']:
+                    notify['justonce'].remove(user_id)
+                notify['allgames'].append(user_id)
+                context.bot.send_message(chat_id=group_id,
+                                         text=get_string(lang, 'notify_allgames_confirm', username),
+                                         parse_mode=HTML)
+            else:
+                context.bot.send_message(chat_id=group_id,
+                                         text=get_string(lang, 'notify_allgames_alreadypresent', username),
+                                         parse_mode=HTML)
+
+        elif command == "disable":
+            if user_id not in notify['justonce'] and user_id not in notify['allgames']:
+                context.bot.send_message(chat_id=group_id,
+                                         text=get_string(lang, 'notify_disable_notpresent', username),
+                                         parse_mode=HTML)
+            else:
+                if user_id in notify['justonce']:
+                    notify['justonce'].remove(user_id)
+                if user_id in notify['allgames']:
+                    notify['allgames'].remove(user_id)
+                context.bot.send_message(chat_id=group_id,
+                                         text=get_string(lang, 'notify_disable_confirm', username),
+                                         parse_mode=HTML)
+
 
 def error(update, context):
     """Log Errors caused by Updates."""
@@ -1359,6 +1409,10 @@ def __init_chat_data(context):
         'lang': 'eng',
         'table_dimensions': '4x4',
         'auto_join': True
+    }
+    cd['notify'] = {
+        'justonce': [],
+        'allgames': []
     }
 
 
