@@ -521,6 +521,10 @@ translations = {
         'ita': "Va bene, {}, sarai notificato della prossima partita in questo gruppo!",
         'eng': "Alright, {}, you'll be notified of the next game in this group chat!"
     },
+    'notify_justonce_alreadypresent': {
+        'ita': "Sei già in attesa della notifica della prossima partita, {}!",
+        'eng': "You're already subscribed to the notification for the next game, {}!"
+    },
     'close_button': {
         'ita': "❌ Chiudi",
         'eng': "❌ Close"
