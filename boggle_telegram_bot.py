@@ -83,8 +83,14 @@ def new(update, context):
                                      parse_mode=HTML)
         return
 
-    if not cd.get('timers'):
+    if 'timers' not in cd:
         __init_chat_data(context)
+
+    if 'notify' not in cd:
+        cd['notify'] = {
+            'justonce': [],
+            'allgames': []
+        }
 
     if not cd['timers']['newgame']:
         t = Timer(interval=cd['timers']['durations']['newgame'],
