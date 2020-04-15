@@ -106,10 +106,11 @@ def new(update, context):
                                            parse_mode=HTML)
         logger.info(f"User {__get_user_for_log(update)} created a game in group"
                     f" {__get_group_name(update)} - {__get_chat_id(update)}")
+        creator_id = __get_user_id(update)
         cd['games'].append({
             'unix_epoch': int(time()),
             'creator': {
-                'id': __get_user_id(update),
+                'id': creator_id,
                 'username': __get_username(update)
             },
             'participants': {},
@@ -121,6 +122,26 @@ def new(update, context):
         })
         if cd['settings']['auto_join']:
             join(update, context)  # auto-join game creator
+        for user_id in cd['notify']['justonce']:
+            try:
+                if user_id != creator_id:
+                    context.bot.send_message(chat_id=user_id,
+                                             text=get_string(__get_chat_lang(context), 'notify_newgame',
+                                                             __get_group_name(update)),
+                                             parse_mode=HTML)
+            except BadRequest:
+                pass
+        cd['notify']['justonce'] = []  # remove all user_ids since they've been notified
+        for user_id in cd['notify']['allgames']:
+            try:
+                if user_id != creator_id:
+                    context.bot.send_message(chat_id=user_id,
+                                             text=get_string(__get_chat_lang(context), 'notify_newgame',
+                                                             __get_group_name(update)),
+                                             parse_mode=HTML)
+            except BadRequest:
+                pass
+
     else:
         context.bot.send_message(chat_id=__get_chat_id(update),
                                  text=get_string(__get_chat_lang(context), 'game_already_created',
