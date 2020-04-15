@@ -1253,7 +1253,7 @@ def query_handler(update, context):
 
     elif query.data.startswith("notify"):
         command = query.data.split("_")[1]
-        group_id = query.data.split("_")[2]
+        # group_id = query.data.split("_")[2]
         user_id = query.data.split("_")[3]
         username = query.data.split("_")[4]
 
@@ -1275,6 +1275,8 @@ def query_handler(update, context):
                                               message_id=query.message.message_id,
                                               text=get_string(lang, 'notify_justonce_confirm', username),
                                               parse_mode=HTML)
+                logger.info(f"User {__get_user_for_log_from_query(query)} enabled the notification just once in group"
+                            f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
             else:
                 context.bot.edit_message_text(chat_id=query.message.chat_id,
                                               message_id=query.message.message_id,
@@ -1290,6 +1292,8 @@ def query_handler(update, context):
                                               message_id=query.message.message_id,
                                               text=get_string(lang, 'notify_allgames_confirm', username),
                                               parse_mode=HTML)
+                logger.info(f"User {__get_user_for_log_from_query(query)} enabled notifications in group"
+                            f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
             else:
                 context.bot.edit_message_text(chat_id=query.message.chat_id,
                                               message_id=query.message.message_id,
@@ -1311,6 +1315,8 @@ def query_handler(update, context):
                                               message_id=query.message.message_id,
                                               text=get_string(lang, 'notify_disable_confirm', username),
                                               parse_mode=HTML)
+                logger.info(f"User {__get_user_for_log_from_query(query)} disabled notifications in group"
+                            f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
 
 
 def error(update, context):
