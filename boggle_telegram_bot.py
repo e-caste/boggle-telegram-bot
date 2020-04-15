@@ -1257,7 +1257,13 @@ def query_handler(update, context):
         user_id = query.data.split("_")[3]
         username = query.data.split("_")[4]
 
-        notify = context.chat_data['notify']
+        cd = context.chat_data
+        if 'notify' not in cd:
+            cd['notify'] = {
+                'justonce': [],
+                'allgames': []
+            }
+        notify = cd['notify']
         lang = __get_chat_lang(context)
 
         if command == "justonce":
