@@ -576,6 +576,7 @@ translations = {
                "Usa /kill per annullare una partita che hai creato.\n"
                "Usa /stats per dare un'occhiata alle tue statistiche o a quelle del gruppo.\n"
                "Usa /settings per modificare le impostazioni per te o per un gruppo.\n"
+               "Usa /notify per ricevere una notifica quando viene creata una partita.\n"
                "Usa /rules per visualizzare le regole del Paroliere.\n"
                "Usa /usage per visualizzare come utilizzare il bot più in dettaglio.\n"
                "Usa /help per mostrare questo messaggio.",
@@ -591,6 +592,7 @@ translations = {
                "Use /kick to remove a player from a game you've created.\n"
                "Use /kill to cancel a game you've created.\n"
                "Use /stats to check your statistics.\n"
+               "Use /notify to receive a notification when a new game is created.\n"
                "Use /settings to change settings for you or for a group.\n"
                "Use /rules to show the rules of Boggle.\n"
                "Use /usage to show a more detailed message on how to use the bot.\n"
