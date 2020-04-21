@@ -5,10 +5,10 @@
 This bot was made by e-caste in 2020
 """
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Bot
 from telegram.parsemode import ParseMode
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
-                          CallbackQueryHandler, PicklePersistence)
+                          CallbackQueryHandler, PicklePersistence, messagequeue as mq)
 from telegram.utils.helpers import mention_html
 from telegram.error import Unauthorized, BadRequest
 import logging
@@ -1867,9 +1867,32 @@ def __get_chat_id_from_query(query) -> int:
     return query.message.chat_id
 
 
+class MQBot(Bot):
+    """A subclass of Bot which delegates send method handling to MQ"""
+    def __init__(self, *args, is_queued_def=True, mqueue=mq.MessageQueue(), **kwargs):
+        super(MQBot, self).__init__(*args, **kwargs)
+        # below 2 attributes should be provided for decorator usage
+        self._is_messages_queued_default = is_queued_def
+        self._msg_queue = mqueue
+
+    def __del__(self):
+        try:
+            self._msg_queue.stop()
+        except:
+            pass
+
+    @mq.queuedmessage
+    def send_message(self, *args, **kwargs):
+        """Wrapped method would accept new `queued` and `isgroup`
+        OPTIONAL arguments"""
+        return super(MQBot, self).send_message(*args, **kwargs)
+
+
 def main():
     pp = PicklePersistence(filename='_boggle_paroliere_bot_db')
-    updater = Updater(token, persistence=pp, use_context=True, request_kwargs={'read_timeout': 10})
+    bot = MQBot(token, mqueue=mq.MessageQueue(all_burst_limit=29, all_time_limit_ms=1020,
+                                              group_burst_limit=19, group_time_limit_ms=60500))
+    updater = Updater(bot=bot, persistence=pp, use_context=True, request_kwargs={'read_timeout': 10})
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
