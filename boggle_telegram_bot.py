@@ -70,8 +70,8 @@ def new(update, context):
     cd = context.chat_data
     bd = context.bot_data
 
-    if bd['games'].get(group_chat_id):
-        if cd['timers'].get('newgame'):
+    if group_chat_id in bd['games']:
+        if 'newgame' in cd['timers']:
             context.bot.send_message(chat_id=__get_chat_id(update),
                                      text=get_string(__get_chat_lang(context), 'game_already_created',
                                                      __get_username(update)),
@@ -162,8 +162,8 @@ def join(update, context):
     cd = context.chat_data
     bd = context.bot_data
 
-    if bd['games'].get(group_chat_id):
-        if cd['timers'].get('newgame'):
+    if group_chat_id in bd['games']:
+        if 'newgame' in cd['timers']:
             context.bot.send_message(chat_id=__get_chat_id(update),
                                      text=get_string(__get_chat_lang(context), 'game_already_created',
                                                      __get_username(update)),
@@ -175,7 +175,7 @@ def join(update, context):
                                      parse_mode=HTML)
         return
 
-    if not cd.get('timers'):
+    if 'timers' not in cd:
         __init_chat_data(context)
         context.bot.send_message(chat_id=__get_chat_id(update),
                                  text=get_string(__get_chat_lang(context), msg='no_game_yet'))
@@ -185,7 +185,7 @@ def join(update, context):
         current_game = __get_current_game(context)
         user_id = __get_user_id(update)
 
-        if current_game['participants'].get(user_id):
+        if user_id in current_game['participants']:
             context.bot.send_message(chat_id=group_chat_id,
                                      text=get_string(__get_chat_lang(context), 'already_in_game',
                                                      __get_username(update),
@@ -195,9 +195,9 @@ def join(update, context):
             if group_chat_id not in bd['stats']['groups']:
                 __init_group_stats(context, group_chat_id)
 
-            if not bd['stats']['users'].get(user_id):  # user has never played
+            if user_id not in bd['stats']['users']:  # user has never played
                 __init_user_stats(context, user_id, __get_username(update), group_chat_id, new_player=True)
-            elif not bd['stats']['groups'][group_chat_id].get(user_id):  # user has already played in other groups
+            elif user_id not in bd['stats']['groups'][group_chat_id]:  # user has already played in other groups
                 __init_user_stats(context, user_id, __get_username(update), group_chat_id, new_player=False)
 
             __join_user_to_game(update, context)
@@ -235,9 +235,9 @@ def leave(update, context):
     cd = context.chat_data
     bd = context.bot_data
 
-    if bd['games'].get(group_chat_id):
+    if group_chat_id in bd['games']:
         game = bd['games'][group_chat_id]
-        if game['participants'].get(user_id):
+        if user_id in game['participants']:
             if not game['is_finished']:
                 context.bot.send_message(chat_id=group_chat_id,
                                          text=get_string(__get_chat_lang(context), 'game_left',
@@ -258,7 +258,7 @@ def leave(update, context):
                                      parse_mode=HTML)
         return
 
-    if not cd.get('timers'):
+    if 'timers' not in cd:
         __init_chat_data(context)
         context.bot.send_message(chat_id=__get_chat_id(update),
                                  text=get_string(__get_chat_lang(context), msg='no_game_yet'))
@@ -268,7 +268,7 @@ def leave(update, context):
         current_game = __get_current_game(context)
         user_id = __get_user_id(update)
 
-        if current_game['participants'].get(user_id):
+        if user_id in current_game['participants']:
             __remove_user_from_game(update, context)
             context.bot.send_message(chat_id=group_chat_id,
                                      text=get_string(__get_chat_lang(context), 'game_left',
@@ -325,7 +325,7 @@ def start_game(update, context, timer: bool = False):
         if __forbid_not_game_creator(update, context, group_chat_id, command="/startgame"):
             return
         else:
-            if bd['games'].get(group_chat_id):
+            if group_chat_id in bd['games']:
                 context.bot.send_message(chat_id=group_chat_id,
                                          text=get_string(__get_chat_lang(context), 'game_already_started'))
                 return
@@ -436,7 +436,7 @@ def points_handler(update, context):
     word = word.replace("q", "qu")
     words = bd['games'][group_id]['participants'][user_id]['words']
 
-    if not words.get(word):
+    if word not in words:
         words[word] = {
             'points': __get_points_for_word(word, game['dim']),
             'sent_by_other_players': False,
@@ -464,7 +464,7 @@ def delete(update, context):
     group_id = __get_chat_id(update)
     bd = context.bot_data
 
-    if not bd['games'].get(group_id):
+    if group_id not in bd['games']:
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(__get_chat_lang(context), msg='no_game_yet'))
         return
@@ -540,7 +540,7 @@ def isthere(update, context):
     group_id = __get_chat_id(update)
     bd = context.bot_data
 
-    if not bd['games'].get(group_id):
+    if group_id not in bd['games']:
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(__get_chat_lang(context), msg='no_game_yet'))
         return
@@ -600,7 +600,7 @@ def end_game(update, context):
     cd = context.chat_data
     bd = context.bot_data
 
-    if not bd['games'].get(group_id):
+    if group_id not in bd['games']:
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(__get_chat_lang(context), msg='no_game_yet'))
         return
@@ -626,12 +626,12 @@ def end_game(update, context):
         words = players[user_id]['words']
         for word in words:
             if not words[word]['sent_by_other_players'] and not words[word]['deleted']:
-                if not players_points.get(user_id):
+                if user_id not in players_points:
                     players_points[user_id] = words[word]['points']
                 else:
                     players_points[user_id] += words[word]['points']
                 total_points += words[word]['points']
-        if not players_points.get(user_id):  # hasn't made any points
+        if user_id not in players_points:  # hasn't made any points
             players_points[user_id] = 0
 
     max_points = -1
@@ -646,7 +646,7 @@ def end_game(update, context):
     game['winners'] = winners
 
     # update group stats
-    if not gs.get(group_id):
+    if group_id not in gs:
         gs[group_id] = {
             'matches': 0,
             'points': 0,
@@ -659,13 +659,13 @@ def end_game(update, context):
     # update users stats
     for user_id in players:
         us[user_id]['matches']['played'] += 1
-        if winners.get(user_id) and len(winners) == 1:  # won
+        if user_id in winners and len(winners) == 1:  # won
             us[user_id]['matches']['won']['value'] += 1
             us[user_id]['matches']['latest']['won'] = "won"
-        elif winners.get(user_id) and len(winners) > 1:  # even
+        elif user_id in winners and len(winners) > 1:  # even
             us[user_id]['matches']['even']['value'] += 1
             us[user_id]['matches']['latest']['won'] = "even"
-        elif not winners.get(user_id):  # lost
+        elif user_id not in winners:  # lost
             us[user_id]['matches']['lost']['value'] += 1
             us[user_id]['matches']['latest']['won'] = "lost"
         for ending in ['won', 'even', 'lost']:
@@ -798,11 +798,11 @@ def kick(update, context):
     group_id = __get_chat_id(update)
     current_game = __get_current_game(context)
 
-    if not bd['games'].get(group_id) and current_game is None:
+    if group_id not in bd['games'] and current_game is None:
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(__get_chat_lang(context), msg='no_game_yet'))
         return
-    elif not bd['games'].get(group_id) and current_game is not None:
+    elif group_id not in bd['games'] and current_game is not None:
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(__get_chat_lang(context), msg='cant_kick_players_before_starting'))
         return
@@ -868,12 +868,12 @@ def kill(update, context, bot_not_started: bool = False, bot_restarted: bool = F
     group_id = __get_chat_id(update)
     current_game = __get_current_game(context)
 
-    if not bd['games'].get(group_id) and current_game is None:
+    if group_id not in bd['games'] and current_game is None:
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(__get_chat_lang(context), msg='no_game_yet'))
         return
 
-    if bd['games'].get(group_id):
+    if group_id in bd['games']:
         game = bd['games'][group_id]
         delete_from_bd = True
     else:
@@ -1065,7 +1065,7 @@ def query_handler(update, context):
                                           reply_markup=reply_markup)
 
         elif setting == "english" or setting == "italiano":
-            if not cd.get('settings'):
+            if 'settings' not in cd:
                 __init_chat_data(context)
             if setting == "english":
                 cd['settings']['lang'] = 'eng'
@@ -1354,7 +1354,7 @@ def __get_user_for_log(update) -> str:
 
 def __get_chat_lang(context) -> str:
     cd = context.chat_data
-    return cd['settings']['lang'] if cd.get('settings') else 'eng'
+    return cd['settings']['lang'] if 'settings' in cd else 'eng'
 
 
 def __get_game_lang(context, group_id: int) -> str:
@@ -1388,7 +1388,7 @@ def __newgame_timer(update, context):
 
 
 def __ingame_timer(update, context, group_id: int):
-    if not context.bot_data['games'].get(group_id):
+    if group_id not in context.bot_data['games']:
         return  # the game has been canceled because a user hasn't started the bot
     game = context.bot_data['games'][group_id]
     game['ingame_timer'] = None
@@ -1422,7 +1422,7 @@ def __ingame_timer(update, context, group_id: int):
 
 
 def __check_bot_data_is_initialized(context):
-    if not context.bot_data.get('stats'):
+    if 'stats' not in context.bot_data:
         __init_bot_data(context)
 
 
@@ -1500,7 +1500,7 @@ def __init_user_stats(context, user_id: int, username: str, group_id: int, new_p
     }
     if new_player:
         bd['stats']['users'][user_id] = initial_stats
-    if not bd['stats']['groups'].get(group_id):
+    if group_id not in bd['stats']['groups']:
         __init_group_stats(context, group_id)
     bd['stats']['groups'][group_id][user_id] = initial_stats
 
@@ -1528,7 +1528,7 @@ def __remove_user_from_game(update, context):
 def __get_latest_game(context) -> dict:
     cd = context.chat_data
     res = {'unix_epoch': 0}
-    if cd.get('games'):
+    if 'games' in cd:
         for game in cd['games']:
             res = game if game['unix_epoch'] > res['unix_epoch'] else res
         return res
@@ -1543,7 +1543,7 @@ def __get_current_game(context) -> dict:
 
 def __forbid_not_game_creator(update, context, group_id, command: str) -> bool:
     bd = context.bot_data
-    if bd['games'].get(group_id):
+    if group_id in bd['games']:
         current_game = bd['games'][group_id]
     else:
         current_game = __get_current_game(context)
@@ -1768,7 +1768,7 @@ def __get_timers_keyboard(chat_id: int, lang: str) -> InlineKeyboardMarkup:
 
 
 def __show_group_stats(context, group_id: int):
-    if not context.bot_data['stats']['groups'].get(group_id):
+    if group_id not in context.bot_data['stats']['groups']:
         __init_group_stats(context, group_id)
 
     stats = context.bot_data['stats']['groups'][group_id]
@@ -1783,7 +1783,7 @@ def __show_group_stats(context, group_id: int):
 
 
 def __show_user_stats(context, user_id: int, username: str, group_id: int = None):
-    if not context.bot_data['stats']['users'].get(user_id):
+    if user_id not in context.bot_data['stats']['users']:
         __init_user_stats(context, user_id, username, group_id, new_player=True)
 
     # username = context.bot_data['stats']['users'][user_id]['username']
@@ -1834,7 +1834,7 @@ def __check_bot_was_restarted(update, context):
         return
     group_id = __get_chat_id(update)
     # for group_id in bd['games']:
-    if group_id in bd['games'] and not (timers['newgame'].get(group_id) or timers['ingame'].get(group_id)):
+    if group_id in bd['games'] and not (group_id in timers['newgame'] or group_id in timers['ingame']):
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(__get_chat_lang(context),
                                                  'game_canceled_because_bot_restarted'))
