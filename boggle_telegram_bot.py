@@ -103,7 +103,7 @@ def new(update, context):
                                            text=get_string(__get_chat_lang(context), 'game_created',
                                                            __get_username(update),
                                                            cd['timers']['durations']['newgame'], ""),
-                                           parse_mode=HTML)
+                                           parse_mode=HTML).result()
         logger.info(f"User {__get_user_for_log(update)} created a game in group"
                     f" {__get_group_name(update)} - {__get_chat_id(update)}")
         creator_id = __get_user_id(update)
@@ -1417,7 +1417,7 @@ def __ingame_timer(update, context, group_id: int):
                                                                      with_points=False, user_id=user_id)
         message = context.bot.send_message(chat_id=group_id,
                                            text=player_words_without_points[user_id],
-                                           parse_mode=HTML)
+                                           parse_mode=HTML).result()
         game['participants'][user_id]['result_message_id'] = message['message_id']
 
 
