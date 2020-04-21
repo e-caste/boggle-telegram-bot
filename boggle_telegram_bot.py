@@ -1331,18 +1331,18 @@ def error(update, context):
     payload = ""
     # normally, we always have an user. If not, its either a channel or a poll update.
     if update.effective_user:
-        payload += " with the user " + str(mention_html(update.effective_user.id, update.effective_user.first_name))
+        payload += f" with the user {mention_html(update.effective_user.id, update.effective_user.first_name)}"
     # there are more situations when you don't get a chat
     if update.effective_chat:
-        payload += " within the chat <i>" + str(update.effective_chat.title) + "</i>"
+        payload += f" within the chat <i>{update.effective_chat.title}</i>"
         if update.effective_chat.username:
-            payload += " (@" + str(update.effective_chat.username)
+            payload += f" (@{update.effective_chat.username}"
     # but only one where you have an empty payload by now: a poll
     if update.poll:
-        payload += " with the poll id " + str(update.poll.id)
+        payload += f" with the poll id {update.poll.id}"
     # lets put this in a "well" formatted text
-    msg = "Hey.\n The error <code>" + str(context.error) + "</code> happened" + str(payload) + \
-          ". The full traceback:\n\n<code>" + str(trace) + "</code>"
+    msg = f"Hey.\n The error <code>{context.error}</code> happened{payload}. " \
+          f"The full traceback:\n\n<code>{trace}</code>"
     context.bot.send_message(chat_id=castes_chat_id,
                              text=msg,
                              parse_mode=HTML)
