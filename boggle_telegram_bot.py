@@ -1249,7 +1249,7 @@ def query_handler(update, context):
     elif query.data.startswith("notify"):
         command = query.data.split("_")[1]
         # group_id = query.data.split("_")[2]
-        user_id = query.data.split("_")[3]
+        user_id = int(query.data.split("_")[3])
         username = query.data.split("_")[4]
 
         cd = context.chat_data
