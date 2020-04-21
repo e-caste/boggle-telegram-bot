@@ -129,7 +129,7 @@ def new(update, context):
                                              text=get_string(__get_chat_lang(context), 'notify_newgame',
                                                              __get_group_name(update)),
                                              parse_mode=HTML)
-            except BadRequest:
+            except Unauthorized:
                 pass
         cd['notify']['justonce'] = []  # remove all user_ids since they've been notified
         for user_id in cd['notify']['allgames']:
@@ -139,7 +139,7 @@ def new(update, context):
                                              text=get_string(__get_chat_lang(context), 'notify_newgame',
                                                              __get_group_name(update)),
                                              parse_mode=HTML)
-            except BadRequest:
+            except Unauthorized:
                 pass
 
     else:
