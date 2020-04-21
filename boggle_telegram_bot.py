@@ -207,10 +207,8 @@ def join(update, context):
                                      parse_mode=HTML)
             logger.info(f"User {__get_user_for_log(update)} joined a game in group"
                         f" {__get_group_name(update)} - {__get_chat_id(update)}")
-            usernames = ""
-            for user_id in current_game['participants']:
-                usernames += current_game['participants'][user_id]['username'] + ", "
-            usernames = f"<b>{usernames[:-2]}</b>"
+
+            usernames = f"<b>{', '.join([current_game['participants'][user_id]['username'] for user_id in current_game['participants']])}</b>"
             context.bot.edit_message_text(chat_id=group_chat_id,
                                           message_id=current_game['newgame_message']['message_id'],
                                           text=get_string(__get_chat_lang(context), 'game_created',
@@ -279,10 +277,7 @@ def leave(update, context):
             logger.info(f"User {__get_user_for_log(update)} left a game in group"
                         f" {__get_group_name(update)} - {__get_chat_id(update)}")
 
-            usernames = ""
-            for user_id in current_game['participants']:
-                usernames += current_game['participants'][user_id]['username'] + ", "
-            usernames = f"<b>{usernames[:-2]}</b>"
+            usernames = f"<b>{', '.join([current_game['participants'][user_id]['username'] for user_id in current_game['participants']])}</b>"
             context.bot.edit_message_text(chat_id=group_chat_id,
                                           message_id=current_game['newgame_message']['message_id'],
                                           text=get_string(__get_chat_lang(context), 'game_created',
