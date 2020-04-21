@@ -10,6 +10,7 @@ from telegram.parsemode import ParseMode
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           CallbackQueryHandler, PicklePersistence, messagequeue as mq)
 from telegram.utils.helpers import mention_html
+from telegram.utils.request import Request
 from telegram.error import Unauthorized, BadRequest
 import logging
 from secret import token, castes_chat_id, working_directory
@@ -1890,7 +1891,9 @@ class MQBot(Bot):
 
 def main():
     pp = PicklePersistence(filename='_boggle_paroliere_bot_db')
-    bot = MQBot(token, mqueue=mq.MessageQueue(all_burst_limit=29, all_time_limit_ms=1020,
+    bot = MQBot(token,
+                request=Request(con_pool_size=8),
+                mqueue=mq.MessageQueue(all_burst_limit=29, all_time_limit_ms=1020,
                                               group_burst_limit=19, group_time_limit_ms=60500))
     updater = Updater(bot=bot, persistence=pp, use_context=True, request_kwargs={'read_timeout': 10})
 
