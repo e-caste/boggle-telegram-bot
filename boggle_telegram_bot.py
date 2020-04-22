@@ -521,6 +521,10 @@ def delete(update, context):
                                               parse_mode=HTML)
             except BadRequest:  # message is not modified because it doesn't contain any of the deleted words
                 pass
+            except KeyError:
+                logger.error(f"KeyError in delete, line 519:\n{game['participants'][user_id]}")
+                context.bot.send_message(chat_id=castes_chat_id,
+                                         text="Check log for debugging KeyError")
 
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(lang, 'all_words_deleted'),
@@ -691,11 +695,15 @@ def end_game(update, context):
         try:
             context.bot.edit_message_text(chat_id=group_id,
                                           message_id=game['participants'][user_id]['result_message_id'],
-                                          text=__get_formatted_words(context, group_id, with_points=True, only_valid=True,
-                                                                     user_id=user_id),
+                                          text=__get_formatted_words(context, group_id, with_points=True,
+                                                                     only_valid=True, user_id=user_id),
                                           parse_mode=HTML)
         except BadRequest:
             pass
+        except KeyError:
+            logger.error(f"KeyError in end_game, line 693:\n{game['participants'][user_id]}")
+            context.bot.send_message(chat_id=castes_chat_id,
+                                     text="Check log for debugging KeyError")
 
     chat_game = __get_latest_game(context)
     cd['games'].remove(chat_game)
