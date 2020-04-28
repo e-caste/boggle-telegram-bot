@@ -522,9 +522,10 @@ def delete(update, context):
             except BadRequest:  # message is not modified because it doesn't contain any of the deleted words
                 pass
             except KeyError:
-                logger.error(f"KeyError in delete, line 519:\n{game['participants'][user_id]}")
-                context.bot.send_message(chat_id=castes_chat_id,
-                                         text="Check log for debugging KeyError")
+                pass
+                # logger.error(f"KeyError in delete, line 519:\n{game['participants'][user_id]}")
+                # context.bot.send_message(chat_id=castes_chat_id,
+                #                          text="Check log for debugging KeyError")
 
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(lang, 'all_words_deleted'),
@@ -701,9 +702,10 @@ def end_game(update, context):
         except BadRequest:
             pass
         except KeyError:
-            logger.error(f"KeyError in end_game, line 693:\n{game['participants'][user_id]}")
-            context.bot.send_message(chat_id=castes_chat_id,
-                                     text="Check log for debugging KeyError")
+            pass
+        #     logger.error(f"KeyError in end_game, line 693:\n{game['participants'][user_id]}")
+        #     context.bot.send_message(chat_id=castes_chat_id,
+        #                              text="Check log for debugging KeyError")
 
     chat_game = __get_latest_game(context)
     cd['games'].remove(chat_game)
@@ -1427,7 +1429,13 @@ def __ingame_timer(update, context, group_id: int):
         message = context.bot.send_message(chat_id=group_id,
                                            text=player_words_without_points[user_id],
                                            parse_mode=HTML).result()
-        game['participants'][user_id]['result_message_id'] = message['message_id']
+        if 'message_id' in message:
+            game['participants'][user_id]['result_message_id'] = message['message_id']
+        else:
+            text = f"No message_id field in the following message:\n\n{message}"
+            logger.error(text)
+            context.bot.send_message(chat_id=castes_chat_id,
+                                     text=text)
 
 
 def __check_bot_data_is_initialized(context):
