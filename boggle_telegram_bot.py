@@ -1902,7 +1902,11 @@ class MQBot(Bot):
     def send_message(self, *args, **kwargs):
         """Wrapped method would accept new `queued` and `isgroup`
         OPTIONAL arguments"""
-        return super(MQBot, self).send_message(*args, **kwargs)
+        try:
+            chat_id = kwargs.pop('chat_id')
+            return super(MQBot, self).send_message(*args, **kwargs, chat_id=chat_id, isgroup=chat_id < 0)
+        except KeyError:
+            return super(MQBot, self).send_message(*args, **kwargs, isgroup=False)
 
 
 def main():
