@@ -1908,7 +1908,7 @@ class MQBot(Bot):
 def main():
     pp = PicklePersistence(filename='_boggle_paroliere_bot_db')
     bot = MQBot(token=token,
-                request=Request(con_pool_size=8, connect_timeout=120, read_timeout=120),
+                request=Request(con_pool_size=8, connect_timeout=10, read_timeout=10),
                 mqueue=mq.MessageQueue(all_burst_limit=29, all_time_limit_ms=1020,
                                        group_burst_limit=19, group_time_limit_ms=60500))
     updater = Updater(bot=bot, persistence=pp, use_context=True)
