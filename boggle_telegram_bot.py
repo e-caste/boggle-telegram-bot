@@ -104,7 +104,7 @@ def new(update, context):
                                            text=get_string(__get_chat_lang(context), 'game_created',
                                                            __get_username(update),
                                                            cd['timers']['durations']['newgame'], ""),
-                                           parse_mode=HTML).result()
+                                           parse_mode=HTML)  # .result()
         logger.info(f"User {__get_user_for_log(update)} created a game in group"
                     f" {__get_group_name(update)} - {__get_chat_id(update)}")
         creator_id = __get_user_id(update)
@@ -1428,7 +1428,7 @@ def __ingame_timer(update, context, group_id: int):
                                                                      with_points=False, user_id=user_id)
         message = context.bot.send_message(chat_id=group_id,
                                            text=player_words_without_points[user_id],
-                                           parse_mode=HTML).result()
+                                           parse_mode=HTML)  # .result()
         if 'message_id' in message:
             game['participants'][user_id]['result_message_id'] = message['message_id']
         else:
@@ -1911,11 +1911,12 @@ class MQBot(Bot):
 
 def main():
     pp = PicklePersistence(filename='_boggle_paroliere_bot_db')
-    bot = MQBot(token=token,
-                request=Request(con_pool_size=8, connect_timeout=10, read_timeout=10),
-                mqueue=mq.MessageQueue(all_burst_limit=29, all_time_limit_ms=1020,
-                                       group_burst_limit=19, group_time_limit_ms=60500))
-    updater = Updater(bot=bot, persistence=pp, use_context=True)
+    # bot = MQBot(token=token,
+    #             request=Request(con_pool_size=8, connect_timeout=10, read_timeout=10),
+    #             mqueue=mq.MessageQueue(all_burst_limit=29, all_time_limit_ms=1020,
+    #                                    group_burst_limit=19, group_time_limit_ms=60500))
+    # updater = Updater(bot=bot, persistence=pp, use_context=True)
+    updater = Updater(token=token, persistence=pp, use_context=True, request_kwargs={'read_timeout': 10})
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
