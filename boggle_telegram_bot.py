@@ -1959,8 +1959,8 @@ def main():
 
 
 if __name__ == '__main__':
-    if not debug:
-        os.chdir(working_directory)
+    # if not debug:
+    #     os.chdir(working_directory)
     # else:
     #     os.remove('_boggle_paroliere_bot_db')
     main()
