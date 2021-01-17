@@ -10,7 +10,7 @@ CNT_ID=$(get_cnt_id)
 
 cd "$REPO_PATH"/boggle-telegram-bot
 
-git checkout production
+git checkout master
 git pull
 docker build -t bogglebot:latest .
 if [[ "$CNT_ID" != "CONTAINER" ]]; then
