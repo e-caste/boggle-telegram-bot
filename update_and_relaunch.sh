@@ -1,9 +1,9 @@
 #!/bin/bash
 
-PATH=""
+REPO_PATH=""
 CNT_ID=$(docker ps --filter ancestor=bogglebot | tail -1 | cut -d ' ' -f 1)
 
-cd "$PATH"/boggle-telegram-bot
+cd "$REPO_PATH"/boggle-telegram-bot
 
 git checkout production
 git pull
