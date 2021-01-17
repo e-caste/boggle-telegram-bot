@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 function get_cnt_id {
   local _cnt_id=$(docker ps --filter ancestor=bogglebot | tail -1 | cut -d ' ' -f 1)
   echo $_cnt_id
@@ -18,8 +20,7 @@ if [[ "$CNT_ID" != "CONTAINER" ]]; then
   docker rm $CNT_ID
 fi
 ./launch.sh
+cd -
 CNT_ID=$(get_cnt_id)
 echo "Following container logs, exit with Ctrl+C..."
 docker logs -f $CNT_ID
-
-cd -
