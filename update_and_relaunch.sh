@@ -8,8 +8,10 @@ cd "$PATH"/boggle-telegram-bot
 git checkout production
 git pull
 docker build -t bogglebot:latest .
-docker stop $CNT_ID
-docker rm $CNT_ID
+if [[ "$CNT_ID" != "CONTAINER" ]]; then
+  docker stop $CNT_ID
+  docker rm $CNT_ID
+fi
 ./launch.sh
 
 cd -
