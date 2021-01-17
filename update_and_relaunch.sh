@@ -1,7 +1,12 @@
 #!/bin/bash
 
+function get_cnt_id {
+  local _cnt_id=$(docker ps --filter ancestor=bogglebot | tail -1 | cut -d ' ' -f 1)
+  echo $_cnt_id
+}
+
 REPO_PATH=""
-CNT_ID=$(docker ps --filter ancestor=bogglebot | tail -1 | cut -d ' ' -f 1)
+CNT_ID=$(get_cnt_id)
 
 cd "$REPO_PATH"/boggle-telegram-bot
 
@@ -13,5 +18,8 @@ if [[ "$CNT_ID" != "CONTAINER" ]]; then
   docker rm $CNT_ID
 fi
 ./launch.sh
+CNT_ID=$(get_cnt_id)
+echo "Following container logs, exit with Ctrl+C..."
+docker logs -f $CNT_ID
 
 cd -
