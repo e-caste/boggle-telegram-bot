@@ -12,7 +12,6 @@ from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
 from telegram.utils.helpers import mention_html
 from telegram.error import Unauthorized, BadRequest
 import logging
-from secret import token, castes_chat_id, working_directory
 import os
 import sys
 import traceback
@@ -21,6 +20,10 @@ from threading import Timer
 from dice import get_shuffled_dice, letters_sets
 from math import sqrt
 from time import time
+
+# import Docker environment variables
+token = os.environ["TOKEN"]
+castes_chat_id = os.environ["CST_CID"]
 
 HTML = ParseMode.HTML
 debug = sys.platform.startswith("darwin")
@@ -1917,8 +1920,4 @@ def main():
 
 
 if __name__ == '__main__':
-    if not debug:
-        os.chdir(working_directory)
-    # else:
-    #     os.remove('_boggle_paroliere_bot_db')
     main()
