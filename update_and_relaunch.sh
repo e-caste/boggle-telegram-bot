@@ -17,7 +17,7 @@ git pull
 docker build -t bogglebot:latest .
 if [[ "$CNT_ID" != "CONTAINER" ]]; then
   docker stop $CNT_ID
-  docker rm $CNT_ID
+  # docker rm $CNT_ID
 fi
 ./launch.sh
 cd -
