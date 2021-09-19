@@ -1876,7 +1876,17 @@ def __get_chat_id_from_query(query) -> int:
 
 
 def main():
-    pp = PicklePersistence(filename='_boggle_paroliere_bot_db')
+    def open_db():
+        return PicklePersistence(filename='_boggle_paroliere_bot_db')
+
+    try:
+        pp = open_db()
+    except TypeError:
+        old_db_name = f"_boggle_paroliere_bot_db.bak_{int(time())}"
+        os.rename("_boggle_paroliere_bot_db", os.path.join("dbs_old", old_db_name))
+        logger.error(f"The database was corrupted. It has been saved as dbs_old/{old_db_name} and has now been reset.")
+        pp = open_db()
+
     updater = Updater(token, persistence=pp, use_context=True, request_kwargs={'read_timeout': 10})
 
     # Get the dispatcher to register handlers
