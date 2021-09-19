@@ -1,5 +1,5 @@
 FROM pypy:3.6-7.3.0-slim
-RUN mkdir /bot
+RUN mkdir -p /bot/dbs_old
 WORKDIR /bot
 COPY requirements.txt .
 # install requirements as soon as possible so rebuilds are faster
