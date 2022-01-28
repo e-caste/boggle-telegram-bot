@@ -1077,8 +1077,12 @@ def query_handler(update, context):
                 __init_chat_data(context)
             if setting == "english":
                 cd['settings']['lang'] = 'eng'
+                if __get_current_game(context):
+                    cd['games'][-1]['lang'] = 'eng'
             elif setting == "italiano":
                 cd['settings']['lang'] = 'ita'
+                if __get_current_game(context):
+                    cd['games'][-1]['lang'] = 'ita'
             context.bot.edit_message_text(chat_id=query.message.chat_id,
                                           message_id=query.message.message_id,
                                           text=get_string(__get_chat_lang(context), 'settings_language_changed'))
