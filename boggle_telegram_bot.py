@@ -951,11 +951,23 @@ def settings(update, context):
     chat_id = __get_chat_id(update)
     lang = __get_chat_lang(context)
 
+    cd = context.chat_data
+    language = "Italiano" if cd['settings']['lang'] == 'ita' else "English"
+    table_dimensions = cd['settings']['table_dimensions']
+    if lang == "ita":
+        auto_join = "sì" if cd['settings']['auto_join'] else "no"
+    else:
+        auto_join = "yes" if cd['settings']['auto_join'] else "no"
+    pregame_timer = f"{cd['timers']['durations']['newgame']} second" + ("i" if lang == "ita" else "s")
+    ingame_timer = f"{cd['timers']['durations']['ingame']} second" + ("i" if lang == "ita" else "s")
+
     reply_keyboard = __get_settings_keyboard(chat_id, lang)
 
     context.bot.send_message(chat_id=chat_id,
-                             text=get_string(lang, 'settings_prompt'),
-                             reply_markup=reply_keyboard)
+                             text=get_string(lang, 'settings_prompt',
+                                             language, table_dimensions, auto_join, pregame_timer, ingame_timer),
+                             reply_markup=reply_keyboard,
+                             parse_mode=HTML)
 
 
 def notify(update, context):
