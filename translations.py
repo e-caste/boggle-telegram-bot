@@ -342,8 +342,10 @@ translations = {
         'eng': "<i>No words received.</i>"
     },
     'settings_prompt': {
-        'ita': "Qui puoi cambiare le impostazioni per questa chat",
-        'eng': "Here you can change the settings for this chat"
+        'ita': "Qui puoi cambiare le impostazioni per questa chat.\n\n<b>Impostazioni attuali</b>:\n- lingua: {}\n"
+               "- dimensioni tabella: {}\n- autojoin: {}\n- timer pre-partita: {}\n- tempo della partita: {}",
+        'eng': "Here you can change the settings for this chat.\n\n<b>Current settings</b>:\n- language: {}\n"
+               "- table dimensions: {}\n- autojoin: {}\n- pre-game timer: {}\n- game duration: {}"
     },
     'settings_button_language': {
         'ita': "Lingua",
