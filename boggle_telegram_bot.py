@@ -2005,7 +2005,7 @@ def main():
     dp.add_handler(CommandHandler('help', show_help))
 
     # handles all text messages in a private chat
-    dp.add_handler(MessageHandler(Filters.text & ~ Filters.group, points_handler))
+    dp.add_handler(MessageHandler(Filters.text & ~ Filters.chat_type.group, points_handler))
     dp.add_handler(MessageHandler(Filters.status_update.new_chat_members, bot_added_to_group))
 
     # handles callback queries from InlineKeyboardButtons
