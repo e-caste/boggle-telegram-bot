@@ -511,6 +511,10 @@ translations = {
         'ita': "Solo per la prossima partita",
         'eng': "Just once for the next game"
     },
+    'notify_withoutspam_button': {
+        'ita': "Per tutte le partite (ma senza spam)",
+        'eng': "For all games (but without any spam)"
+    },
     'notify_allgames_button': {
         'ita': "Per tutte le partite in questo gruppo",
         'eng': "For all games in this group chat"
@@ -534,6 +538,16 @@ translations = {
     'notify_allgames_alreadypresent': {
         'ita': "Sei già in attesa delle notifiche delle partite di questo gruppo, {}!",
         'eng': "You're already subscribed to the notifications for the next games, {}!"
+    },
+    'notify_withoutspam_confirm': {
+        'ita': "Va bene, {}, ti avviserò delle prossime partite in questo gruppo! (Senza spam, al massimo una volta "
+               "ogni {} ore)",
+        'eng': "Alright, {}, you'll be notified of all the next games in this group chat! (Without spam, once every {} "
+               "hours at most)"
+    },
+    'notify_withoutspam_alreadypresent': {
+        'ita': "Sei già in attesa delle notifiche delle partite di questo gruppo, {}! (Senza spam, promesso)",
+        'eng': "You're already subscribed to the notifications for the next games, {}! (Without spam, I promise)"
     },
     'notify_disable_confirm': {
         'ita': "Notifiche disabilitate per {}!",

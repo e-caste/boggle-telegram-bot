@@ -43,6 +43,8 @@ timers = {
     'ingame': {}
 }
 
+spam_interval = 4  # hours
+
 
 def start(update, context):
     __check_bot_data_is_initialized(context)
@@ -95,8 +97,11 @@ def new(update, context):
     if 'notify' not in cd:
         cd['notify'] = {
             'justonce': [],
-            'allgames': []
+            'allgames': [],
+            'withoutspam': {},
         }
+    if 'withoutspam' not in cd['notify']:
+        cd['notify']['withoutspam'] = {}
 
     if not cd['timers']['newgame']:
         t = Timer(interval=cd['timers']['durations']['newgame'],
@@ -141,6 +146,16 @@ def new(update, context):
         for user_id in cd['notify']['allgames']:
             try:
                 if user_id != creator_id:
+                    context.bot.send_message(chat_id=user_id,
+                                             text=get_string(__get_chat_lang(context), 'notify_newgame',
+                                                             __get_group_name(update)),
+                                             parse_mode=HTML)
+            except BadRequest:
+                pass
+        for user_id in cd['notify']['withoutspam']:
+            try:
+                if user_id != creator_id and time() > cd['notify']['withoutspam'][user_id] + spam_interval * 3600:
+                    cd['notify']['withoutspam'][user_id] = time()
                     context.bot.send_message(chat_id=user_id,
                                              text=get_string(__get_chat_lang(context), 'notify_newgame',
                                                              __get_group_name(update)),
@@ -991,6 +1006,8 @@ def notify(update, context):
     reply_keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton(get_string(lang, 'notify_justonce_button'),
                               callback_data=f"notify_justonce_{group_id}_{user_id}_{username}")],
+        [InlineKeyboardButton(get_string(lang, 'notify_withoutspam_button'),
+                              callback_data=f"notify_withoutspam_{group_id}_{user_id}_{username}")],
         [InlineKeyboardButton(get_string(lang, 'notify_allgames_button'),
                               callback_data=f"notify_allgames_{group_id}_{user_id}_{username}")],
         [InlineKeyboardButton(get_string(lang, 'notify_disable_button'),
@@ -1283,16 +1300,21 @@ def query_handler(update, context):
         if 'notify' not in cd:
             cd['notify'] = {
                 'justonce': [],
-                'allgames': []
+                'allgames': [],
+                'withoutspam': {},
             }
+        if 'withoutspam' not in cd['notify']:
+            cd['notify']['withoutspam'] = {}
         notify = cd['notify']
         lang = __get_chat_lang(context)
 
         if command == "justonce":
             if user_id not in notify['justonce']:
-                notify['justonce'].append(user_id)
                 if user_id in notify['allgames']:
                     notify['allgames'].remove(user_id)
+                if user_id in notify['withoutspam']:
+                    del notify['withoutspam'][user_id]
+                notify['justonce'].append(user_id)
                 context.bot.edit_message_text(chat_id=query.message.chat_id,
                                               message_id=query.message.message_id,
                                               text=get_string(lang, 'notify_justonce_confirm', username),
@@ -1309,6 +1331,8 @@ def query_handler(update, context):
             if user_id not in notify['allgames']:
                 if user_id in notify['justonce']:
                     notify['justonce'].remove(user_id)
+                if user_id in notify['withoutspam']:
+                    del notify['withoutspam'][user_id]
                 notify['allgames'].append(user_id)
                 context.bot.edit_message_text(chat_id=query.message.chat_id,
                                               message_id=query.message.message_id,
@@ -1322,8 +1346,30 @@ def query_handler(update, context):
                                               text=get_string(lang, 'notify_allgames_alreadypresent', username),
                                               parse_mode=HTML)
 
+        elif command == "withoutspam":
+            if user_id not in notify['withoutspam']:
+                if user_id in notify['allgames']:
+                    notify['allgames'].remove(user_id)
+                if user_id in notify['justonce']:
+                    notify['justonce'].remove(user_id)
+                notify['withoutspam'][user_id] = -1
+                context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                              message_id=query.message.message_id,
+                                              text=get_string(lang, 'notify_withoutspam_confirm',
+                                                              username, spam_interval),
+                                              parse_mode=HTML)
+                logger.info(f"User {__get_user_for_log_from_query(query)} enabled notifications (without spam) in group"
+                            f" {__get_group_name_from_query(query)} - {__get_chat_id_from_query(query)}")
+            else:
+                context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                              message_id=query.message.message_id,
+                                              text=get_string(lang, 'notify_withoutspam_alreadypresent', username),
+                                              parse_mode=HTML)
+
         elif command == "disable":
-            if user_id not in notify['justonce'] and user_id not in notify['allgames']:
+            if user_id not in notify['justonce'] and \
+                    user_id not in notify['allgames'] and \
+                    user_id not in notify['withoutspam']:
                 context.bot.edit_message_text(chat_id=query.message.chat_id,
                                               message_id=query.message.message_id,
                                               text=get_string(lang, 'notify_disable_notpresent', username),
@@ -1333,6 +1379,8 @@ def query_handler(update, context):
                     notify['justonce'].remove(user_id)
                 if user_id in notify['allgames']:
                     notify['allgames'].remove(user_id)
+                if user_id in notify['withoutspam']:
+                    del notify['withoutspam'][user_id]
                 context.bot.edit_message_text(chat_id=query.message.chat_id,
                                               message_id=query.message.message_id,
                                               text=get_string(lang, 'notify_disable_confirm', username),
@@ -1481,7 +1529,8 @@ def __init_chat_data(context):
     }
     cd['notify'] = {
         'justonce': [],
-        'allgames': []
+        'allgames': [],
+        'withoutspam': {},
     }
 
 
