@@ -970,6 +970,8 @@ def settings(update, context):
     lang = __get_chat_lang(context)
 
     cd = context.chat_data
+    if not cd.get('settings'):
+        __init_chat_data(context)
     language = "Italiano" if cd['settings']['lang'] == 'ita' else "English"
     table_dimensions = cd['settings']['table_dimensions']
     if lang == "ita":
@@ -1950,15 +1952,16 @@ def main():
     def open_db():
         return PicklePersistence(filename='_boggle_paroliere_bot_db')
 
+    def get_updater():
+        return Updater(token, persistence=open_db(), use_context=True, request_kwargs={'read_timeout': 10})
+
     try:
-        pp = open_db()
+        updater = get_updater()
     except TypeError:
         old_db_name = f"_boggle_paroliere_bot_db.bak_{int(time())}"
         os.rename("_boggle_paroliere_bot_db", os.path.join("dbs_old", old_db_name))
         logger.error(f"The database was corrupted. It has been saved as dbs_old/{old_db_name} and has now been reset.")
-        pp = open_db()
-
-    updater = Updater(token, persistence=pp, use_context=True, request_kwargs={'read_timeout': 10})
+        updater = get_updater()
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
