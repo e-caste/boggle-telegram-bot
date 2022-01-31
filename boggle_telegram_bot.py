@@ -1980,7 +1980,8 @@ def main():
         updater = get_updater()
     except TypeError:
         old_db_name = f"_boggle_paroliere_bot_db.bak_{int(time())}"
-        shutil.move("_boggle_paroliere_bot_db", os.path.join("dbs_old", old_db_name))
+        shutil.copy("_boggle_paroliere_bot_db", os.path.join("dbs_old", old_db_name))
+        os.remove("_boggle_paroliere_bot_db")
         logger.error(f"The database was corrupted. It has been saved as dbs_old/{old_db_name} and has now been reset.")
         updater = get_updater()
 
