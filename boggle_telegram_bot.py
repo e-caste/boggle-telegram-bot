@@ -634,7 +634,7 @@ def end_game(update, context):
     game = bd['games'][group_id]
     lang = game['lang']
 
-    if __forbid_not_game_creator(update, context, group_id, command="/endgame"):
+    if __forbid_not_game_creator(update, context, group_id, command="/endgame", allow_admins=True):
         return
 
     if not game['is_finished']:
@@ -1617,14 +1617,17 @@ def __get_current_game(context) -> dict:
     return res if not res['is_finished'] else None
 
 
-def __forbid_not_game_creator(update, context, group_id, command: str) -> bool:
+def __forbid_not_game_creator(update, context, group_id, command: str, allow_admins: bool = False) -> bool:
     bd = context.bot_data
     if bd['games'].get(group_id):
         current_game = bd['games'][group_id]
     else:
         current_game = __get_current_game(context)
     user_id = __get_user_id(update)
-    if user_id != current_game['creator']['id']:
+    admin_ids = []
+    if allow_admins:
+        admin_ids = [adm.user.id for adm in context.bot.get_chat_administrators(group_id)]
+    if user_id != current_game['creator']['id'] and user_id not in admin_ids:
         context.bot.send_message(chat_id=group_id,
                                  text=get_string(__get_chat_lang(context), 'forbid_not_game_creator',
                                                  __get_username(update), current_game['creator']['username'], command),
