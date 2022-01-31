@@ -1263,10 +1263,25 @@ def query_handler(update, context):
 
         if destination == "settings":
             reply_keyboard = __get_settings_keyboard(chat_id, lang)
+
+            cd = context.chat_data
+            if not cd.get('settings'):
+                __init_chat_data(context, settings_only=True)
+            language = "Italiano" if cd['settings']['lang'] == 'ita' else "English"
+            table_dimensions = cd['settings']['table_dimensions']
+            if lang == "ita":
+                auto_join = "sì" if cd['settings']['auto_join'] else "no"
+            else:
+                auto_join = "yes" if cd['settings']['auto_join'] else "no"
+            pregame_timer = f"{cd['timers']['durations']['newgame']} second" + ("i" if lang == "ita" else "s")
+            ingame_timer = f"{cd['timers']['durations']['ingame']} second" + ("i" if lang == "ita" else "s")
+
             context.bot.edit_message_text(chat_id=chat_id,
                                           message_id=query.message.message_id,
-                                          text=get_string(lang, 'settings_prompt'),
-                                          reply_markup=reply_keyboard)
+                                          text=get_string(lang, 'settings_prompt', language, table_dimensions,
+                                                          auto_join, pregame_timer, ingame_timer),
+                                          reply_markup=reply_keyboard,
+                                          parse_mode=HTML)
 
         elif destination == "timers":
             reply_keyboard = __get_timers_keyboard(chat_id, lang)
