@@ -971,7 +971,7 @@ def settings(update, context):
 
     cd = context.chat_data
     if not cd.get('settings'):
-        __init_chat_data(context)
+        __init_chat_data(context, settings_only=True)
     language = "Italiano" if cd['settings']['lang'] == 'ita' else "English"
     table_dimensions = cd['settings']['table_dimensions']
     if lang == "ita":
@@ -1108,7 +1108,7 @@ def query_handler(update, context):
 
         elif setting == "english" or setting == "italiano":
             if not cd.get('settings'):
-                __init_chat_data(context)
+                __init_chat_data(context, settings_only=True)
             if setting == "english":
                 cd['settings']['lang'] = 'eng'
                 if __get_current_game(context):
@@ -1512,8 +1512,19 @@ def __init_bot_data(context):
     }
 
 
-def __init_chat_data(context):
+def __init_chat_data(context, settings_only: bool = False):
     cd = context.chat_data
+
+    if not settings_only:
+        cd['games'] = []
+        cd['ingame_user_ids'] = []
+        cd['notify'] = {
+            'justonce': [],
+            'allgames': [],
+            'withoutspam': {},
+        }
+
+    # timers need to be considered settings
     cd['timers'] = {
         'newgame': None,
         'ingame': None,
@@ -1522,17 +1533,10 @@ def __init_chat_data(context):
             'ingame': 180  # seconds
         }
     }
-    cd['games'] = []
-    cd['ingame_user_ids'] = []
     cd['settings'] = {
         'lang': 'eng',
         'table_dimensions': '4x4',
         'auto_join': True
-    }
-    cd['notify'] = {
-        'justonce': [],
-        'allgames': [],
-        'withoutspam': {},
     }
 
 
