@@ -21,12 +21,15 @@ from dice import get_shuffled_dice, letters_sets
 from math import sqrt
 from time import time
 
-# import Docker environment variables
-token = os.environ["TOKEN"]
-castes_chat_id = os.environ["CST_CID"]
-
 HTML = ParseMode.HTML
 debug = sys.platform.startswith("darwin")
+
+if debug:
+    from secret import token, castes_chat_id
+else:
+    # import Docker environment variables
+    token = os.environ["TOKEN"]
+    castes_chat_id = os.environ["CST_CID"]
 
 # Enable logging
 level = logging.DEBUG if debug else logging.INFO
