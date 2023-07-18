@@ -2,7 +2,7 @@ certifi==2022.12.7
 cffi==1.14.0
 cryptography==39.0.1
 decorator==4.4.2
-future==0.18.2
+future==0.18.3
 pycparser==2.20
 python-telegram-bot==13.10
 six==1.14.0
