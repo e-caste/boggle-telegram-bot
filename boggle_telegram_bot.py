@@ -119,6 +119,8 @@ def new(update, context):
         logger.info(f"User {__get_user_for_log(update)} created a game in group"
                     f" {__get_group_name(update)} - {__get_chat_id(update)}")
         creator_id = __get_user_id(update)
+        if not cd.get('games'):
+            cd['games'] = []
         cd['games'].append({
             'unix_epoch': int(time()),
             'creator': {
@@ -203,8 +205,8 @@ def join(update, context):
                                  text=get_string(__get_chat_lang(context), msg='no_game_yet'))
         return
 
-    if cd['timers']['newgame']:
-        current_game = __get_current_game(context)
+    current_game = __get_current_game(context)
+    if cd['timers']['newgame'] and current_game is not None:
         user_id = __get_user_id(update)
 
         if current_game['participants'].get(user_id):
